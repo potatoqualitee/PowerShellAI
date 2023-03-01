@@ -18,5 +18,3 @@ function Get-ErrorInsights {
         Write-Host "No error has occurred"
     }
 }
-
-Set-Alias -Name Get-WtfHappened -Value Get-ErrorInsights # ;)
