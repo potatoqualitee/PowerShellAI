@@ -17,6 +17,7 @@ The PowerShell AI module integrates with the OpenAI API and let's you easily acc
         'Disable-AIShortCutKey'
         'Enable-AIShortCutKey'
         'Get-DalleImage'
+        'Get-ChatCompletion'
         'Get-GPT3Completion'
         'Get-OpenAIModel'
         'Get-OpenAIModeration'
@@ -24,12 +25,13 @@ The PowerShell AI module integrates with the OpenAI API and let's you easily acc
         'Set-DalleImageAsWallpaper'
         'Set-OpenAIKey'
         'Get-OpenAIBaseRestUri'
+        'Get-OpenAIChatCompletionUri'
         'Get-OpenAICompletionsUri'
         'Get-OpenAIImagesGenerationsUri'
         'Get-OpenAIModelsUri'
         'Get-OpenAIModerationsUri'
-		'Get-OpenAIEditsUri'
-		'Get-OpenAIEdit'
+        'Get-OpenAIEditsUri'
+        'Get-OpenAIEdit'
         'New-SpreadSheet'
     )
 
