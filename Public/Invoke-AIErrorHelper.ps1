@@ -1,18 +1,17 @@
-#Requires -Modules PowerShellAI
-
-function Get-ErrorInsights {
+function Invoke-AIErrorHelper {
     
     <#
         .SYNOPSIS
             Inspect the last error record and offer some suggestions on how to resolve it          
         .DESCRIPTION
-            Get-ErrorInsights is a function that uses the OpenAI GPT-3 API to provide insights into errors that occur in a powershell script.
+            Invoke-AIErrorHelper is a function that uses the OpenAI GPT-3 API to provide insights into errors that occur in a powershell script.
         .EXAMPLE
-            Get-ErrorInsights    
+            Invoke-AIErrorHelper    
     #>
-    $lastError = $Error[0]
 
-    if ($lastError) {
+    $lastError = $global:Error[0]
+
+    if ($null -ne $lastError) {
         $message = $lastError.Exception.Message
         $errorType = $lastError.FullyQualifiedErrorId
 
