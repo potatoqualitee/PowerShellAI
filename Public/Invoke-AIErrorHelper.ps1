@@ -1,5 +1,4 @@
 function Invoke-AIErrorHelper {
-    
     <#
         .SYNOPSIS
             Inspect the last error record and offer some suggestions on how to resolve it          
@@ -8,6 +7,9 @@ function Invoke-AIErrorHelper {
         .EXAMPLE
             Invoke-AIErrorHelper    
     #>
+    [CmdletBinding()]
+    [alias("ieh")]
+    param()
 
     $lastError = $global:Error[0]
 
