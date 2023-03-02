@@ -230,11 +230,11 @@ You can also use the alias `ieh`.
 
 Unlike completions, edits takes two inputs: the `text` to edit and an `instruction`. Here the `model` is set to `code-davinci-edit-001` because we're working with PowerShell code.
 
-- Here you're passing in the string that is a PowerShell function.
+- Here you're passing in the string (`InputText`) that is a PowerShell function.
 - The `instruction` is to `add a comment-based help detailed description`
 
 ```powershell
-Get-OpenAIEdit @'
+Get-OpenAIEdit -InputText @'
 function greet {
     param($n)
 
