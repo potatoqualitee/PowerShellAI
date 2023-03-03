@@ -1,3 +1,70 @@
+$Script:messages = @()
+
+function New-ChatMessage {
+    param(
+        [Parameter(Mandatory)]
+        [ValidateSet('user', 'system')]
+        $Role,
+        [Parameter(Mandatory)]
+        $Content
+    )
+
+    $Script:messages += @(
+        @{
+            role    = $Role
+            content = $Content
+        }        
+    )
+}
+
+function Get-OpenAIChatPayload {
+    param(
+        $model = 'gpt-3.5-turbo',
+        $temperature = 0.0,
+        $max_tokens = 256,
+        $top_p = 1.0,        
+        $frequency_penalty = 0,        
+        $presence_penalty = 0,
+        $stop    
+    )
+
+    $payLoad = [ordered]@{
+        model             = $model
+        messages          = $Script:messages
+        temperature       = $temperature
+        max_tokens        = $max_tokens
+        top_p             = $top_p
+        frequency_penalty = $frequency_penalty
+        presence_penalty  = $presence_penalty
+        stop              = $stop
+    }
+
+    $payLoad | ConvertTo-Json -Depth 5
+}
+
+function Write-OpenAIRespose {
+    param(
+        [Parameter(Mandatory)]
+        [ValidateSet('user', 'system')]
+        $Role,
+        [Parameter(Mandatory)]
+        $Content
+    )
+ 
+    $body = Get-OpenAIChatPayload
+    New-ChatMessage -Role 'system' -Content $prompt
+    $result = Invoke-OpenAIAPI -Uri (Get-OpenAIChatCompletionUri) -Method 'Post' -Body $body
+
+    if ($Raw) {
+        $result
+    } 
+    elseif ($result.choices) {
+        $content = $result.choices[0].message.content
+        $content.ToCharArray() | ForEach-Object { Write-Host -NoNewline $_; Start-Sleep -Milliseconds 1 }
+    }
+    ''
+}
+
 function Get-ChatCompletion {
     <#
         .SYNOPSIS
@@ -40,8 +107,7 @@ function Get-ChatCompletion {
         $prompt,        
         $model = 'gpt-3.5-turbo',
         [ValidateRange(0, 2)]
-        [decimal]$temperature = 0.0,
-        #[ValidateRange(1, 2048)]
+        [decimal]$temperature = 0.0,        
         [ValidateRange(1, 4096)]
         [int]$max_tokens = 256,
         [ValidateRange(0, 1)]
@@ -53,41 +119,16 @@ function Get-ChatCompletion {
         $stop,
         [Switch]$Raw
     )
+    
+    $Script:messages = @()
 
-    <#
-        -d '{
-        "model": "gpt-3.5-turbo",
-        "messages": [{"role": "user", "content": "What is the OpenAI mission?"}    
-    #>
-    
-    $messages = @(
-        @{
-            role    = 'system'
-            content = $prompt
-        }        
-    )
-    
-    $body = [ordered]@{
-        model             = $model
-        messages          = $messages
-        temperature       = $temperature
-        max_tokens        = $max_tokens
-        top_p             = $top_p
-        frequency_penalty = $frequency_penalty
-        presence_penalty  = $presence_penalty
-        stop              = $stop
-    }
+    New-ChatMessage -Role 'system' -Content $prompt
+    # Write-OpenAIRespose -Role 'system' -Content $prompt
 
-    $body = $body | ConvertTo-Json -Depth 5
-    $body = [System.Text.Encoding]::UTF8.GetBytes($body)
+    while ($true) {
+        Write-Host 'Press ctrl-c to exit' -ForegroundColor Green
+        $prompt = Read-Host -Prompt 'Follow up' 
 
-    
-    $result = Invoke-OpenAIAPI -Uri (Get-OpenAIChatCompletionUri) -Method 'Post' -Body $body
-    
-    if ($Raw) {
-        $result
-    } 
-    elseif ($result.choices) {
-        $result.choices[0].message.content
+        Write-OpenAIRespose -Role 'system' -Content $prompt
     }
 }
