@@ -37,6 +37,7 @@ The PowerShell AI module integrates with the OpenAI API and let's you easily acc
 
     AliasesToExport   = @(
         'gpt'
+        'chatgpt'
     )
 
     PrivateData       = @{

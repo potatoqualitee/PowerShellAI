@@ -34,14 +34,15 @@ function Get-ChatCompletion {
         Get-GPT3Completion -prompt "What is 2%2? - please explain"
     #>
     [CmdletBinding()]
-    [alias("gpt")]
+    [alias("chatgpt")]
     param(
         [Parameter(Mandatory)]
-        $prompt,
+        $prompt,        
         $model = 'gpt-3.5-turbo',
         [ValidateRange(0, 2)]
         [decimal]$temperature = 0.0,
-        [ValidateRange(1, 2048)]
+        #[ValidateRange(1, 2048)]
+        [ValidateRange(1, 4096)]
         [int]$max_tokens = 256,
         [ValidateRange(0, 1)]
         [decimal]$top_p = 1.0,
@@ -61,7 +62,7 @@ function Get-ChatCompletion {
     
     $messages = @(
         @{
-            role    = 'user'
+            role    = 'system'
             content = $prompt
         }        
     )
