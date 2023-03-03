@@ -57,7 +57,7 @@ Check out these PowerShell scripts to see how easy it is to get started with AI 
 
 ## Demos of the PowerShellAI
 
-Here are some vidoes of `PowerShellAI` in action:
+Here are some videos of `PowerShellAI` in action:
 
 | Description | YouTube Video |
 |--|--|
