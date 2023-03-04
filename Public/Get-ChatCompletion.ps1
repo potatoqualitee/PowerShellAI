@@ -1,4 +1,8 @@
-$Script:messages = @()
+$Script:messages
+
+function New-Chat {
+    $Script:messages = @()
+}
 
 function New-ChatMessage {
     param(
@@ -42,7 +46,7 @@ function Get-OpenAIChatPayload {
     $payLoad | ConvertTo-Json -Depth 5
 }
 
-function Write-OpenAIRespose {
+function Write-OpenAIResponse {
     param(
         [Parameter(Mandatory)]
         [ValidateSet('user', 'system')]
@@ -51,8 +55,8 @@ function Write-OpenAIRespose {
         $Content
     )
  
+    New-ChatMessage -Role $Role -Content $prompt
     $body = Get-OpenAIChatPayload
-    New-ChatMessage -Role 'system' -Content $prompt
     $result = Invoke-OpenAIAPI -Uri (Get-OpenAIChatCompletionUri) -Method 'Post' -Body $body
 
     if ($Raw) {
@@ -120,15 +124,61 @@ function Get-ChatCompletion {
         [Switch]$Raw
     )
     
-    $Script:messages = @()
+    New-Chat
+    New-ChatMessage -Role 'system' -Content $prompt    
+ 
+    function AnotherQuestion {
+        $prompt = Read-Host -Prompt 'Please tell me what you would like to know' 
+        Write-OpenAIResponse -Role 'user' -Content $prompt
+    }
+    
+    function NewChat {
+        New-Chat
+        $prompt = Read-Host -Prompt 'What is the theme of your chat' 
+        New-ChatMessage -Role 'system' -Content $prompt    
 
-    New-ChatMessage -Role 'system' -Content $prompt
-    # Write-OpenAIRespose -Role 'system' -Content $prompt
+        AnotherQuestion
+    }
+    
+    function RunCode {
+        Write-Host "Run: Not yet implemented`r`n" -ForegroundColor Red
+    }
+    
+    function SaveCode {
+        Write-Host "Save: Not yet implemented`r`n" -ForegroundColor Red
+    }
+    
+    function StopChat {
+        break
+    }
+
+    [System.Collections.ArrayList]$map = @()
+    function New-MenuOption {
+        param(
+            [System.Management.Automation.Host.ChoiceDescription]$ChoiceDescription,
+            $Action
+        )
+    
+        $null = $map.Add(@{
+                ChoiceDescription = $ChoiceDescription
+                Action            = $Action
+            })
+    }
+    
+    New-MenuOption (New-Object System.Management.Automation.Host.ChoiceDescription '&Another question', 'Do a follow up question') AnotherQuestion
+    New-MenuOption (New-Object System.Management.Automation.Host.ChoiceDescription '&New Chat', 'Start a new chat') NewChat
+    New-MenuOption (New-Object System.Management.Automation.Host.ChoiceDescription '&Run', 'Run the code') RunCode
+    New-MenuOption (New-Object System.Management.Automation.Host.ChoiceDescription '&Save', 'Save the code') SaveCode
+    New-MenuOption (New-Object System.Management.Automation.Host.ChoiceDescription '&Quit', 'Stop the chat') StopChat
+    
+    $descriptions = foreach ($item in $map) { $item.ChoiceDescription }
+    $options = [System.Management.Automation.Host.ChoiceDescription[]]($descriptions)
+    
+    AnotherQuestion
 
     while ($true) {
-        Write-Host 'Press ctrl-c to exit' -ForegroundColor Green
-        $prompt = Read-Host -Prompt 'Follow up' 
-
-        Write-OpenAIRespose -Role 'system' -Content $prompt
+        $message = 'What would you like to do next?'
+        $response = $host.ui.PromptForChoice($null, $message, $options, 0)
+        &$map[$response].Action
     }
 }
