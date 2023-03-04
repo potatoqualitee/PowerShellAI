@@ -31,6 +31,9 @@ The PowerShell AI module integrates with the OpenAI API and let's you easily acc
         'Get-OpenAIModerationsUri'
 		'Get-OpenAIEditsUri'
 		'Get-OpenAIEdit'
+        'Get-OpenAIKey'
+        'Get-OpenAIUsage'
+        'Get-OpenAIUser'
         'New-SpreadSheet'
     )
 
