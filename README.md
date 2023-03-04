@@ -53,6 +53,12 @@ Check out these PowerShell scripts to see how easy it is to get started with AI 
 | Set-DalleImageAsWallpaper | Set the image from the OpenAI DALL-E API as the wallpaper | [Set-DalleImageAsWallpaper.ps1](./Public/Set-DalleImageAsWallpaper.ps1)
 | Invoke-AIErrorHelper | Helper function let ChatGPT add more info about errors | [Invoke-AIErrorHelper.ps1](./Public/Invoke-AIErrorHelper.ps1)
 
+## Polyglot Interactive Notebooks
+
+| Notebook | Description | Location
+|--|--|--|
+| OpenAI Settings | A notebook shows how to get OpenAI dashboard info | [Settings.ipynb](CommunityContributions/05-Settings/Settings.ipynb)
+
 <br/>
 
 ## Demos of the PowerShellAI
