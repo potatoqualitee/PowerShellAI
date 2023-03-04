@@ -107,7 +107,7 @@ function Get-ChatCompletion {
     [CmdletBinding()]
     [alias("chatgpt")]
     param(
-        [Parameter(Mandatory)]
+        # [Parameter(Mandatory)]
         $prompt,        
         $model = 'gpt-3.5-turbo',
         [ValidateRange(0, 2)]
@@ -125,8 +125,11 @@ function Get-ChatCompletion {
     )
     
     New-Chat
-    New-ChatMessage -Role 'system' -Content $prompt    
- 
+
+    if($prompt) {
+        New-ChatMessage -Role 'system' -Content $prompt    
+    }
+
     function AnotherQuestion {
         $prompt = Read-Host -Prompt 'Please tell me what you would like to know' 
         Write-OpenAIResponse -Role 'user' -Content $prompt
@@ -152,6 +155,10 @@ function Get-ChatCompletion {
         break
     }
 
+    function ClearScreen {
+        Clear-Host
+    }
+
     [System.Collections.ArrayList]$map = @()
     function New-MenuOption {
         param(
@@ -169,6 +176,9 @@ function Get-ChatCompletion {
     New-MenuOption (New-Object System.Management.Automation.Host.ChoiceDescription '&New Chat', 'Start a new chat') NewChat
     New-MenuOption (New-Object System.Management.Automation.Host.ChoiceDescription '&Run', 'Run the code') RunCode
     New-MenuOption (New-Object System.Management.Automation.Host.ChoiceDescription '&Save', 'Save the code') SaveCode
+
+    New-MenuOption (New-Object System.Management.Automation.Host.ChoiceDescription '&Clear Screen', 'Clear the screen') ClearScreen
+
     New-MenuOption (New-Object System.Management.Automation.Host.ChoiceDescription '&Quit', 'Stop the chat') StopChat
     
     $descriptions = foreach ($item in $map) { $item.ChoiceDescription }
@@ -177,7 +187,7 @@ function Get-ChatCompletion {
     AnotherQuestion
 
     while ($true) {
-        $message = 'What would you like to do next?'
+        $message = "`r`nWhat would you like to do next?"
         $response = $host.ui.PromptForChoice($null, $message, $options, 0)
         &$map[$response].Action
     }
