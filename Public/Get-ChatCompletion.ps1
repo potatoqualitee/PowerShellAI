@@ -1,13 +1,66 @@
 $Script:messages
+$Script:timeStamp = $null
+$Script:chatGPTSessionPath = Join-Path $env:APPDATA 'PowerShellAI/ChatGPT'
 
 function New-Chat {
     $Script:messages = @()
+    New-ChatSession
+}
+
+function New-ChatSession {
+    if ($null -ne $Script:timeStamp) {
+        Export-ChatSession
+    }
+
+    $Script:timeStamp = Get-Date -Format 'yyyyMMddHHmmss'
+}
+
+function Export-ChatSession {
+    $file = Join-Path $Script:chatGPTSessionPath ("{0}-ChatGPTSession.xml" -f $Script:timeStamp)
+
+    if (-not (Test-Path $Script:chatGPTSessionPath)) {
+        $null = New-Item -ItemType Directory -Path $Script:chatGPTSessionPath
+    }
+
+    $Script:messages | Export-Clixml -Path $file
+}
+
+function Import-ChatSession {
+    param(
+        [Parameter(ValueFromPipelineByPropertyName)]
+        $Path        
+    )
+
+    Process {
+        $Script:messages = Import-Clixml -Path $Path
+    }
+}
+
+function Get-ChatSession {
+    if (Test-Path $Script:chatGPTSessionPath) {
+        Get-ChildItem -Path $Script:chatGPTSessionPath *.xml
+    }   
+}
+
+function Get-ChatGPTSessionContent {
+    param(
+        [Parameter(ValueFromPipelineByPropertyName)]
+        $Path        
+    )
+
+    Process {
+        Import-Clixml -Path $Path
+    }
+}
+
+function Get-ChatMessage {
+    $Script:messages
 }
 
 function New-ChatMessage {
     param(
         [Parameter(Mandatory)]
-        [ValidateSet('user', 'system')]
+        [ValidateSet('user', 'system', 'assistant')]
         $Role,
         [Parameter(Mandatory)]
         $Content
@@ -19,6 +72,8 @@ function New-ChatMessage {
             content = $Content
         }        
     )
+
+    Export-ChatSession
 }
 
 function Get-OpenAIChatPayload {
@@ -52,10 +107,11 @@ function Write-OpenAIResponse {
         [ValidateSet('user', 'system')]
         $Role,
         [Parameter(Mandatory)]
-        $Content
+        $Content        
     )
  
     New-ChatMessage -Role $Role -Content $prompt
+
     $body = Get-OpenAIChatPayload
     $result = Invoke-OpenAIAPI -Uri (Get-OpenAIChatCompletionUri) -Method 'Post' -Body $body
 
@@ -64,7 +120,14 @@ function Write-OpenAIResponse {
     } 
     elseif ($result.choices) {
         $content = $result.choices[0].message.content
-        $content.ToCharArray() | ForEach-Object { Write-Host -NoNewline $_; Start-Sleep -Milliseconds 1 }
+
+        if ($FastDisplay) {
+            Write-Host $content
+        }
+        else {
+            Write-Host $content -NoNewline
+            $content.ToCharArray() | ForEach-Object { Write-Host -NoNewline $_; Start-Sleep -Milliseconds 1 }
+        }
     }
     ''
 }
@@ -121,12 +184,13 @@ function Get-ChatCompletion {
         [ValidateRange(-2, 2)]
         [decimal]$presence_penalty = 0,
         $stop,
-        [Switch]$Raw
+        [Switch]$Raw,
+        [Switch]$FastDisplay
     )
     
     New-Chat
 
-    if($prompt) {
+    if ($prompt) {
         New-ChatMessage -Role 'system' -Content $prompt    
     }
 
@@ -176,9 +240,7 @@ function Get-ChatCompletion {
     New-MenuOption (New-Object System.Management.Automation.Host.ChoiceDescription '&New Chat', 'Start a new chat') NewChat
     New-MenuOption (New-Object System.Management.Automation.Host.ChoiceDescription '&Run', 'Run the code') RunCode
     New-MenuOption (New-Object System.Management.Automation.Host.ChoiceDescription '&Save', 'Save the code') SaveCode
-
     New-MenuOption (New-Object System.Management.Automation.Host.ChoiceDescription '&Clear Screen', 'Clear the screen') ClearScreen
-
     New-MenuOption (New-Object System.Management.Automation.Host.ChoiceDescription '&Quit', 'Stop the chat') StopChat
     
     $descriptions = foreach ($item in $map) { $item.ChoiceDescription }
