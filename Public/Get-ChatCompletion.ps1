@@ -37,19 +37,28 @@ function Import-ChatSession {
 }
 
 function Get-ChatSession {
+    param(
+        $Name
+    )
+
     if (Test-Path $Script:chatGPTSessionPath) {
-        Get-ChildItem -Path $Script:chatGPTSessionPath *.xml
+        Get-ChildItem -Path $Script:chatGPTSessionPath *.xml | ? { $_.Name -match $Name }
     }   
 }
 
 function Get-ChatGPTSessionContent {
     param(
-        [Parameter(ValueFromPipelineByPropertyName)]
+        [Alias('FullName')]
+        [Parameter(ValueFromPipelineByPropertyName)]        
         $Path        
     )
 
     Process {
-        Import-Clixml -Path $Path
+        (Import-Clixml -Path $Path) | ForEach-Object {
+            $SessionName = (Split-Path -Leaf $Path) -replace '-ChatGPTSession.xml', ''
+            [PSCustomObject]$_ | Add-Member -PassThru -MemberType NoteProperty -Name SessionName -Value $SessionName
+            
+        } | Select-Object SessionName, Role, Content
     }
 }
 
@@ -114,6 +123,10 @@ function Write-OpenAIResponse {
 
     $body = Get-OpenAIChatPayload
     $result = Invoke-OpenAIAPI -Uri (Get-OpenAIChatCompletionUri) -Method 'Post' -Body $body
+
+    if (!$ExcludeResponseFromBeingSaved) {
+        New-ChatMessage -Role assistant -Content $result.choices[0].message.content
+    }
 
     if ($Raw) {
         $result
@@ -185,7 +198,8 @@ function Get-ChatCompletion {
         [decimal]$presence_penalty = 0,
         $stop,
         [Switch]$Raw,
-        [Switch]$FastDisplay
+        [Switch]$FastDisplay,
+        [Switch]$ExcludeResponseFromBeingSaved
     )
     
     New-Chat
