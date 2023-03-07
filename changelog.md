@@ -3,7 +3,7 @@ Thank you to the community for your contributions!
 
 - [Mikey Bronowski](https://github.com/MikeyBronowski)
     - Update README with fixes and clarifications
-* Usage by @stefanstranger in https://github.com/dfinke/PowerShellAI/pull/69
+- Usage by @stefanstranger in https://github.com/dfinke/PowerShellAI/pull/69
 
 - [Stefan Stranger](https://github.com/stefanstranger)
     - Added functions to get OpenAI Dashboard information and more
