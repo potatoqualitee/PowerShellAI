@@ -1,3 +1,9 @@
+# v0.4.9
+
+- For `Get-OpenAIUsage`
+    - Default start and end date
+    - Added switch $OnlyLineItems
+
 # v0.4.8
 Thank you to the community for your contributions!
 
