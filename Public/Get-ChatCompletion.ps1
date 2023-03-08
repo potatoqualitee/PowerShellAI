@@ -114,7 +114,7 @@ function Get-OpenAIChatPayload {
     $payLoad | ConvertTo-Json -Depth 5
 }
 
-function Write-OpenAIResponse {
+function Write-ChatResponse {
     param(
         [Parameter(Mandatory)]
         [ValidateSet('user', 'system')]
@@ -214,7 +214,7 @@ function Get-ChatCompletion {
 
     function AnotherQuestion {
         $prompt = Read-Host -Prompt 'Please tell me what you would like to know' 
-        Write-OpenAIResponse -Role 'user' -Content $prompt
+        Write-ChatResponse -Role 'user' -Content $prompt
     }
     
     function NewChat {
