@@ -7,6 +7,10 @@ function New-Chat {
     New-ChatSession
 }
 
+function Get-ChatSessionPath {
+    $Script:chatGPTSessionPath
+}
+
 function New-ChatSession {
     if ($null -ne $Script:timeStamp) {
         Export-ChatSession
@@ -124,7 +128,7 @@ function Write-OpenAIResponse {
     $body = Get-OpenAIChatPayload
     $result = Invoke-OpenAIAPI -Uri (Get-OpenAIChatCompletionUri) -Method 'Post' -Body $body
 
-    if (!$ExcludeResponseFromBeingSaved) {
+    if (!$ExcludeResponseFromBeingSaved) {    
         New-ChatMessage -Role assistant -Content $result.choices[0].message.content
     }
 
@@ -138,7 +142,7 @@ function Write-OpenAIResponse {
             Write-Host $content
         }
         else {
-            Write-Host $content -NoNewline
+            # Write-Host $content -NoNewline
             $content.ToCharArray() | ForEach-Object { Write-Host -NoNewline $_; Start-Sleep -Milliseconds 1 }
         }
     }
