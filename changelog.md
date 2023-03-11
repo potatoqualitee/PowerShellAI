@@ -1,3 +1,7 @@
+# v0.5.0
+
+- Thank you [Kris Borowinski](https://github.com/kborowinski) for re-working Get-OpenAIKey to Get-LocalOpenAIKey and creating/updating tests
+
 # v0.4.9
 
 - For `Get-OpenAIUsage`
