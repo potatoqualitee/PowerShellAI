@@ -86,11 +86,12 @@ function Import-ChatSession {
         $Path        
     )
 
-    Process {
-        $Script:messages = Import-Clixml -Path $Path
-    }
-    
     End {
+        if($null -eq $Path -or -not (Test-Path $Path) ) {
+            throw "Chat session file not found or is empty: $Path"
+        }
+
+        $Script:messages = Import-Clixml -Path $Path
         Set-TimeStamp ((Split-Path -Leaf $Path) -split '-')[0]
         $Script:chatInProgress = $true
     }
