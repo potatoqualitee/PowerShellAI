@@ -39,6 +39,7 @@ The PowerShell AI module integrates with the OpenAI API and let's you easily acc
         'Get-ChatSession'
         'Get-ChatSessionContent'
         'Get-ChatSessionPath'
+        'Import-ChatAssistantMessages'
         'Import-ChatSession'
         'Invoke-ChatCompletion'
         'New-Chat'

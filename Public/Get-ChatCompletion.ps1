@@ -87,7 +87,7 @@ function Import-ChatSession {
     )
 
     End {
-        if($null -eq $Path -or -not (Test-Path $Path) ) {
+        if ($null -eq $Path -or -not (Test-Path $Path) ) {
             throw "Chat session file not found or is empty: $Path"
         }
 
@@ -137,6 +137,29 @@ function Invoke-ChatCompletion {
     }
     
     Write-ChatResponse -Role user -Content $prompt
+}
+
+function Import-ChatAssistantMessages {    
+    param(
+        [Parameter(ValueFromPipeline = $true)]
+        [string[]]$targetInput
+    )
+
+    Begin {
+        if (!(Test-ChatInProgress)) {
+            New-Chat
+        }
+        $messages = @()
+    }
+
+    Process {
+        $messages += $targetInput
+    }
+
+    End {
+        $prompt = $messages -join "`r`n"
+        New-ChatMessage -Role assistant -Content $prompt.Trim()
+    }
 }
 
 function New-ChatMessage {
