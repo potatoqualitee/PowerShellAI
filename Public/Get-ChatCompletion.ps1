@@ -7,6 +7,15 @@ function Test-ChatInProgress {
     $Script:chatInProgress
 }
 
+function Get-ChatTheme {
+    if (Test-ChatInProgress) {
+        $Script:messages[0].content
+    }
+    else {
+        "No chat in progress. Use `Chat <content>` or `New-Chat <theme>` to start a new chat session."
+    }
+}
+
 function Stop-Chat {
     $Script:chatInProgress = $false
     $Script:messages = @()
