@@ -34,14 +34,21 @@ The PowerShell AI module integrates with the OpenAI API and let's you easily acc
         'Get-OpenAIEdit'
         'New-SpreadSheet'
 
+        'Get-ChatHistory'
+        'Get-ChatInProgress'
         'Get-ChatSession'
-        'Get-ChatGPTSessionContent'
+        'Get-ChatSessionContent'
         'Get-ChatSessionPath'
+        'Import-ChatSession'
+        'Invoke-ChatCompletion'
+        'New-Chat'
+        'Test-ChatInProgress'
     )
 
     AliasesToExport   = @(
         'gpt'
-        'chatgpt'
+        #'chatgpt'
+        'chat'
     )
 
     PrivateData       = @{

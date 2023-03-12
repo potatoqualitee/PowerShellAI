@@ -1,42 +1,98 @@
 $Script:messages
 $Script:timeStamp = $null
-$Script:chatGPTSessionPath = Join-Path $env:APPDATA 'PowerShellAI/ChatGPT'
+$Script:chatSessionPath = Join-Path $env:APPDATA 'PowerShellAI/ChatGPT'
+$Script:chatInProgress = $false
+
+function Test-ChatInProgress {
+    $Script:chatInProgress
+}
+
+function Get-ChatHistory {
+    if (Test-ChatInProgress) {
+        if ($Script:messages.Count -gt 0) {            
+            foreach ($message in $Script:messages) {
+                [PSCustomObject]$message             
+            }
+        }
+        else {
+            "No chat history"
+        }
+    }
+    else {
+        "No chat in progress. Use `Chat <content>` or `New-Chat <theme>` to start a new chat session."
+    }    
+}
+
+function Get-ChatInProgress {
+    if (Test-ChatInProgress) {        
+        Get-ChatHistory
+    }
+    else {
+        "No chat in progress. Use `New-Chat` to start a new chat session."
+    }
+}
+
+function Set-TimeStamp {
+    param(
+        $targetTimeStamp
+    )
+
+    if ($null -ne $targetTimeStamp) {
+        $Script:timeStamp = $targetTimeStamp
+    }
+    else {
+        $Script:timeStamp = Get-Date -Format 'yyyyMMddHHmmss'
+    }    
+}
 
 function New-Chat {
-    $Script:messages = @()
-    New-ChatSession
-}
-
-function Get-ChatSessionPath {
-    $Script:chatGPTSessionPath
-}
-
-function New-ChatSession {
+    param(
+        $prompt
+    )
+    
     if ($null -ne $Script:timeStamp) {
         Export-ChatSession
     }
 
-    $Script:timeStamp = Get-Date -Format 'yyyyMMddHHmmss'
+    $Script:chatInProgress = $true
+    $Script:messages = @()
+
+    #$Script:timeStamp = Get-Date -Format 'yyyyMMddHHmmss'
+    Set-TimeStamp
+
+    if ($null -ne $prompt) {    
+        New-ChatMessage -Role system -Content $prompt
+    }
+}
+
+function Get-ChatSessionPath {
+    $Script:chatSessionPath
 }
 
 function Export-ChatSession {
-    $file = Join-Path $Script:chatGPTSessionPath ("{0}-ChatGPTSession.xml" -f $Script:timeStamp)
+    $file = Join-Path $Script:chatSessionPath ("{0}-ChatGPTSession.xml" -f $Script:timeStamp)
 
-    if (-not (Test-Path $Script:chatGPTSessionPath)) {
-        $null = New-Item -ItemType Directory -Path $Script:chatGPTSessionPath
+    if (-not (Test-Path $Script:chatSessionPath)) {
+        $null = New-Item -ItemType Directory -Path $Script:chatSessionPath
     }
 
-    $Script:messages | Export-Clixml -Path $file
+    $Script:messages | Export-Clixml -Path $file -Force
 }
 
 function Import-ChatSession {
     param(
         [Parameter(ValueFromPipelineByPropertyName)]
+        [Alias('FullName')]
         $Path        
     )
 
     Process {
         $Script:messages = Import-Clixml -Path $Path
+    }
+    
+    End {
+        Set-TimeStamp ((Split-Path -Leaf $Path) -split '-')[0]
+        $Script:chatInProgress = $true
     }
 }
 
@@ -45,12 +101,12 @@ function Get-ChatSession {
         $Name
     )
 
-    if (Test-Path $Script:chatGPTSessionPath) {
-        Get-ChildItem -Path $Script:chatGPTSessionPath *.xml | ? { $_.Name -match $Name }
+    if (Test-Path $Script:chatSessionPath) {
+        Get-ChildItem -Path $Script:chatSessionPath *.xml | Where-Object { $_.Name -match $Name }
     }   
 }
 
-function Get-ChatGPTSessionContent {
+function Get-ChatSessionContent {
     param(
         [Alias('FullName')]
         [Parameter(ValueFromPipelineByPropertyName)]        
@@ -66,8 +122,20 @@ function Get-ChatGPTSessionContent {
     }
 }
 
-function Get-ChatMessage {
-    $Script:messages
+function Invoke-ChatCompletion {
+    [CmdletBinding()]
+    [alias("chat")]
+    param(
+        [Parameter(Mandatory)]
+        $prompt,
+        [switch]$FastDisplay
+    )
+
+    if (!(Test-ChatInProgress)) {     
+        New-Chat
+    }
+    
+    Write-ChatResponse -Role user -Content $prompt
 }
 
 function New-ChatMessage {
