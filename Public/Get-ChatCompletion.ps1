@@ -7,6 +7,12 @@ function Test-ChatInProgress {
     $Script:chatInProgress
 }
 
+function Stop-Chat {
+    $Script:chatInProgress = $false
+    $Script:messages = @()
+    $Script:timeStamp = $null
+}
+
 function Get-ChatHistory {
     if (Test-ChatInProgress) {
         if ($Script:messages.Count -gt 0) {            
