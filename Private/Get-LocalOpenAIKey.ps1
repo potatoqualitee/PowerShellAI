@@ -1,10 +1,10 @@
-function Get-OpenAIKey {
+function Get-LocalOpenAIKey {
     <#
         .SYNOPSIS
         Gets the OpenAIKey module scope variable or environment variable.
 
         .EXAMPLE
-        Get-OpenAIKey
+        Get-LocalOpenAIKey
     #>
     if ($null -ne $Script:OpenAIKey) {
         if ($PSVersionTable.PSVersion.Major -gt 5) {

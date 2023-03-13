@@ -38,7 +38,7 @@ function Invoke-OpenAIAPI {
         body        = $Body
     }
 
-    if (($apiKey = Get-OpenAIKey) -is [SecureString]) {
+    if (($apiKey = Get-LocalOpenAIKey) -is [SecureString]) {
         #On PowerShell 6 and higher use Invoke-RestMethod with Authentication parameter and secure Token
         $params['Authentication'] = 'Bearer'
         $params['Token'] = $apiKey

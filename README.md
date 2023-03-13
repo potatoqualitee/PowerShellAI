@@ -50,14 +50,21 @@ Check out these PowerShell scripts to see how easy it is to get started with AI 
 | Get-DalleImage | Get an image from the OpenAI DALL-E API | [Get-DalleImage.ps1](./Public/Get-DalleImage.ps1)
 | ai | Experimental AI function that you can pipe all sorts of things into and get back a completion | [ai.ps1](./Public/ai.ps1)
 | copilot | Makes the request to GPT, parses the response and displays it in a box and then prompts the user to run the code or not. | [copilot.ps1](./Public/copilot.ps1)
-| Get-DalleImage | Get an image from the OpenAI DALL-E API | [Get-DalleImage.ps1](./Public/Get-DalleImage.ps1)
 | Set-DalleImageAsWallpaper | Set the image from the OpenAI DALL-E API as the wallpaper | [Set-DalleImageAsWallpaper.ps1](./Public/Set-DalleImageAsWallpaper.ps1)
+| Invoke-AIErrorHelper | Helper function let ChatGPT add more info about errors | [Invoke-AIErrorHelper.ps1](./Public/Invoke-AIErrorHelper.ps1)
+|Get-OpenAIUsage|Returns a billing summary of OpenAI API usage for your organization
+
+## Polyglot Interactive Notebooks
+
+| Notebook | Description | Location
+|--|--|--|
+| OpenAI Settings | A notebook shows how to get OpenAI dashboard info | [Settings.ipynb](CommunityContributions/05-Settings/Settings.ipynb)
 
 <br/>
 
 ## Demos of the PowerShellAI
 
-Here are some vidoes of `PowerShellAI` in action:
+Here are some videos of `PowerShellAI` in action:
 
 | Description | YouTube Video |
 |--|--|
@@ -218,15 +225,23 @@ Thank you to [Clem Messerli](https://twitter.com/ClemMesserli/status/16163122382
 
 Check out the [video of `copilot` in action]()
 
+# Ask ChatGPT for help with an error message
+
+If you get an error after executing some PowerShell. You can now ask ChatGPT for help. The new `Invoke-AIErrorInsights` function will take the last error message and ask ChatGPT for help.
+
+You can also use the alias `ieh`.
+
+![Alt text](media/AIErrorInsights.png)
+
 # Code editing example
 
 Unlike completions, edits takes two inputs: the `text` to edit and an `instruction`. Here the `model` is set to `code-davinci-edit-001` because we're working with PowerShell code.
 
-- Here you're passing in the string that is a PowerShell function.
+- Here you're passing in the string (`InputText`) that is a PowerShell function.
 - The `instruction` is to `add a comment-based help detailed description`
 
 ```powershell
-Get-OpenAIEdit @'
+Get-OpenAIEdit -InputText @'
 function greet {
     param($n)
 
