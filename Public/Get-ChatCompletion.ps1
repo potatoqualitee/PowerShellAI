@@ -30,7 +30,7 @@ More to come....
 
 $Script:messages
 $Script:timeStamp = $null
-$Script:chatSessionPath = Join-Path $env:APPDATA 'PowerShellAI/ChatGPT'
+# $Script:chatSessionPath = Join-Path $env:APPDATA 'PowerShellAI/ChatGPT'
 $Script:chatInProgress = $false
 
 function Test-ChatInProgress {
