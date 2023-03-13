@@ -154,10 +154,13 @@ function Invoke-ChatCompletion {
     Write-ChatResponse -Role user -Content $prompt
 }
 
-function Import-ChatAssistantMessages {    
+function Import-ChatMessages {
     param(
-        [Parameter(ValueFromPipeline = $true)]
-        [string[]]$targetInput
+        [Parameter(ValueFromPipeline)]
+        $targetInput,
+        [ValidateSet('user', 'system', 'assistant')]
+        [Parameter(Mandatory)]
+        $Role 
     )
 
     Begin {
@@ -173,7 +176,37 @@ function Import-ChatAssistantMessages {
 
     End {
         $prompt = $messages -join "`r`n"
-        New-ChatMessage -Role assistant -Content $prompt.Trim()
+        New-ChatMessage -Role $Role -Content $prompt.Trim()
+    }
+}
+
+function Import-ChatAssistantMessages {    
+    param(
+        [Parameter(ValueFromPipeline)]
+        $targetInput
+    )
+
+    Process {
+        $messages += $targetInput
+    }
+
+    End {
+        Import-ChatMessages -targetInput $messages -Role assistant
+    }
+}
+
+function Import-ChatUserMessages {    
+    param(
+        [Parameter(ValueFromPipeline)]
+        $targetInput
+    )
+
+    Process {
+        $messages += $targetInput
+    }
+
+    End {
+        Import-ChatMessages -targetInput $messages -Role user
     }
 }
 
