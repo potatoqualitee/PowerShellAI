@@ -1,3 +1,33 @@
+<#
+
+NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE 
+
+This script is a work in progress.
+
+It is a ** Proof of Concept **
+
+It has proven to be a very useful tool.
+
+I am releasing it as a preview to get feedback.
+
+Next steps are to refactor the code, add unit tests, add help, vidoes and add more features.
+
+Easiest way to get started:
+
+1. Install-Module PowerShellAI
+
+```powershell
+new-chat 'you are a powershell bot'
+
+chat 'even numbers btwn 1 and 10'
+chat 'odd numbers'
+```
+
+These functions enable having a chat session with a GPT model. It has "memory" and keeps track of the conversation.
+
+More to come....
+#>
+
 $Script:messages
 $Script:timeStamp = $null
 $Script:chatSessionPath = Join-Path $env:APPDATA 'PowerShellAI/ChatGPT'
