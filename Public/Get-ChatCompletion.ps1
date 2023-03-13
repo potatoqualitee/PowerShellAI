@@ -156,10 +156,10 @@ function Invoke-ChatCompletion {
 
 function Import-ChatMessages {
     param(
-        [Parameter(ValueFromPipeline)]
-        $targetInput,
-        [ValidateSet('user', 'system', 'assistant')]
-        [Parameter(Mandatory)]
+        [Parameter(ValueFromPipelineByPropertyName)]
+        $Content,
+        [Parameter(ValueFromPipelineByPropertyName)]
+        [ValidateSet('user', 'system', 'assistant')]        
         $Role 
     )
 
@@ -167,46 +167,47 @@ function Import-ChatMessages {
         if (!(Test-ChatInProgress)) {
             New-Chat
         }
-        $messages = @()
     }
 
     Process {
-        $messages += $targetInput
+        if ($Content -is [string]) {
+            $targetContent = $Content
+        }
+        else {
+            $targetContent = $Content.Content
+        }
+
+        #New-ChatMessage -Role $Role -Content $Content #.Content
+        New-ChatMessage -Role $Role -Content $targetContent
     }
 
-    End {
-        $prompt = $messages -join "`r`n"
-        New-ChatMessage -Role $Role -Content $prompt.Trim()
-    }
 }
 
 function Import-ChatAssistantMessages {    
     param(
-        [Parameter(ValueFromPipeline)]
-        $targetInput
+        [Parameter(ValueFromPipelineByPropertyName, ValueFromPipeline)]
+        $Content
     )
 
     Process {
-        $messages += $targetInput
-    }
-
-    End {
-        Import-ChatMessages -targetInput $messages -Role assistant
+        [PSCustomObject]@{
+            role    = 'assistant'
+            content = $Content
+        }  | Import-ChatMessages
     }
 }
 
 function Import-ChatUserMessages {    
     param(
-        [Parameter(ValueFromPipeline)]
-        $targetInput
+        [Parameter(ValueFromPipelineByPropertyName, ValueFromPipeline)]
+        $Content
     )
 
     Process {
-        $messages += $targetInput
-    }
-
-    End {
-        Import-ChatMessages -targetInput $messages -Role user
+        [PSCustomObject]@{
+            role    = 'user'
+            content = $Content
+        }  | Import-ChatMessages
     }
 }
 
