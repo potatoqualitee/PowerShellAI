@@ -72,7 +72,6 @@ function New-Chat {
     $Script:chatInProgress = $true
     $Script:messages = @()
 
-    #$Script:timeStamp = Get-Date -Format 'yyyyMMddHHmmss'
     Set-TimeStamp
 
     if ($null -ne $prompt) {    
@@ -206,7 +205,7 @@ function Import-ChatUserMessages {
     Process {
         [PSCustomObject]@{
             role    = 'user'
-            content = $Content
+            content = $Content.Content
         }  | Import-ChatMessages
     }
 }
@@ -282,8 +281,7 @@ function Write-ChatResponse {
         if ($FastDisplay) {
             Write-Host $content
         }
-        else {
-            # Write-Host $content -NoNewline
+        else {            
             $content.ToCharArray() | ForEach-Object { Write-Host -NoNewline $_; Start-Sleep -Milliseconds 1 }
         }
     }
