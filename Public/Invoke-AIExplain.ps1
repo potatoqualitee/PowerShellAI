@@ -8,14 +8,20 @@ function Invoke-AIExplain {
             explain
         .EXAMPLE
             explain 10 # where 10 is the id of the command in the history
+        .EXAMPLE
+            explain -Value "Get-Process"
     #>
     [CmdletBinding()]
     [alias("explain")]
     param(
-        $Id
+        $Id,
+        $Value        
     )
 
-    if ($Id) {
+    if($Value) {
+        $cli = $Value
+    }
+    elseif ($Id) {
         $cli = Get-History -Id $Id
     }
     else {
