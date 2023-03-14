@@ -36,4 +36,10 @@ Describe "OpenAIUri" -Tag 'OpenAIUri' {
 
         $actual | Should -Be 'https://api.openai.com/v1/edits'
     }
+
+    It "Should return the OpenAI Chat URI" {
+        $actual = Get-OpenAIChatCompletionUri
+        
+        $actual | Should -Be 'https://api.openai.com/v1/chat/completions'
+    }
 }

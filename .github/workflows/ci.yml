@@ -1,9 +1,9 @@
 on:
   push:
     paths-ignore:
-      - 'README.md'
-      - 'changelog.md'
-      - 'CommunityContributions/**'
+      - "README.md"
+      - "changelog.md"
+      - "CommunityContributions/**"
     branches:
       - master
 

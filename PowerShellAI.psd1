@@ -1,6 +1,6 @@
 @{
     RootModule        = 'PowerShellAI.psm1'
-    ModuleVersion     = '0.5.0'
+    ModuleVersion     = '0.5.1'
     GUID              = '081ce7b4-6e63-41ca-92a7-2bf72dbad018'
     Author            = 'Douglas Finke'
     CompanyName       = 'Doug Finke'
@@ -19,8 +19,10 @@ The PowerShell AI module integrates with the OpenAI API and let's you easily acc
         'Disable-AIShortCutKey'
         'Enable-AIShortCutKey'
         'Get-DalleImage'
+        'Get-ChatCompletion'
         'Get-GPT3Completion'
         'Get-OpenAIBaseRestUri'
+        'Get-OpenAIChatCompletionUri'
         'Get-OpenAICompletionsUri'
         'Get-OpenAIImagesGenerationsUri'
         'Get-OpenAIKey'
@@ -28,6 +30,26 @@ The PowerShell AI module integrates with the OpenAI API and let's you easily acc
         'Get-OpenAIModelsUri'
         'Get-OpenAIModeration'
         'Get-OpenAIModerationsUri'
+
+        'Get-OpenAIEditsUri'
+        'Get-OpenAIEdit'
+        'New-SpreadSheet'
+
+        'Get-ChatHistory'
+        'Get-ChatInProgress'
+        'Get-ChatSession'
+        'Get-ChatSessionContent'
+        'Get-ChatSessionPath'
+        'Get-ChatTheme'
+        'Import-ChatMessages'
+        'Import-ChatAssistantMessages'
+        'Import-ChatUserMessages'
+        'Import-ChatSession'
+        'Invoke-ChatCompletion'
+        'New-Chat'
+        'Stop-Chat'
+        'Test-ChatInProgress'
+
         'Get-OpenAIUsage'
         'Get-OpenAIUser'
         'Invoke-AIErrorHelper'
@@ -39,6 +61,8 @@ The PowerShell AI module integrates with the OpenAI API and let's you easily acc
 
     AliasesToExport   = @(
         'gpt'
+        #'chatgpt'
+        'chat'
         'ieh'
     )
 
