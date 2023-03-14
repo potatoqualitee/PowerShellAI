@@ -1,3 +1,16 @@
+# v0.5.1
+
+- Added proof of concept to work with the new Chat REST API
+    - There is more to it. Requires refactoring and tests
+    - Proving to be very useful
+
+    ```powershell
+    new-chat 'you are a powershell bot'
+
+    chat 'even numbers btwn 1 and 10'
+    chat 'odd numbers'
+    ```
+
 # v0.5.0
 
 - Thank you [Kris Borowinski](https://github.com/kborowinski) for re-working Get-OpenAIKey to Get-LocalOpenAIKey and creating/updating tests
