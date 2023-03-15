@@ -43,16 +43,18 @@ Check out these PowerShell scripts to see how easy it is to get started with AI 
 
 |PS Script | Description | Location
 |--|--|--|
-| Disable-AIShortCutKey | Disable the <kbd>ctrl+g</kbd> shortcut key go getting completions | [Disable-AIShortCutKey.ps1](./Public/Disable-AIShortCutKey.ps1) |
-| Enable-AIShortCutKey | Enable the <kbd>ctrl+g</kbd> | [Enable-AIShortCutKey.ps1](./Public/Enable-AIShortCutKey.ps1) |
-| Get-OpenAIEdit | Given a prompt and an instruction, the model will return an edited version of the prompt | [Get-OpenAIEdit.ps1](./Public/Get-OpenAIEdit.ps1)
-| Get-GPT3Completion | Get a completion from the OpenAI GPT-3 API | [Get-GPT3Completion.ps1](./Public/Get-GPT3Completion.ps1)
-| Get-DalleImage | Get an image from the OpenAI DALL-E API | [Get-DalleImage.ps1](./Public/Get-DalleImage.ps1)
 | ai | Experimental AI function that you can pipe all sorts of things into and get back a completion | [ai.ps1](./Public/ai.ps1)
 | copilot | Makes the request to GPT, parses the response and displays it in a box and then prompts the user to run the code or not. | [copilot.ps1](./Public/copilot.ps1)
-| Set-DalleImageAsWallpaper | Set the image from the OpenAI DALL-E API as the wallpaper | [Set-DalleImageAsWallpaper.ps1](./Public/Set-DalleImageAsWallpaper.ps1)
+| Get-GPT3Completion - alias `gpt` | Get a completion from the OpenAI GPT-3 API | [Get-GPT3Completion.ps1](./Public/Get-GPT3Completion.ps1)
 | Invoke-AIErrorHelper | Helper function let ChatGPT add more info about errors | [Invoke-AIErrorHelper.ps1](./Public/Invoke-AIErrorHelper.ps1)
+| Invoke-AIExplain | Utilizes the OpenAI GPT-3 API to offer explanations for the most recently run command, and more. | [Invoke-AIExplain.ps1](./Public/Invoke-AIExplain.ps1)
+| Get-OpenAIEdit | Given a prompt and an instruction, the model will return an edited version of the prompt | [Get-OpenAIEdit.ps1](./Public/Get-OpenAIEdit.ps1)
+| Get-DalleImage | Get an image from the OpenAI DALL-E API | [Get-DalleImage.ps1](./Public/Get-DalleImage.ps1)
+| Set-DalleImageAsWallpaper | Set the image from the OpenAI DALL-E API as the wallpaper | [Set-DalleImageAsWallpaper.ps1](./Public/Set-DalleImageAsWallpaper.ps1)
 |Get-OpenAIUsage|Returns a billing summary of OpenAI API usage for your organization
+| Disable-AIShortCutKey | Disable the <kbd>ctrl+g</kbd> shortcut key go getting completions | [Disable-AIShortCutKey.ps1](./Public/Disable-AIShortCutKey.ps1) |
+| Enable-AIShortCutKey | Enable the <kbd>ctrl+g</kbd> | [Enable-AIShortCutKey.ps1](./Public/Enable-AIShortCutKey.ps1) |
+
 
 ## Polyglot Interactive Notebooks
 
@@ -73,6 +75,8 @@ Here are some videos of `PowerShellAI` in action:
 | PowerShell AI - `copilot` at the command line | <a href="https://youtu.be/JrNBvEm6E7Q"><img src="https://img.youtube.com/vi/JrNBvEm6E7Q/0.jpg" width="200"> |
 | PowerShell AI - new `ai` function | <a href="https://youtu.be/-mlkUVUPZHU"><img src="https://img.youtube.com/vi/-mlkUVUPZHU/0.jpg" width="200"> |
 | New-Spreadsheet script: PowerShell + ChatGPT + Excel | <a href="https://youtu.be/Aehsgtll1CA"><img src="https://img.youtube.com/vi/Aehsgtll1CA/0.jpg" width="200"> |
+| Invoke-AIErrorHelper: Lets ChatGPT provide additional information and context about errors | <a href="https://youtu.be/uwDAcIiXqz0"><img src="https://img.youtube.com/vi/uwDAcIiXqz0/0.jpg" width="200"> |
+| Invoke-AIExplain: Utilizes the OpenAI GPT-3 API to offer explanations for the most recently run command, and more. | <a href="https://youtu.be/pbwLok0krCQ"><img src="https://img.youtube.com/vi/pbwLok0krCQ/0.jpg" width="200"> |
 
 <br/>
 <br/>
