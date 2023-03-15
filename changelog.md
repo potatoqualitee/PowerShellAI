@@ -1,3 +1,8 @@
+# v0.5.2
+
+- Added `Invoke-AIExplain` - The function utilizes the OpenAI GPT-3 API to offer explanations for the most recently run command, and more.
+- Added alias `explain` to `Invoke-AIExplain`
+
 # v0.5.1
 
 - Added proof of concept to work with the new Chat REST API
