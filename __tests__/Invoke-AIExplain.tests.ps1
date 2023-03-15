@@ -10,4 +10,11 @@ Describe "Invoke-AIExplain" -Tag 'Invoke-AIExplain' {
         $actual = Get-Alias explain -ErrorAction SilentlyContinue
         $actual | Should -Not -BeNullOrEmpty
     }
+
+    It "Should have these parameters" {
+        $actual = Get-Command Invoke-AIExplain -ErrorAction SilentlyContinue
+        
+        $actual.Parameters.keys.Contains("Id") | Should -BeTrue
+        $actual.Parameters.keys.Contains("Value") | Should -BeTrue
+    }
 }
