@@ -9,30 +9,38 @@ function Invoke-AIExplain {
         .EXAMPLE
             explain 10 # where 10 is the id of the command in the history
         .EXAMPLE
+            explain 10 13 # the start and end id of the commands in the history
+        .EXAMPLE
             explain -Value "Get-Process"
     #>
     [CmdletBinding()]
     [alias("explain")]
     param(
         $Id,
-        $Value        
+        $IdEnd,
+        $Value,
+        $max_tokens = 300
     )
-
-    
-    if ($Value) {
+ 
+    if ($Id -and $IdEnd) {
+        foreach ($targetId in ($Id..$IdEnd)) {
+            $cli += (Get-History -Id $targetId).CommandLine + "`r`n"
+        }
+    }
+    elseif ($Value) {
         $cli = $Value
     }
     elseif ($Id) {
-        $cli = Get-History -Id $Id
+        $cli = (Get-History -Id $Id).CommandLine
     }
     else {
         $cli = (Get-History | Select-Object -last 1).CommandLine 
     }
         
-    $prompt = 'You are running powershell on '+ $PSVersionTable.PlatformPSEdition
+    $prompt = 'You are running powershell on ' + $PSVersionTable.Platform
     $prompt += " Please explain the following:"
-        
-    $result = $cli | ai $prompt
+    
+    $result = $cli | ai $prompt -max_tokens $max_tokens
 
     Write-Host $cli -ForegroundColor Green
     $result
