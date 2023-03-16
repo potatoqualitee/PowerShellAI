@@ -19,7 +19,7 @@ function Invoke-AIExplain {
     )
 
     
-    if($Value) {
+    if ($Value) {
         $cli = $Value
     }
     elseif ($Id) {
@@ -28,10 +28,11 @@ function Invoke-AIExplain {
     else {
         $cli = (Get-History | Select-Object -last 1).CommandLine 
     }
-    
-    # Need more cowbell
-
-    $result = $cli | ai 'explain'
+        
+    $prompt = 'You are running powershell on '+ $PSVersionTable.PlatformPSEdition
+    $prompt += " Please explain the following:`n"
+        
+    $result = $cli | ai $prompt
 
     Write-Host $cli -ForegroundColor Green
     $result
