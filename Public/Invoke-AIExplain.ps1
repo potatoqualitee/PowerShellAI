@@ -30,7 +30,7 @@ function Invoke-AIExplain {
     }
         
     $prompt = 'You are running powershell on '+ $PSVersionTable.PlatformPSEdition
-    $prompt += " Please explain the following:`n"
+    $prompt += " Please explain the following:"
         
     $result = $cli | ai $prompt
 
