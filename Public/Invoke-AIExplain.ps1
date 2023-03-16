@@ -18,6 +18,7 @@ function Invoke-AIExplain {
         $Value        
     )
 
+    
     if($Value) {
         $cli = $Value
     }
@@ -27,6 +28,8 @@ function Invoke-AIExplain {
     else {
         $cli = (Get-History | Select-Object -last 1).CommandLine 
     }
+    
+    # Need more cowbell
 
     $result = $cli | ai 'explain'
 
