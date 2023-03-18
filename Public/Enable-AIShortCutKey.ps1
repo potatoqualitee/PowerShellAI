@@ -38,6 +38,7 @@ function Enable-AIShortCutKey {
 
         [Microsoft.PowerShell.PSConsoleReadLine]::GetBufferState([ref]$line, [ref]$cursor)
 
+        # review
         $prompt = "Using PowerShell, just code: $($line)"
 
         $output = Get-GPT3Completion $prompt -max_tokens 256 
