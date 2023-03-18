@@ -1,3 +1,12 @@
+# v0.5.3
+
+- Thank you to [Matt Cargile](https://github.com/mattcargile) for suggestions on improving the prompt for `Invoke-AIExplain` and reviewing the updates.
+    - Prompt now includes 
+        - 'You are running powershell on'
+        - $PSVersionTable.Platform
+- Added $max_tokens to `Invoke-AIExplain`
+- Added `$IdEnd`. You can ask for the explanation of a range of history items `Invoke-AIExplain -Id 20 -IdEnd 23`
+
 # v0.5.2
 
 - Added `Invoke-AIExplain` - The function utilizes the OpenAI GPT-3 API to offer explanations for the most recently run command, and more.

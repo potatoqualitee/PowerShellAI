@@ -14,6 +14,7 @@ function ai {
         .EXAMPLE
         git status | ai "create a detailed git message"
     #>
+    [CmdletBinding()]
     param(
         $inputPrompt,
         [Parameter(ValueFromPipeline = $true)]
@@ -37,6 +38,8 @@ $($inputPrompt)
 $(($lines | Out-String).Trim())
 
 "@
+
+        Write-Verbose $fullPrompt.Trim()
 
         (Get-GPT3Completion -prompt $fullPrompt.Trim() -max_tokens $max_tokens -temperature $temperature).Trim()
     }
