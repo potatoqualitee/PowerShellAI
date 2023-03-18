@@ -26,6 +26,7 @@ function copilot {
         .EXAMPLE
         copilot 'Find all enabled users that have a samaccountname similar to Mazi; List SAMAccountName and DisplayName'
     #>
+    [CmdletBinding()]
     param(
         [Parameter(Mandatory)]
         $inputPrompt,
@@ -49,6 +50,8 @@ function copilot {
     $prompt = "using {0} {1}: {2}`n" -f $shell, $promptComments, $inputPrompt
     $prompt += '```'
 
+    Write-Verbose $prompt
+    
     $completion = Get-GPT3Completion -prompt $prompt -max_tokens $max_tokens -temperature $temperature -stop '```'
     $completion = $completion -split "`n"
     
