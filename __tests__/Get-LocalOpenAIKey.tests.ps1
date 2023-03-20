@@ -1,6 +1,7 @@
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', '', Justification='BeforeAll block variables are used in tests')]
 param()
 
+Remove-Module 'PowerShellAI' -Force
 Import-Module "$PSScriptRoot\..\PowerShellAI.psd1" -Force
 
 Describe "Get-LocalOpenAIKey" -Tag 'GetLocalOpenAIKey' {
