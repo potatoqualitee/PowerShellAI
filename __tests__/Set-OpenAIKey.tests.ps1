@@ -1,3 +1,4 @@
+Remove-Module 'PowerShellAI' -Force -ErrorAction Ignore
 Import-Module "$PSScriptRoot\..\PowerShellAI.psd1" -Force
 
 Describe "Set-OpenAIKey" -Tag 'SetOpenAIKey' {
@@ -15,5 +16,12 @@ Describe "Set-OpenAIKey" -Tag 'SetOpenAIKey' {
 
     It "Should accept valid secure string as Key parameter value" {
         {Set-OpenAIKey -Key (ConvertTo-SecureString -String 'FakeOpenAIKey' -AsPlainText -Force)} | Should -Not -Throw
+    }
+
+    AfterAll {
+        InModuleScope 'PowerShellAI' {
+            #Reset module scope secure string with fake OpenAI key
+            $Script:OpenAIKey = $null
+        }
     }
 }

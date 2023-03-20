@@ -14,7 +14,9 @@ Describe "Get-LocalOpenAIKey" -Tag 'GetLocalOpenAIKey' {
             $environmentVariableKey = 'OpenAIKeyEnvironmentVariable'
         }
 
-        BeforeEach {
+        AfterEach {
+            #After each test reset module scope secure string with fake OpenAI key,
+            #and $env:OpenAIKey with plain text fake OpenAI key
             $Script:OpenAIKey, $env:OpenAIKey = $null
         }
 
