@@ -47,5 +47,6 @@ function Invoke-OpenAIAPI {
         $params['Headers'] = @{Authorization = "Bearer $apiKey"}
     }
 
+    Write-Verbose ($params | ConvertTo-Json)
     Invoke-RestMethod @params
 }
