@@ -8,7 +8,6 @@ Describe "Get-GPT4Completion" -Tag 'Get-GPT4Completion' {
 
         Mock Invoke-RestMethod -ModuleName PowerShellAI -ParameterFilter { 
             $Method -eq 'Post' -and $Uri -eq (Get-OpenAIChatCompletionUri) 
-
         } -MockWith {
             [PSCustomObject]@{
                 choices = @(
