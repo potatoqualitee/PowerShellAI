@@ -1,3 +1,7 @@
+# vY.Y.Z
+
+- Thank you [Kris Borowinski](https://github.com/kborowinski) for fixing the Pester tests.
+
 # v0.5.3
 
 - Thank you to [Matt Cargile](https://github.com/mattcargile) for suggestions on improving the prompt for `Invoke-AIExplain` and reviewing the updates.
