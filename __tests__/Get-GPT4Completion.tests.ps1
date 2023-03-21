@@ -3,6 +3,9 @@ Import-Module "$PSScriptRoot\..\PowerShellAI.psd1" -Force
 Describe "Get-GPT4Completion" -Tag 'Get-GPT4Completion' {
 
     BeforeAll {
+        $script:savedKey = $env:OpenAIKey
+        $env:OpenAIKey = 'sk-1234567890'
+
         Mock Invoke-RestMethod -ModuleName PowerShellAI -ParameterFilter { 
             $Method -eq 'Post' -and $Uri -eq (Get-OpenAIChatCompletionUri) 
 
@@ -17,6 +20,10 @@ Describe "Get-GPT4Completion" -Tag 'Get-GPT4Completion' {
                 )
             }
         } 
+    }
+
+    AfterAll {
+        $env:OpenAIKey = $savedKey
     }
 
     It "Test Get-GPT4Completion function exists" {
