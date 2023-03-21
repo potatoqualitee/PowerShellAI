@@ -1,20 +1,23 @@
-[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', '', Justification='$secureStringKey and $environmentVariableKey variables are used in tests')]
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', '', Justification='BeforeAll block variables are used in tests')]
 param()
 
+Remove-Module 'PowerShellAI' -Force -ErrorAction Ignore
+Import-Module "$PSScriptRoot\..\PowerShellAI.psd1" -Force
+
 Describe "Get-LocalOpenAIKey" -Tag 'GetLocalOpenAIKey' {
-    BeforeEach {
-        Remove-Module 'PowerShellAI' -Force
-        Import-Module "$PSScriptRoot\..\PowerShellAI.psd1" -Force
-    }
-
-    AfterEach {
-        $env:OpenAIKey = $null
-    }
-
     InModuleScope 'PowerShellAI' {
         BeforeAll {
+            #Backup existing OpenAIKey
+            $backupOpenAIKey = $env:OpenAIKey
+
             $secureStringKey = 'OpenAIKeySecureString'
             $environmentVariableKey = 'OpenAIKeyEnvironmentVariable'
+        }
+
+        AfterEach {
+            #After each test reset module scope secure string with fake OpenAI key,
+            #and $env:OpenAIKey with plain text fake OpenAI key
+            $Script:OpenAIKey, $env:OpenAIKey = $null
         }
 
         It 'Should return value of type [String] when $env:OpenAIKey is set' {
@@ -57,6 +60,11 @@ Describe "Get-LocalOpenAIKey" -Tag 'GetLocalOpenAIKey' {
             } else {
                 Get-LocalOpenAIKey | Should -BeExactly $secureStringKey
             }
+        }
+
+        AfterAll {
+            #Restore OpenAIKey
+            $env:OpenAIKey = $backupOpenAIKey
         }
     }
 }
