@@ -1,5 +1,6 @@
-# vY.Y.Z
+# v0.5.4
 
+- Copilot can now `explain` the code it generates.
 - Thank you [Kris Borowinski](https://github.com/kborowinski) for fixing the Pester tests.
 
 # v0.5.3
