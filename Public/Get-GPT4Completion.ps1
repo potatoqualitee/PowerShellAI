@@ -54,7 +54,17 @@ function New-ChatMessage {
         } 
     )    
 }
-    
+
+function New-ChatSystemMessage {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        $Content
+    )
+
+    New-ChatMessage -Role 'system' -Content $Content
+}
+
 function New-ChatUserMessage {
     [CmdletBinding()]
     param(
@@ -63,6 +73,16 @@ function New-ChatUserMessage {
     )
 
     New-ChatMessage -Role 'user' -Content $Content
+}
+
+function New-ChatAssistantMessage {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        $Content
+    )
+
+    New-ChatMessage -Role 'assistant' -Content $Content
 }
 
 function Get-ChatMessages {
@@ -91,9 +111,22 @@ function Get-ChatPayload {
     
 }
 
+function New-Chat {
+    [CmdletBinding()]
+    param(
+        $Content
+    )
+
+    Clear-ChatMessages
+
+    if (![string]::IsNullOrEmpty($Content)) {
+        New-ChatSystemMessage -Content $Content
+    }
+}
+
 function Get-GPT4Completion {
     [CmdletBinding()]
-    [alias("gpt4")]
+    [alias("chat")]
     param(
         [Parameter(Mandatory)]
         $Content
@@ -108,7 +141,9 @@ function Get-GPT4Completion {
         $result
     } 
     elseif ($result.choices) {
-        $result.choices[0].message.content
+        $response = $result.choices[0].message.content
+        New-ChatAssistantMessage -Content $response
+        $response
     }
 }
 

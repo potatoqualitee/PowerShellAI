@@ -34,9 +34,10 @@ Describe "Get-GPT4Completion" -Tag 'GPT4Completion' {
         $actual | Should -Not -BeNullOrEmpty
     }
 
-    It "Test complete alias exists" {
-        $actual = Get-Alias gpt4 -ErrorAction SilentlyContinue
+    It "Test chat alias exists" {
+        $actual = Get-Alias chat -ErrorAction SilentlyContinue
         $actual | Should -Not -BeNullOrEmpty
+        $actual.Definition | Should -Be Get-GPT4Completion
     }
 
     It "Tests Get-GPT4Completion has these parameters" {
