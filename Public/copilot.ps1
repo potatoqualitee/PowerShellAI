@@ -1,3 +1,36 @@
+function Get-Runnable {
+    <#
+        .SYNOPSIS
+        Gets the runnable code from the result
+
+        .DESCRIPTION
+        Gets the runnable code from the result
+
+        .EXAMPLE
+        Get-Runnable -result $result
+    #>
+    [CmdletBinding()]
+    param(
+        $result
+    )
+
+    $runnable = for ($idx = 1; $idx -lt $result.Count; $idx++) {
+        $line = $result[$idx]
+        if ([string]::IsNullOrEmpty($line)) {
+            continue
+        }
+
+        $line = $line.Trim()
+        if ($line.StartsWith('#')) {
+            continue
+        }
+
+        $line
+    }
+
+    return ($runnable -join "`n")
+}
+
 function copilot {
     <#
         .SYNOPSIS
@@ -29,7 +62,7 @@ function copilot {
     param(
         [Parameter(Mandatory)]
         $inputPrompt,
-        [ValidateRange(0,2)]
+        [ValidateRange(0, 2)]
         [decimal]$temperature = 0.0,
         # The maximum number of tokens to generate. default 256
         $max_tokens = 256,
@@ -67,26 +100,15 @@ function copilot {
         $result | CreateBoxText
 
         $userInput = CustomReadHost
-
-        if ($userInput -eq 0) {
-            $runnable = for ($idx = 1; $idx -lt $result.Count; $idx++) {
-                $line = $result[$idx]
-                if ([string]::IsNullOrEmpty($line)) {
-                    continue
-                }
-
-                $line = $line.Trim()
-                if ($line.StartsWith('#')) {
-                    continue
-                }
-
-                $line
+        
+        switch ($userInput) {
+            0 {
+                (Get-Runnable -result $result) | Invoke-Expression
             }
-
-        ($runnable -join "`n") | Invoke-Expression
-        }
-        else {
-            "Not running"
+            1 {
+                explain -Value (Get-Runnable -result $result)
+            }
+            default { "Not running" }
         }
     }
 }
