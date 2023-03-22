@@ -1,6 +1,6 @@
 Import-Module "$PSScriptRoot\..\PowerShellAI.psd1" -Force
 
-Describe "Get-GPT4Completion" -Tag 'Get-GPT4Completion' {
+Describe "Get-GPT4Completion" -Tag 'GPT4Completion' {
 
     BeforeAll {
         $script:savedKey = $env:OpenAIKey
@@ -13,12 +13,16 @@ Describe "Get-GPT4Completion" -Tag 'Get-GPT4Completion' {
                 choices = @(
                     [PSCustomObject]@{
                         message = [PSCustomObject]@{
-                            content = 'Mocked'
+                            content = 'Mocked Get-GPT4Completion call'
                         }
                     }
                 )
             }
         } 
+    }
+
+    BeforeEach {
+        Clear-ChatMessages
     }
 
     AfterAll {
@@ -35,24 +39,18 @@ Describe "Get-GPT4Completion" -Tag 'Get-GPT4Completion' {
         $actual | Should -Not -BeNullOrEmpty
     }
 
-    It "Should have these parameters" {
+    It "Tests Get-GPT4Completion has these parameters" {
         $actual = Get-Command Get-GPT4Completion -ErrorAction SilentlyContinue
         
         $keys = $actual.Parameters.keys
 
-        $keys.Contains("prompt") | Should -BeTrue
-        $keys.Contains("model") | Should -BeTrue
-        $keys.Contains("temperature") | Should -BeTrue
-        $keys.Contains("max_tokens") | Should -BeTrue
-        $keys.Contains("top_p") | Should -BeTrue
-        $keys.Contains("frequency_penalty") | Should -BeTrue
-        $keys.Contains("presence_penalty") | Should -BeTrue
-        $keys.Contains("stop") | Should -BeTrue
-        $keys.Contains("Raw") | Should -BeTrue
+        $keys.Contains("Content") | Should -BeTrue
     }
 
-    It 'Should Mock' {
-        $actual = Get-GPT4Completion 'test'
-        $actual | Should -Be 'Mocked'
+    It 'Tests message is added to chat' {        
+        $null = Get-GPT4Completion 'test'
+
+        $actual = Get-ChatMessages
+        $actual.Count | Should -Be 1
     }
 }
