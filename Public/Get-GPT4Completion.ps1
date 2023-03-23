@@ -1,4 +1,4 @@
-$ChatSessionOptions = @{
+$Script:ChatSessionOptions = @{
     'model'             = 'gpt-4'
     'temperature'       = 0.0
     'max_tokens'        = 256
@@ -16,8 +16,9 @@ function Get-ChatSessionOptions {
     [CmdletBinding()]
     param()
 
-    $ChatSessionOptions
+    $Script:ChatSessionOptions
 }
+
 
 function Set-ChatSessionOption {
     [CmdletBinding()]
@@ -28,7 +29,22 @@ function Set-ChatSessionOption {
     $options = @{} + $PSBoundParameters
     
     foreach ($entry in $options.GetEnumerator()) {
-        $ChatSessionOptions["$($entry.Name)"] = $entry.Value
+        $Script:ChatSessionOptions["$($entry.Name)"] = $entry.Value
+    }
+}
+
+function Reset-ChatSessionOptions {
+    [CmdletBinding()]
+    param()
+
+    $Script:ChatSessionOptions = @{
+        'model'             = 'gpt-4'
+        'temperature'       = 0.0
+        'max_tokens'        = 256
+        'top_p'             = 1.0
+        'frequency_penalty' = 0
+        'presence_penalty'  = 0
+        'stop'              = $null
     }
 }
 
@@ -152,7 +168,7 @@ function Get-GPT4Completion {
     New-ChatUserMessage -Content $Content
 
     $body = Get-ChatPayload -AsJson
-
+    
     $result = Invoke-OpenAIAPI -Uri (Get-OpenAIChatCompletionUri) -Method 'Post' -Body $body
     if ($Raw) {
         $result
