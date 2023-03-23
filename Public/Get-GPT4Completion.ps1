@@ -121,9 +121,8 @@ function New-Chat {
         $Content
     )
 
+    Stop-Chat
     $Script:ChatInProgress = $true
-
-    Clear-ChatMessages
 
     if (![string]::IsNullOrEmpty($Content)) {
         New-ChatSystemMessage -Content $Content
@@ -132,6 +131,14 @@ function New-Chat {
 
 function Test-ChatInProgress {
     $Script:ChatInProgress
+}
+
+function Stop-Chat {
+    [CmdletBinding()]
+    param()
+
+    $Script:ChatInProgress = $false
+    Clear-ChatMessages
 }
 
 function Get-GPT4Completion {

@@ -43,6 +43,11 @@ Describe "Get-GPT4Completion" -Tag 'GPT4Completion' {
         $actual = Get-Command Test-ChatInProgress -ErrorAction SilentlyContinue
         $actual | Should -Not -BeNullOrEmpty
     }
+
+    It 'Tests if Stop-Chat exists' {
+        $actual = Get-Command Stop-Chat -ErrorAction SilentlyContinue
+        $actual | Should -Not -BeNullOrEmpty
+    } 
     
     It "Test chat alias exists" {
         $actual = Get-Alias chat -ErrorAction SilentlyContinue
@@ -82,6 +87,20 @@ Describe "Get-GPT4Completion" -Tag 'GPT4Completion' {
         $keys = $actual.Parameters.keys
 
         $keys.Contains("Content") | Should -BeTrue
+    }
+
+    It 'Test if Stop-Chats stops chat and resets messages' {
+        $null = New-Chat 'test'
+
+        $actual = Test-ChatInProgress
+        $actual | Should -BeTrue
+
+        Stop-Chat
+
+        $actual = Test-ChatInProgress
+        $actual | Should -BeFalse
+
+        (Get-ChatMessages).Count | Should -Be 0
     }
 
     # It 'Tests message is added to chat' {        
