@@ -55,6 +55,30 @@ function Clear-ChatMessages {
     $Script:ChatMessages.Clear()
 }
 
+function Add-ChatMessage {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        $Message
+    )
+
+    $null = $Script:ChatMessages.Add($Message)
+}
+
+function New-ChatMessageTemplate {
+    [CmdletBinding()]
+    param( 
+        [ValidateSet('user', 'system', 'assistant')]
+        $Role,
+        $Content
+    )
+
+    [PSCustomObject]@{
+        role    = $Role
+        content = $Content
+    }
+}
+
 function New-ChatMessage {
     param(
         [Parameter(Mandatory)]
@@ -66,13 +90,9 @@ function New-ChatMessage {
 
     $Script:ChatInProgress = $Script:true
 
-    # keys need to be lower case
-    $null = $Script:ChatMessages.Add(
-        [PSCustomObject]@{
-            role    = $Role
-            content = $Content
-        } 
-    )    
+    $message = New-ChatMessageTemplate -Role $Role -Content $Content
+
+    Add-ChatMessage -Message $message
 }
 
 function New-ChatSystemMessage {
@@ -154,7 +174,9 @@ function Stop-Chat {
     param()
 
     $Script:ChatInProgress = $false
+    
     Clear-ChatMessages
+    #Reset-ChatSessionTimeStamp 
 }
 
 function Get-GPT4Completion {

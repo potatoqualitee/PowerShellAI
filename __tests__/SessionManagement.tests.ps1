@@ -72,6 +72,7 @@ Describe "Session Management" -Tag SessionManagement {
             # skip 
             return
         }
+        
         Reset-ChatSessionTimeStamp
         $timeStamp = Get-ChatSessionTimeStamp
 

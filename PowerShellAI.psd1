@@ -53,6 +53,7 @@ The PowerShell AI module integrates with the OpenAI API and let's you easily acc
         # 'Test-ChatInProgress'
 
         # new chat functions
+        'Add-ChatMessage'
         'Clear-ChatMessages'
         'Get-ChatMessages'
         'Get-ChatPayload'
@@ -63,8 +64,9 @@ The PowerShell AI module integrates with the OpenAI API and let's you easily acc
         'New-Chat'
         'New-ChatAssistantMessage'
         'New-ChatMessage'
+        'New-ChatMessageTemplate'
         'New-ChatSystemMessage'
-        'New-ChatUserMessage'
+        'New-ChatUserMessage'        
         'Reset-ChatSessionOptions'
         'Reset-ChatSessionTimeStamp'
         'Set-ChatSessionOption'

@@ -3,12 +3,12 @@ $Script:timeStamp
 function Get-ChatSessionTimeStamp {
     [CmdletBinding()]
     param ()
-
+    
     if ($null -eq $Script:timeStamp) {
         $Script:timeStamp = (Get-Date).ToString("yyyyMMddHHmmss")
     }
 
-    $Script:timeStamp
+    $Script:timeStamp    
 }
 
 function Reset-ChatSessionTimeStamp {

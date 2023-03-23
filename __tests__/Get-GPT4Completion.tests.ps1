@@ -39,12 +39,12 @@ Describe "Get-GPT4Completion" -Tag 'GPT4Completion' {
         $actual | Should -Not -BeNullOrEmpty
     }
 
-    It 'Tests Test-ChatInProgress exists' {
+    It 'Test Test-ChatInProgress function exists' {
         $actual = Get-Command Test-ChatInProgress -ErrorAction SilentlyContinue
         $actual | Should -Not -BeNullOrEmpty
     }
 
-    It 'Tests if Stop-Chat exists' {
+    It 'Test Stop-Chat function exists' {
         $actual = Get-Command Stop-Chat -ErrorAction SilentlyContinue
         $actual | Should -Not -BeNullOrEmpty
     } 
@@ -53,6 +53,16 @@ Describe "Get-GPT4Completion" -Tag 'GPT4Completion' {
         $actual = Get-Alias chat -ErrorAction SilentlyContinue
         $actual | Should -Not -BeNullOrEmpty
         $actual.Definition | Should -Be Get-GPT4Completion
+    }
+
+    It 'Test Add-ChatMessage function exists' {
+        $actual = Get-Command Add-ChatMessage -ErrorAction SilentlyContinue
+        $actual | Should -Not -BeNullOrEmpty
+    }
+
+    It 'Test New-ChatMessageTemplate function exists' {
+        $actual = Get-Command New-ChatMessageTemplate -ErrorAction SilentlyContinue
+        $actual | Should -Not -BeNullOrEmpty
     }
 
     It 'Test if chat is in progress after message' {
@@ -80,6 +90,23 @@ Describe "Get-GPT4Completion" -Tag 'GPT4Completion' {
         $actual = Test-ChatInProgress
         $actual | Should -BeTrue
     }
+    
+    It 'Test New-ChatMessageTemplate has these parameters' {
+        $actual = Get-Command New-ChatMessageTemplate
+
+        $keys = $actual.Parameters.keys
+
+        $keys.Contains("Role") | Should -BeTrue
+        $keys.Contains("Content") | Should -BeTrue
+    }
+
+    It 'Test if Add-ChatMessage has these parameters' {
+        $actual = Get-Command Add-ChatMessage
+        
+        $keys = $actual.Parameters.keys
+
+        $keys.Contains("Message") | Should -BeTrue
+    }
 
     It "Tests Get-GPT4Completion has these parameters" {
         $actual = Get-Command Get-GPT4Completion -ErrorAction SilentlyContinue
@@ -87,6 +114,50 @@ Describe "Get-GPT4Completion" -Tag 'GPT4Completion' {
         $keys = $actual.Parameters.keys
 
         $keys.Contains("Content") | Should -BeTrue
+    }
+
+    It 'Test Add-ChatMessage adds message' {
+
+        Add-ChatMessage -Message ([PSCustomObject]@{
+                role    = 'system'
+                content = 'system test'
+            })
+
+        Add-ChatMessage -Message ([PSCustomObject]@{
+                role    = 'user'
+                content = 'user test'
+            })
+
+        Add-ChatMessage -Message ([PSCustomObject]@{
+                role    = 'assistant'
+                content = 'assistant test'
+            })
+
+        $actual = Get-ChatMessages
+        $actual.Count | Should -Be 3
+
+        $actual[0].role | Should -Be 'system'
+        $actual[0].content | Should -Be 'system test'
+
+        $actual[1].role | Should -Be 'user'
+        $actual[1].content | Should -Be 'user test'
+
+        $actual[2].role | Should -Be 'assistant'
+        $actual[2].content | Should -Be 'assistant test'
+    }
+
+    It 'Test New-ChatMessageTemplate creates and populates template' {
+        $actual = New-ChatMessageTemplate -Role user -Content 'test'
+
+        $actual.role | Should -Be 'user'
+        $actual.content | Should -Be 'test'
+    }
+
+    It 'Test New-ChatMessageTemplate creates empty template' {
+        $actual = New-ChatMessageTemplate
+
+        $actual.role | Should -BeNullOrEmpty
+        $actual.content | Should -BeNullOrEmpty
     }
 
     It 'Test if Stop-Chats stops chat and resets messages' {
