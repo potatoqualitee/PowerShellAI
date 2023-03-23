@@ -12,6 +12,10 @@ Describe "Session Management" -Tag SessionManagement {
         }
     }
 
+    AfterAll {
+        Clear-ChatMessages
+    }
+
     It 'Test Get-ChatSessionTimeStamp function exists' {
         $actual = Get-Command Get-ChatSessionTimeStamp -ErrorAction SilentlyContinue
 
@@ -106,6 +110,11 @@ Describe "Session Management" -Tag SessionManagement {
         })
         
         Export-ChatSession
-        # Clear-ChatMessages
+    }
+
+    It 'Test Get-ChatSession function exists' {
+        $actual = Get-Command Get-ChatSession -ErrorAction SilentlyContinue
+
+        $actual | Should -Not -BeNullOrEmpty
     }
 }
