@@ -56,14 +56,15 @@ Describe "Session Management" -Tag SessionManagement {
     It 'Test Get-ChatSessionPath returns correct path for Windows' {
         $actual = Get-ChatSessionPath
 
-        $actual | Should -BeExactly "$env:APPDATA\PowerShellAI\ChatGPT"
+        if ($IsWindows -or $null -eq $IsWindows) {
+            $actual | Should -BeExactly "$env:APPDATA\PowerShellAI\ChatGPT"
+        }
     }
 
-    It 'Test Get-ChatSessionPath returns correct path for Linux' -Skip {
-
-        $actual = Get-ChatSessionPath
-        $actual | Should -BeExactly ($env:HOME + "~/PowerShellAI/ChatGPT")
-    }
+    # It 'Test Get-ChatSessionPath returns correct path for Linux' -Skip {
+    #     $actual = Get-ChatSessionPath
+    #     $actual | Should -Be ($env:HOME + "~/PowerShellAI/ChatGPT")
+    # }
 
     It 'Test Get-ChatSessionFile returns correct file name' {
         Reset-ChatSessionTimeStamp
