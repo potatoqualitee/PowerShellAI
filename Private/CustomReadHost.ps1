@@ -8,10 +8,11 @@ function CustomReadHost {
     #>
 
     $Yes = New-Object System.Management.Automation.Host.ChoiceDescription '&Yes', 'Yes, run the code'    
-    $no = New-Object System.Management.Automation.Host.ChoiceDescription '&No', 'No, do not run the code'
+    $Explain = New-Object System.Management.Automation.Host.ChoiceDescription '&Explain', 'Yes, explain the code'    
+    $No = New-Object System.Management.Automation.Host.ChoiceDescription '&No', 'No, do not run the code'
 
-    $options = [System.Management.Automation.Host.ChoiceDescription[]]($Yes, $no)
+    $options = [System.Management.Automation.Host.ChoiceDescription[]]($Yes, $Explain, $No)
 
-    $message = 'Run the code?'
-    $host.ui.PromptForChoice($null, $message, $options, 1)
+    $message = 'What would you like to do?'
+    $host.ui.PromptForChoice($null, $message, $options, 2)
 }
