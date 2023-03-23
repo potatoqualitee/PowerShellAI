@@ -66,7 +66,12 @@ Describe "Session Management" -Tag SessionManagement {
     #     $actual | Should -Be ($env:HOME + "~/PowerShellAI/ChatGPT")
     # }
 
-    It 'Test Get-ChatSessionFile returns correct file name' {
+    It 'Test Get-ChatSessionFile returns correct file name for Windows' {
+
+        if($IsLinux -or $IsMacOS) {
+            # skip 
+            return
+        }
         Reset-ChatSessionTimeStamp
         $timeStamp = Get-ChatSessionTimeStamp
 
