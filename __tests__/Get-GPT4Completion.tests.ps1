@@ -29,15 +29,51 @@ Describe "Get-GPT4Completion" -Tag 'GPT4Completion' {
         $env:OpenAIKey = $savedKey
     }
 
+    It 'Test if chat is in progress initially' -Skip {
+        $actual = Test-ChatInProgress
+        $actual | Should -BeFalse
+    }
+
     It "Test Get-GPT4Completion function exists" {
         $actual = Get-Command Get-GPT4Completion -ErrorAction SilentlyContinue
         $actual | Should -Not -BeNullOrEmpty
     }
 
+    It 'Tests Test-ChatInProgress exists' {
+        $actual = Get-Command Test-ChatInProgress -ErrorAction SilentlyContinue
+        $actual | Should -Not -BeNullOrEmpty
+    }
+    
     It "Test chat alias exists" {
         $actual = Get-Alias chat -ErrorAction SilentlyContinue
         $actual | Should -Not -BeNullOrEmpty
         $actual.Definition | Should -Be Get-GPT4Completion
+    }
+
+    It 'Test if chat is in progress after message' {
+        $null = Get-GPT4Completion 'test'
+
+        $actual = Test-ChatInProgress
+        $actual | Should -BeTrue
+    }
+
+    It 'Test if chat is in progress after New-Chat' {
+        $null = New-Chat
+
+        $actual = Test-ChatInProgress
+        $actual | Should -BeTrue
+    }
+
+    It 'Test if chat is in progress after New-ChatMessage and then New-Chat' {
+        $null = New-ChatMessage -Role user -Content 'test'
+
+        $actual = Test-ChatInProgress
+        $actual | Should -BeTrue
+
+        New-Chat
+
+        $actual = Test-ChatInProgress
+        $actual | Should -BeTrue
     }
 
     It "Tests Get-GPT4Completion has these parameters" {

@@ -8,6 +8,8 @@ $ChatSessionOptions = @{
     'stop'              = $null
 }
 
+$Script:ChatInProgress = $false
+
 [System.Collections.ArrayList]$Script:ChatMessages = @()
 
 function Get-ChatSessionOptions {
@@ -45,6 +47,8 @@ function New-ChatMessage {
         [Parameter(Mandatory)]
         $Content
     )
+
+    $Script:ChatInProgress = $Script:true
 
     # keys need to be lower case
     $null = $Script:ChatMessages.Add(
@@ -117,11 +121,17 @@ function New-Chat {
         $Content
     )
 
+    $Script:ChatInProgress = $true
+
     Clear-ChatMessages
 
     if (![string]::IsNullOrEmpty($Content)) {
         New-ChatSystemMessage -Content $Content
     }
+}
+
+function Test-ChatInProgress {
+    $Script:ChatInProgress
 }
 
 function Get-GPT4Completion {
