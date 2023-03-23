@@ -42,3 +42,15 @@ function Get-ChatSessionFile {
 
     Join-Path (Get-ChatSessionPath) ("{0}-ChatGPTSession.xml" -f $timeStamp)
 }
+
+function Export-ChatSession {
+    [CmdletBinding()]
+    param ()
+
+    $sessionPath = Get-ChatSessionPath
+    if (-not (Test-Path $sessionPath)) {
+        New-Item -ItemType Directory -Path $sessionPath -Force | Out-Null
+    }
+    
+    Get-ChatMessages | Export-Clixml -Path (Get-ChatSessionFile) -Force
+}

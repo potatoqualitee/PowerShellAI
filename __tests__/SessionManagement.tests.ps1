@@ -36,6 +36,12 @@ Describe "Session Management" -Tag SessionManagement {
         $actual | Should -Not -BeNullOrEmpty
     }
 
+    It 'Test Export-ChatSession function exists' {
+        $actual = Get-Command Export-ChatSession -ErrorAction SilentlyContinue
+
+        $actual | Should -Not -BeNullOrEmpty
+    }
+
     It 'Test Get-ChatSessionTimeStamp returns a string in the correct format' {
         $actual = Get-ChatSessionTimeStamp
 
@@ -81,5 +87,25 @@ Describe "Session Management" -Tag SessionManagement {
         $expected = "$(Get-ChatSessionPath)\$($timeStamp)-ChatGPTSession.xml"
 
         $actual | Should -BeExactly $expected
+    }
+
+    It 'Test exporting chat messages' {
+        Add-ChatMessage -Message ([PSCustomObject]@{
+            role    = 'system'
+            content = 'system test'
+        })
+
+        Add-ChatMessage -Message ([PSCustomObject]@{
+            role    = 'user'
+            content = 'user test'
+        })
+
+        Add-ChatMessage -Message ([PSCustomObject]@{
+            role    = 'assistant'
+            content = 'assistant test'
+        })
+        
+        Export-ChatSession
+        # Clear-ChatMessages
     }
 }
