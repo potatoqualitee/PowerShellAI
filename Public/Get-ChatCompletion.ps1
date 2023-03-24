@@ -31,7 +31,7 @@ More to come....
 $Script:messages
 $Script:timeStamp = $null
 
-if ($IsWindows) {
+if ($null -eq $IsWindows -or $IsWindows) {
     $Script:chatSessionPath = Join-Path $env:APPDATA 'PowerShellAI/ChatGPT'
 }
 else {
