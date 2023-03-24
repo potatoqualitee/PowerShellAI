@@ -15,6 +15,9 @@ function Invoke-OpenAIAPI {
     .PARAMETER Body
     The body to send with the request
 
+    .PARAMETER NoProgress
+    The option to hide write-progress if you want, you could also set $ProgressPreference to SilentlyContinue
+
     .EXAMPLE
     Invoke-OpenAIAPI -Uri "https://api.openai.com/v1/images/generations" -Method Post -Body $body
     #>
@@ -24,7 +27,8 @@ function Invoke-OpenAIAPI {
         $Uri,
         [ValidateSet('Default', 'Delete', 'Get', 'Head', 'Merge', 'Options', 'Patch', 'Post', 'Put', 'Trace')]
         $Method = 'Get',
-        $Body
+        $Body,
+        [switch] $NoProgress
     )
 
     if (!(Test-OpenAIKey)) {
@@ -47,5 +51,9 @@ function Invoke-OpenAIAPI {
         $params['Headers'] = @{Authorization = "Bearer $apiKey"}
     }
 
-    Invoke-RestMethod @params
+    if($NoProgress) {
+        Invoke-RestMethod @params
+    } else {
+        Invoke-RestMethodWithProgress -Params $params
+    }
 }
