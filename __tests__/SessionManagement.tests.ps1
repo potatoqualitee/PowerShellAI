@@ -12,6 +12,10 @@ Describe "Session Management" -Tag SessionManagement {
         }
     }
 
+    AfterEach {
+        Reset-ChatSessionPath
+    }
+
     AfterAll {
         Clear-ChatMessages
     }
@@ -121,6 +125,7 @@ Describe "Session Management" -Tag SessionManagement {
             content = 'assistant test'
         })
         
+        Set-chatSessionPath -Path 'TestDrive:\PowerShell\ChatGPT'
         Export-ChatSession
     }
 
@@ -128,5 +133,27 @@ Describe "Session Management" -Tag SessionManagement {
         $actual = Get-Command Get-ChatSession -ErrorAction SilentlyContinue
 
         $actual | Should -Not -BeNullOrEmpty
+    }
+
+    It 'Test setting and resetting the chat session path' {
+
+        if($IsLinux -or $IsMacOS) {
+            # skip 
+            return
+        }
+
+        $expected = 'TestDrive:\PowerShell\ChatGPT'
+        Set-ChatSessionPath -Path $expected
+
+        $actual = Get-ChatSessionPath
+        $actual | Should -BeExactly $expected
+
+        Reset-ChatSessionPath
+
+        $actual = Get-ChatSessionPath
+ 
+        if ($IsWindows -or $null -eq $IsWindows) {
+            $actual | Should -BeExactly "$env:APPDATA\PowerShellAI\ChatGPT"
+        }
     }
 }
