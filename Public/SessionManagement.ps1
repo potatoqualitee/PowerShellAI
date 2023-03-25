@@ -91,6 +91,32 @@ function Get-ChatSession {
     }
 }
 
+function Get-ChatSessionContent {
+    <#
+    .SYNOPSIS
+        Get chat session content
+    .DESCRIPTION
+        Get chat session content from a chat session file
+    .PARAMETER Path
+        Path of the chat session file
+    .EXAMPLE
+        Get-ChatSessionContent -Path 'C:\Users\user\Documents\PowerShellAI\ChatGPT\20200101120000-ChatGPTSession.xml'
+    #>
+    [CmdletBinding()]
+    param ()
+    # param (
+    #     [Alias('FullName')]
+    #     [Parameter(ValueFromPipelineByPropertyName)]
+    #     $Path
+    # )
+
+    # Process {
+    #     if (Test-Path $Path) {
+    #         Import-Clixml -Path $Path
+    #     }
+    # }
+}
+
 function Export-ChatSession {
     [CmdletBinding()]
     param ()

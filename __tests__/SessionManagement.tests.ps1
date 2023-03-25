@@ -62,6 +62,12 @@ Describe "Session Management" -Tag SessionManagement {
         $actual | Should -Not -BeNullOrEmpty
     }
 
+    It 'Test Get-ChatSessionContent function exists' {
+        $actual = Get-Command Get-ChatSessionContent -ErrorAction SilentlyContinue
+
+        $actual | Should -Not -BeNullOrEmpty
+    }
+
     It 'Test Get-ChatSessionTimeStamp returns a string in the correct format' {
         $actual = Get-ChatSessionTimeStamp
 

@@ -93,6 +93,8 @@ function New-ChatMessage {
     $message = New-ChatMessageTemplate -Role $Role -Content $Content
 
     Add-ChatMessage -Message $message
+
+    # Export-ChatSession
 }
 
 function New-ChatSystemMessage {
