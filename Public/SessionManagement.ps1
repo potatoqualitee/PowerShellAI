@@ -1,4 +1,5 @@
 $Script:timeStamp
+$Script:chatSessionPath
 
 function Get-ChatSessionTimeStamp {
     [CmdletBinding()]
@@ -18,16 +19,38 @@ function Reset-ChatSessionTimeStamp {
     $Script:timeStamp = $null
 }
 
+function Reset-ChatSessionPath {
+    [CmdletBinding()]
+    param ()
+
+    if ($PSVersionTable.Platform -eq 'Unix') {
+        $Script:chatSessionPath = Join-Path $env:HOME '~/PowerShellAI/ChatGPT'
+    }
+    elseif ($env:APPDATA) {
+        $Script:chatSessionPath = Join-Path $env:APPDATA 'PowerShellAI/ChatGPT'
+    }
+
+}
+
 function Get-ChatSessionPath {
     [CmdletBinding()]
     param ()
-    
-    if ($PSVersionTable.Platform -eq 'Unix') {
-        return Join-Path $env:HOME '~/PowerShellAI/ChatGPT'
+
+    if ($null -eq $Script:chatSessionPath) {
+        Reset-ChatSessionPath
     }
-    elseif ($env:APPDATA) {
-        return Join-Path $env:APPDATA 'PowerShellAI/ChatGPT'
-    }
+
+    $Script:chatSessionPath
+}
+
+function Set-ChatSessionPath {
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory)]
+        $Path
+    )
+
+    $Script:chatSessionPath = $Path
 }
 
 function Get-ChatSessionFile {
@@ -51,11 +74,10 @@ function Get-ChatSession {
 
     $path = Get-ChatSessionPath
 
-    if(Test-Path $path) {
+    if (Test-Path $path) {
         Get-ChildItem -Path $path -Filter "*.xml" | Where-Object { $_.Name -match $Name }         
     }
 }
-
 
 function Export-ChatSession {
     [CmdletBinding()]

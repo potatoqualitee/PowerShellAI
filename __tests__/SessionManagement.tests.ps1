@@ -34,6 +34,12 @@ Describe "Session Management" -Tag SessionManagement {
         $actual | Should -Not -BeNullOrEmpty
     }
 
+    It 'Test Set-ChatSessionPath function exists' {
+        $actual = Get-Command Set-ChatSessionPath -ErrorAction SilentlyContinue
+
+        $actual | Should -Not -BeNullOrEmpty
+    }
+
     It 'Test Get-ChatSessionFile function exists' {
         $actual = Get-Command Get-ChatSessionFile -ErrorAction SilentlyContinue
 
@@ -42,6 +48,12 @@ Describe "Session Management" -Tag SessionManagement {
 
     It 'Test Export-ChatSession function exists' {
         $actual = Get-Command Export-ChatSession -ErrorAction SilentlyContinue
+
+        $actual | Should -Not -BeNullOrEmpty
+    }
+
+    It 'Test Reset-ChatSessionPath function exists' {
+        $actual = Get-Command Reset-ChatSessionPath -ErrorAction SilentlyContinue
 
         $actual | Should -Not -BeNullOrEmpty
     }
