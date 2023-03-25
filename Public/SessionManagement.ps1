@@ -67,6 +67,18 @@ function Get-ChatSessionFile {
 }
 
 function Get-ChatSession {
+    <#
+    .SYNOPSIS
+        Get chat session files
+    .DESCRIPTION
+        Get chat session files from all time
+    .PARAMETER Name
+        Name of the chat session file, can be a regular expression
+    .EXAMPLE
+        Get-ChatSession
+    .EXAMPLE
+        Get-ChatSession -Name '20200101120000-ChatGPTSession'
+    #>
     [CmdletBinding()]
     param (
         $Name

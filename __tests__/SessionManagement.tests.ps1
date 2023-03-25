@@ -126,7 +126,12 @@ Describe "Session Management" -Tag SessionManagement {
         })
         
         Set-chatSessionPath -Path 'TestDrive:\PowerShell\ChatGPT'
+        
         Export-ChatSession
+
+        $totalChats = Get-ChatSession
+
+        $totalChats.Count | Should -Be 1
     }
 
     It 'Test Get-ChatSession function exists' {
