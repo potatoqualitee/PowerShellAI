@@ -94,7 +94,7 @@ function New-ChatMessage {
 
     Add-ChatMessage -Message $message
 
-    # Export-ChatSession
+    #Export-ChatSession
 }
 
 function New-ChatSystemMessage {
@@ -165,6 +165,8 @@ function New-Chat {
     if (![string]::IsNullOrEmpty($Content)) {
         New-ChatSystemMessage -Content $Content
     }
+    
+    #Export-ChatSession
 }
 
 function Test-ChatInProgress {
@@ -194,12 +196,20 @@ function Get-GPT4Completion {
     $body = Get-ChatPayload -AsJson
     
     $result = Invoke-OpenAIAPI -Uri (Get-OpenAIChatCompletionUri) -Method 'Post' -Body $body
+
+    if ($result.choices) {
+        $response = $result.choices[0].message.content
+        New-ChatAssistantMessage -Content $response
+        
+        #Export-ChatSession
+    }
+        
     if ($Raw) {
         $result
     } 
     elseif ($result.choices) {
-        $response = $result.choices[0].message.content
-        New-ChatAssistantMessage -Content $response
+        # $response = $result.choices[0].message.content
+        # New-ChatAssistantMessage -Content $response
         $response
     }
 }

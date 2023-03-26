@@ -12,8 +12,14 @@ Describe "Session Management" -Tag SessionManagement {
         }
     }
 
+    BeforeEach {
+        # Set-ChatSessionPath "TestDrive:\PowerShell\ChatGPT"
+    }
+
     AfterEach {
         Reset-ChatSessionPath
+        Clear-ChatMessages
+        # Get-ChatSessionPath | Remove-Item -Recurse -force
     }
 
     AfterAll {
@@ -100,7 +106,7 @@ Describe "Session Management" -Tag SessionManagement {
 
     It 'Test Get-ChatSessionFile returns correct file name for Windows' {
 
-        if($IsLinux -or $IsMacOS) {
+        if ($IsLinux -or $IsMacOS) {
             # skip 
             return
         }
@@ -117,19 +123,19 @@ Describe "Session Management" -Tag SessionManagement {
 
     It 'Test exporting chat messages' {
         Add-ChatMessage -Message ([PSCustomObject]@{
-            role    = 'system'
-            content = 'system test'
-        })
+                role    = 'system'
+                content = 'system test'
+            })
 
         Add-ChatMessage -Message ([PSCustomObject]@{
-            role    = 'user'
-            content = 'user test'
-        })
+                role    = 'user'
+                content = 'user test'
+            })
 
         Add-ChatMessage -Message ([PSCustomObject]@{
-            role    = 'assistant'
-            content = 'assistant test'
-        })
+                role    = 'assistant'
+                content = 'assistant test'
+            })
         
         Set-chatSessionPath -Path 'TestDrive:\PowerShell\ChatGPT'
         
@@ -148,7 +154,7 @@ Describe "Session Management" -Tag SessionManagement {
 
     It 'Test setting and resetting the chat session path' {
 
-        if($IsLinux -or $IsMacOS) {
+        if ($IsLinux -or $IsMacOS) {
             # skip 
             return
         }
@@ -166,5 +172,125 @@ Describe "Session Management" -Tag SessionManagement {
         if ($IsWindows -or $null -eq $IsWindows) {
             $actual | Should -BeExactly "$env:APPDATA\PowerShellAI\ChatGPT"
         }
+    }
+
+    It 'Test Get-ChatSessionContent returns correct content' {
+
+        Set-ChatSessionPath "TestDrive:\PowerShell\ChatGPT"
+        
+        Add-ChatMessage -Message ([PSCustomObject]@{
+                role    = 'system'
+                content = 'system test'
+            })
+
+        Add-ChatMessage -Message ([PSCustomObject]@{
+                role    = 'user'
+                content = 'user test'
+            })
+
+        Add-ChatMessage -Message ([PSCustomObject]@{
+                role    = 'assistant'
+                content = 'assistant test'
+            })
+
+        Export-ChatSession
+ 
+        $sessions = Get-ChatSession
+        $sessions.Count | Should -Be 1
+
+        $content = Get-ChatSessionContent $sessions
+        
+        $content | Should -Not -BeNullOrEmpty
+        $content.Count | Should -Be 3
+
+        $content[0].role | Should -BeExactly 'system'
+        $content[0].content | Should -BeExactly 'system test'
+        
+        $content[1].role | Should -BeExactly 'user'
+        $content[1].content | Should -BeExactly 'user test'
+
+        $content[2].role | Should -BeExactly 'assistant'
+        $content[2].content | Should -BeExactly 'assistant test'
+    }
+
+    It 'Test Get-ChatSessionContent returns correct content with multiple sessions' {
+
+        # $Path = "TestDrive:\PowerShell\ChatGPT"
+
+        # $Path | Get-ChildItem | Remove-Item -recurse -force 
+        
+        # "test" | Out-File -FilePath "$Path\test.txt"
+        # "test1" | Out-File -FilePath "$Path\test1.txt"
+
+        # (Get-ChildItem $path).count | Should -Be 2
+
+        Set-ChatSessionPath "TestDrive:\PowerShell\ChatGPT"
+        Get-ChatSessionPath | Get-ChildItem | Remove-Item -Recurse -Force -ErrorAction SilentlyContinue
+        
+        Add-ChatMessage -Message ([PSCustomObject]@{
+                role    = 'system'
+                content = 'system test'
+            })
+
+        Add-ChatMessage -Message ([PSCustomObject]@{
+                role    = 'user'
+                content = 'user test'
+            })
+
+        Add-ChatMessage -Message ([PSCustomObject]@{
+                role    = 'assistant'
+                content = 'assistant test'
+            })
+
+        Export-ChatSession
+        
+        Stop-Chat
+        Reset-ChatSessionTimeStamp
+        Start-Sleep 1
+
+        Add-ChatMessage -Message ([PSCustomObject]@{
+                role    = 'system'
+                content = 'system test 2'
+            })
+
+        Add-ChatMessage -Message ([PSCustomObject]@{
+                role    = 'user'
+                content = 'user test 2'
+            })
+
+        Add-ChatMessage -Message ([PSCustomObject]@{
+                role    = 'assistant'
+                content = 'assistant test 2'
+            })
+
+        Export-ChatSession
+
+        Stop-Chat
+        Reset-ChatSessionTimeStamp
+
+        $sessions = Get-ChatSession
+        $sessions.Count | Should -Be 2
+
+        $result = $sessions | Get-ChatSessionContent
+
+        $result.Count | Should -Be 6
+        
+        $result[0].role | Should -BeExactly 'system'
+        $result[0].content | Should -BeExactly 'system test'
+        
+        $result[1].role | Should -BeExactly 'user'
+        $result[1].content | Should -BeExactly 'user test'
+
+        $result[2].role | Should -BeExactly 'assistant'
+        $result[2].content | Should -BeExactly 'assistant test'
+
+        $result[3].role | Should -BeExactly 'system'
+        $result[3].content | Should -BeExactly 'system test 2'
+
+        $result[4].role | Should -BeExactly 'user'
+        $result[4].content | Should -BeExactly 'user test 2'
+
+        $result[5].role | Should -BeExactly 'assistant'
+        $result[5].content | Should -BeExactly 'assistant test 2'
     }
 }

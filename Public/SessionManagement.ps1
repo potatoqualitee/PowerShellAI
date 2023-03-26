@@ -87,7 +87,8 @@ function Get-ChatSession {
     $path = Get-ChatSessionPath
 
     if (Test-Path $path) {
-        Get-ChildItem -Path $path -Filter "*.xml" | Where-Object { $_.Name -match $Name }         
+        $results = Get-ChildItem -Path $path -Filter "*.xml" | Where-Object { $_.Name -match $Name }         
+        $results
     }
 }
 
@@ -103,18 +104,17 @@ function Get-ChatSessionContent {
         Get-ChatSessionContent -Path 'C:\Users\user\Documents\PowerShellAI\ChatGPT\20200101120000-ChatGPTSession.xml'
     #>
     [CmdletBinding()]
-    param ()
-    # param (
-    #     [Alias('FullName')]
-    #     [Parameter(ValueFromPipelineByPropertyName)]
-    #     $Path
-    # )
+    param (
+        [Alias('FullName')]
+        [Parameter(ValueFromPipelineByPropertyName)]
+        $Path
+    )
 
-    # Process {
-    #     if (Test-Path $Path) {
-    #         Import-Clixml -Path $Path
-    #     }
-    # }
+    Process {
+        if (Test-Path $Path) {
+            Import-Clixml -Path $Path
+        }
+    }
 }
 
 function Export-ChatSession {
