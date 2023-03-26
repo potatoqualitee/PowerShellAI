@@ -5,6 +5,7 @@ Describe "Get-GPT4Completion" -Tag 'GPT4Completion' {
     BeforeAll {
         $script:savedKey = $env:OpenAIKey
         $env:OpenAIKey = 'sk-1234567890'
+        Set-chatSessionPath -Path 'TestDrive:\PowerShell\ChatGPT'
 
         Mock Invoke-RestMethod -ModuleName PowerShellAI -ParameterFilter { 
             $Method -eq 'Post' -and $Uri -eq (Get-OpenAIChatCompletionUri) 
@@ -22,6 +23,7 @@ Describe "Get-GPT4Completion" -Tag 'GPT4Completion' {
     }
 
     BeforeEach {
+        Stop-Chat
         Clear-ChatMessages
     }
 
@@ -160,7 +162,7 @@ Describe "Get-GPT4Completion" -Tag 'GPT4Completion' {
         $actual.content | Should -BeNullOrEmpty
     }
 
-    It 'Test if Stop-Chats stops chat and resets messages' {
+    It 'Test if Stop-Chat stops chat and resets messages' {
         $null = New-Chat 'test'
 
         $actual = Test-ChatInProgress
@@ -174,10 +176,56 @@ Describe "Get-GPT4Completion" -Tag 'GPT4Completion' {
         (Get-ChatMessages).Count | Should -Be 0
     }
 
-    # It 'Tests message is added to chat' {        
-    #     $null = Get-GPT4Completion 'test'
+    It 'Test message is added via New-Chat' {
+        $actual = New-Chat 'test system message'
 
-    #     $actual = Get-ChatMessages
-    #     $actual.Count | Should -Be 1
-    # }
+        $actual | Should -BeNullOrEmpty
+
+        $messages = Get-ChatMessages
+        $messages.Count | Should -Be 1
+
+        $messages[0].role | Should -BeExactly 'system'
+        $messages[0].content | Should -BeExactly 'test system message'
+    }
+
+    It 'Test message is added via chat' {
+        $actual = chat 'test user message'
+
+        $actual | Should -BeExactly 'Mocked Get-GPT4Completion call'
+
+        $messages = Get-ChatMessages
+        $messages.Count | Should -Be 2
+
+        $messages[0].role | Should -BeExactly 'user'
+        $messages[0].content | Should -BeExactly 'test user message'
+
+        $messages[1].role | Should -BeExactly 'assistant'
+        $messages[1].content | Should -BeExactly 'Mocked Get-GPT4Completion call'
+    }
+
+    It 'Test message is added via New-Chat and Test-ChatInProgress' {
+        Test-ChatInProgress | Should -BeFalse
+
+        $actual = New-Chat 'test system message'
+
+        $actual | Should -BeNullOrEmpty
+
+        Test-ChatInProgress | Should -BeTrue
+
+        Stop-Chat
+        Test-ChatinProgress | Should -BeFalse
+    }
+    
+    It 'Test message is added via chat and Test-ChatInProgress' {
+        Test-ChatInProgress | Should -BeFalse
+
+        $actual = chat 'test user message'
+
+        $actual | Should -BeExactly 'Mocked Get-GPT4Completion call'
+
+        Test-ChatInProgress | Should -BeTrue
+
+        Stop-Chat
+        Test-ChatinProgress | Should -BeFalse
+    }
 }
