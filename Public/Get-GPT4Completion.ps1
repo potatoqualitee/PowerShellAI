@@ -167,7 +167,7 @@ function New-Chat {
         New-ChatSystemMessage -Content $Content
     }
     
-    #Export-ChatSession
+    Export-ChatSession
 }
 
 function Test-ChatInProgress {
@@ -181,7 +181,7 @@ function Stop-Chat {
     $Script:ChatInProgress = $false
     
     Clear-ChatMessages
-    #Reset-ChatSessionTimeStamp 
+    Reset-ChatSessionTimeStamp 
 }
 
 function Get-GPT4Completion {
@@ -202,8 +202,7 @@ function Get-GPT4Completion {
         $response = $result.choices[0].message.content
         New-ChatAssistantMessage -Content $response
         
-        #Export-ChatSession
-        
+        Export-ChatSession
         $response
     }
 }

@@ -228,4 +228,37 @@ Describe "Get-GPT4Completion" -Tag 'GPT4Completion' {
         Stop-Chat
         Test-ChatinProgress | Should -BeFalse
     }
+
+    It 'Test system message is added via New-Chat and Export works' {
+        $actual = New-Chat 'test system message'
+
+        $actual | Should -BeNullOrEmpty
+
+        $sessions = Get-ChatSession
+        $sessions.Count | Should -Be 1
+
+        $content = $sessions | Get-ChatSessionContent
+        $content.Count | Should -Be 1
+
+        $content[0].role | Should -BeExactly 'system'
+        $content[0].content | Should -BeExactly 'test system message'
+    }
+
+    It 'Test user message is added via chat and Export works' {
+        $actual = chat 'test user message'
+
+        $actual | Should -BeExactly 'Mocked Get-GPT4Completion call'
+
+        $sessions = Get-ChatSession
+        $sessions.Count | Should -Be 1
+
+        $content = $sessions | Get-ChatSessionContent
+        $content.Count | Should -Be 2
+
+        $content[0].role | Should -BeExactly 'user'
+        $content[0].content | Should -BeExactly 'test user message'
+
+        $content[1].role | Should -BeExactly 'assistant'
+        $content[1].content | Should -BeExactly 'Mocked Get-GPT4Completion call'
+    }
 }
