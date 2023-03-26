@@ -25,6 +25,7 @@ Describe "Get-GPT4Completion" -Tag 'GPT4Completion' {
     BeforeEach {
         Stop-Chat
         Clear-ChatMessages
+        Get-ChatSessionPath | Get-ChildItem -ErrorAction SilentlyContinue | Remove-Item -Force
     }
 
     AfterAll {
@@ -189,7 +190,7 @@ Describe "Get-GPT4Completion" -Tag 'GPT4Completion' {
     }
 
     It 'Test message is added via chat' {
-        $actual = chat 'test user message'
+        $actual = Get-GPT4Completion 'test user message'
 
         $actual | Should -BeExactly 'Mocked Get-GPT4Completion call'
 
@@ -219,7 +220,7 @@ Describe "Get-GPT4Completion" -Tag 'GPT4Completion' {
     It 'Test message is added via chat and Test-ChatInProgress' {
         Test-ChatInProgress | Should -BeFalse
 
-        $actual = chat 'test user message'
+        $actual = Get-GPT4Completion 'test user message'
 
         $actual | Should -BeExactly 'Mocked Get-GPT4Completion call'
 
@@ -245,7 +246,7 @@ Describe "Get-GPT4Completion" -Tag 'GPT4Completion' {
     }
 
     It 'Test user message is added via chat and Export works' {
-        $actual = chat 'test user message'
+        $actual = Get-GPT4Completion 'test user message'
 
         $actual | Should -BeExactly 'Mocked Get-GPT4Completion call'
 
