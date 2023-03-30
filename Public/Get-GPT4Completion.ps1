@@ -13,6 +13,13 @@ $Script:ChatInProgress = $false
 [System.Collections.ArrayList]$Script:ChatMessages = @()
 
 function Get-ChatSessionOptions {
+    # add comment based help
+    <#
+        .SYNOPSIS
+            Get the current chat session options.
+        .EXAMPLE
+            Get-ChatSessionOptions
+    #>
     [CmdletBinding()]
     param()
 
@@ -20,6 +27,38 @@ function Get-ChatSessionOptions {
 }
 
 function Set-ChatSessionOption {
+    <#
+        .SYNOPSIS
+            Set a chat session option.
+                
+        .PARAMETER model
+            The model to use for the chat session.
+            Valid values are 'gpt-4' and 'gpt-3.5-turbo'.
+            Default value is 'gpt-4'.
+        .PARAMETER max_tokens
+            The maximum number of tokens to generate.
+            Default value is 256.
+        .PARAMETER temperature
+            The temperature of the model.
+            Default value is 0.
+        .PARAMETER top_p
+            The top_p of the model.
+            Default value is 1. 
+        .PARAMETER frequency_penalty
+            The frequency penalty of the model.
+            Default value is 0.
+        .PARAMETER presence_penalty
+            The presence penalty of the model.
+            Default value is 0.
+        .PARAMETER stop
+            The stop sequence of the model.
+            Default value is $null.
+        .EXAMPLE
+            Set-ChatSessionOption -model 'gpt-4'
+        .EXAMPLE
+            Set-ChatSessionOption -max_tokens 512
+
+    #>
     [CmdletBinding()]
     param(
         [ValidateSet('gpt-4', 'gpt-3.5-turbo')]
@@ -40,6 +79,12 @@ function Set-ChatSessionOption {
 }
 
 function Reset-ChatSessionOptions {
+    <#
+        .SYNOPSIS
+            Reset the chat session options to their default values.
+        .EXAMPLE
+            Reset-ChatSessionOptions
+    #>
     [CmdletBinding()]
     param()
 
@@ -55,6 +100,12 @@ function Reset-ChatSessionOptions {
 }
 
 function Clear-ChatMessages {
+    <#
+        .SYNOPSIS
+            Clear the chat messages in the current chat session.
+        .EXAMPLE
+            Clear-ChatMessages
+    #>
     [CmdletBinding()]
     param()
 
@@ -62,6 +113,14 @@ function Clear-ChatMessages {
 }
 
 function Add-ChatMessage {
+    <#
+        .SYNOPSIS
+            Add a chat message to the current chat session.
+        .PARAMETER Message
+            The chat message to add.
+        .EXAMPLE
+            Add-ChatMessage -Message <#PSCustomObject#>
+    #>    
     [CmdletBinding()]
     param(
         [Parameter(Mandatory)]
@@ -72,6 +131,17 @@ function Add-ChatMessage {
 }
 
 function New-ChatMessageTemplate {
+    <#
+        .SYNOPSIS
+            Create a new chat message template.
+        .PARAMETER Role
+            The role of the chat message.
+            Valid values are 'user', 'system', and 'assistant'.
+        .PARAMETER Content
+            The content of the chat message.
+        .EXAMPLE
+            New-ChatMessageTemplate -Role 'user' -Content <#string#>
+    #>
     [CmdletBinding()]
     param( 
         [ValidateSet('user', 'system', 'assistant')]
@@ -86,6 +156,19 @@ function New-ChatMessageTemplate {
 }
 
 function New-ChatMessage {
+    <#
+        .SYNOPSIS
+            Create a new chat message.
+        .DESCRIPTION
+            Create a new chat message and add it to the current chat session.
+        .PARAMETER Role
+            The role of the chat message.
+            Valid values are 'user', 'system', and 'assistant'.
+        .PARAMETER Content
+            The content of the chat message.
+        .EXAMPLE
+            New-ChatMessage -Role 'user' -Content <#string
+    #>
     param(
         [Parameter(Mandatory)]
         [ValidateSet('user', 'system', 'assistant')]
@@ -104,6 +187,16 @@ function New-ChatMessage {
 }
 
 function New-ChatSystemMessage {
+    <#
+        .SYNOPSIS
+            Create a new chat system message.
+        .DESCRIPTION
+            Create a new chat system message and add it to the current chat session.
+        .PARAMETER Content
+            The content of the chat message.
+        .EXAMPLE
+            New-ChatSystemMessage -Content <#string#>        
+    #>
     [CmdletBinding()]
     param(
         [Parameter(Mandatory)]
@@ -114,6 +207,16 @@ function New-ChatSystemMessage {
 }
 
 function New-ChatUserMessage {
+    <#
+        .SYNOPSIS
+            Create a new chat user message.
+        .DESCRIPTION
+            Create a new chat user message and add it to the current chat session.
+        .PARAMETER Content
+            The content of the chat message.
+        .EXAMPLE
+            New-ChatUserMessage -Content <#string#>
+    #>
     [CmdletBinding()]
     param(
         [Parameter(Mandatory)]
@@ -124,6 +227,16 @@ function New-ChatUserMessage {
 }
 
 function New-ChatAssistantMessage {
+    <#
+        .SYNOPSIS
+            Create a new chat assistant message.
+        .DESCRIPTION
+            Create a new chat assistant message and add it to the current chat session.
+        .PARAMETER Content
+            The content of the chat message.
+        .EXAMPLE
+            New-ChatAssistantMessage -Content <#string
+    #>
     [CmdletBinding()]
     param(
         [Parameter(Mandatory)]
@@ -134,6 +247,12 @@ function New-ChatAssistantMessage {
 }
 
 function Get-ChatMessages {
+    <#
+        .SYNOPSIS
+            Get the chat messages in the current chat session.
+        .EXAMPLE
+            Get-ChatMessages
+    #>
     [CmdletBinding()]
     param()
 
@@ -141,6 +260,16 @@ function Get-ChatMessages {
 }
 
 function Get-ChatPayload {
+    <#
+        .SYNOPSIS
+            Get the chat payload.
+        .DESCRIPTION
+            Get the chat payload as a PSCustomObject.
+        .PARAMETER AsJson
+            Return the chat payload as a JSON string.
+        .EXAMPLE
+            Get-ChatPayload
+    #>
     [CmdletBinding()]
     param(
         [Switch]$AsJson
@@ -160,6 +289,18 @@ function Get-ChatPayload {
 }
 
 function New-Chat {
+    <#
+        .SYNOPSIS
+            Start a new chat session.
+        .DESCRIPTION
+            Start a new chat session and optionally send a message to the assistant.
+        .PARAMETER Content
+            The content of the chat message.
+        .EXAMPLE
+            New-Chat 
+        .EXAMPLE
+            New-Chat -Content <#string#>
+    #>
     [CmdletBinding()]
     param(
         $Content
@@ -176,10 +317,24 @@ function New-Chat {
 }
 
 function Test-ChatInProgress {
+    <#
+        .SYNOPSIS
+            Test if a chat session is in progress.
+        .EXAMPLE
+            Test-ChatInProgress
+    #>
+    [CmdletBinding()]
+    param()
     $Script:ChatInProgress
 }
 
 function Stop-Chat {
+    <#
+        .SYNOPSIS
+            Stop the current chat session.
+        .EXAMPLE
+            Stop-Chat
+    #>
     [CmdletBinding()]
     param()
 
@@ -190,6 +345,16 @@ function Stop-Chat {
 }
 
 function Get-GPT4Completion {
+    <#
+        .SYNOPSIS
+            Get a GPT-4 completion.
+        .DESCRIPTION
+            Get a GPT-4 completion from the OpenAI API.
+        .EXAMPLE
+            chat "use powershell: what is my IP address?"
+        .EXAMPLE
+            Get-GPT4Completion -Prompt <#string#>
+    #>
     [CmdletBinding()]
     [alias("chat")]
     param(

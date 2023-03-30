@@ -2,6 +2,14 @@ $Script:timeStamp
 $Script:chatSessionPath
 
 function Get-ChatSessionTimeStamp {
+    <#
+        .SYNOPSIS
+            Get chat session time stamp
+        .DESCRIPTION
+            Get chat session time stamp, if not set, set it to current time
+        .EXAMPLE
+            Get-ChatSessionTimeStamp
+    #>
     [CmdletBinding()]
     param ()
     
@@ -13,6 +21,14 @@ function Get-ChatSessionTimeStamp {
 }
 
 function Reset-ChatSessionTimeStamp {
+    <#
+        .SYNOPSIS
+            Reset chat session time stamp
+        .DESCRIPTION
+            Reset chat session time stamp to $null
+        .EXAMPLE
+            Reset-ChatSessionTimeStamp
+    #>
     [CmdletBinding()]
     param ()
 
@@ -20,6 +36,14 @@ function Reset-ChatSessionTimeStamp {
 }
 
 function Reset-ChatSessionPath {
+    <#
+        .SYNOPSIS
+            Reset chat session path
+        .DESCRIPTION
+            Reset chat session path to default value
+        .EXAMPLE
+            Reset-ChatSessionPath
+    #>
     [CmdletBinding()]
     param ()
 
@@ -33,6 +57,14 @@ function Reset-ChatSessionPath {
 }
 
 function Get-ChatSessionPath {
+    <#
+        .SYNOPSIS
+            Get chat session path
+        .DESCRIPTION
+            Get chat session path, if not set, set it to default value
+        .EXAMPLE
+            Get-ChatSessionPath
+    #>
     [CmdletBinding()]
     param ()
 
@@ -44,6 +76,14 @@ function Get-ChatSessionPath {
 }
 
 function Set-ChatSessionPath {
+    <#
+        .SYNOPSIS
+            Set chat session path
+        .PARAMETER Path
+            Path of the chat session
+        .EXAMPLE
+            Set-ChatSessionPath -Path 'C:\Users\user\Documents\PowerShellAI\ChatGPT'
+    #>
     [CmdletBinding()]
     param (
         [Parameter(Mandatory)]
@@ -54,6 +94,16 @@ function Set-ChatSessionPath {
 }
 
 function Get-ChatSessionFile {
+    <#
+        .SYNOPSIS
+            Get chat session file
+        .DESCRIPTION
+            Get chat session file from current time
+        .PARAMETER timeStamp
+            Time stamp of the chat session file
+        .EXAMPLE
+            Get-ChatSessionFile
+    #>
     [CmdletBinding()]
     param (
         $timeStamp
@@ -68,16 +118,16 @@ function Get-ChatSessionFile {
 
 function Get-ChatSession {
     <#
-    .SYNOPSIS
-        Get chat session files
-    .DESCRIPTION
-        Get chat session files from all time
-    .PARAMETER Name
-        Name of the chat session file, can be a regular expression
-    .EXAMPLE
-        Get-ChatSession
-    .EXAMPLE
-        Get-ChatSession -Name '20200101120000-ChatGPTSession'
+        .SYNOPSIS
+            Get chat session files
+        .DESCRIPTION
+            Get chat session files from all time
+        .PARAMETER Name
+            Name of the chat session file, can be a regular expression
+        .EXAMPLE
+            Get-ChatSession
+        .EXAMPLE
+            Get-ChatSession -Name '20200101120000-ChatGPTSession'
     #>
     [CmdletBinding()]
     param (
@@ -94,14 +144,14 @@ function Get-ChatSession {
 
 function Get-ChatSessionContent {
     <#
-    .SYNOPSIS
-        Get chat session content
-    .DESCRIPTION
-        Get chat session content from a chat session file
-    .PARAMETER Path
-        Path of the chat session file
-    .EXAMPLE
-        Get-ChatSessionContent -Path 'C:\Users\user\Documents\PowerShellAI\ChatGPT\20200101120000-ChatGPTSession.xml'
+        .SYNOPSIS
+            Get chat session content
+        .DESCRIPTION
+            Get chat session content from a chat session file
+        .PARAMETER Path
+            Path of the chat session file
+        .EXAMPLE
+            Get-ChatSessionContent -Path 'C:\Users\user\Documents\PowerShellAI\ChatGPT\20200101120000-ChatGPTSession.xml'
     #>
     [CmdletBinding()]
     param (
@@ -118,6 +168,16 @@ function Get-ChatSessionContent {
 }
 
 function Export-ChatSession {
+    <#
+        .SYNOPSIS
+            Export chat session 
+        .DESCRIPTION
+            Export chat session to a chat session file
+        .EXAMPLE
+            Export-ChatSession        
+    #>
+
+
     [CmdletBinding()]
     param ()
 
