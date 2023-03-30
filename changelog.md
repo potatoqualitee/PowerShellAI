@@ -1,3 +1,11 @@
+# v0.5.5
+
+- Added support for GPT-4, conversation-in and message-out
+    - Saves the conversation to a file in each invocation
+    - Supports changing chat options like the model like `gpt-4` or `gpt-3.5-turbo` and more
+    - List sessions that have been saved, plus you can get their conent
+    
+
 # v0.5.4
 
 - Copilot can now `explain` the code it generates.

@@ -36,22 +36,6 @@ The PowerShell AI module integrates with the OpenAI API and let's you easily acc
         'Get-OpenAIEdit'
         'New-SpreadSheet'
 
-        # current chat functions
-        # 'Get-ChatHistory'
-        # 'Get-ChatInProgress'
-        # 'Get-ChatSession'
-        # 'Get-ChatSessionContent'
-        # 'Get-ChatSessionPath'
-        # 'Get-ChatTheme'
-        # 'Import-ChatMessages'
-        # 'Import-ChatAssistantMessages'
-        # 'Import-ChatUserMessages'
-        # 'Import-ChatSession'
-        # 'Invoke-ChatCompletion'
-        # 'New-Chat'
-        # 'Stop-Chat'
-        # 'Test-ChatInProgress'
-
         # new chat functions
         'Add-ChatMessage'
         'Clear-ChatMessages'
@@ -92,7 +76,6 @@ The PowerShell AI module integrates with the OpenAI API and let's you easily acc
     AliasesToExport   = @(
         'gpt'
         'gpt4'
-        #'chatgpt'
         'chat'
         'ieh'
         'explain'
