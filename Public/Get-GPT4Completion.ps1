@@ -22,9 +22,14 @@ function Get-ChatSessionOptions {
 function Set-ChatSessionOption {
     [CmdletBinding()]
     param(
+        [ValidateSet('gpt-4', 'gpt-3.5-turbo')]
         $model,
-        $max_tokens,
-        $temperature
+        $max_tokens = 256,
+        $temperature = 0,
+        $top_p = 1,
+        $frequency_penalty = 0,
+        $presence_penalty = 0,
+        $stop
     )
 
     $options = @{} + $PSBoundParameters
