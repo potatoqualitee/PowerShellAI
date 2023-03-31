@@ -5,6 +5,14 @@
     - Supports changing chat options like the model like `gpt-4` or `gpt-3.5-turbo` and more
     - List sessions that have been saved, plus you can get their content
 
+**Note**: This defaults to using `gpt-4`. You can set the model to chat with:
+
+```powershell
+Get-ChatSessionOptions
+Set-ChatSessionOption -model  gpt-3.5-turbo
+Get-ChatSessionOptions
+```
+
 Getting started example:
 
 ```powershell
