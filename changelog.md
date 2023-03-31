@@ -3,7 +3,22 @@
 - Added support for GPT-4, conversation-in and message-out
     - Saves the conversation to a file in each invocation
     - Supports changing chat options like the model like `gpt-4` or `gpt-3.5-turbo` and more
-    - List sessions that have been saved, plus you can get their conent
+    - List sessions that have been saved, plus you can get their content
+
+Getting started example:
+
+```powershell
+New-Chat 'respond only in json'
+chat 'what are the capitals of Spain, France, and the USA?'
+```
+
+```json
+{
+  "Spain": "Madrid",
+  "France": "Paris",
+  "USA": "Washington, D.C."
+}
+```
     
 
 # v0.5.4
