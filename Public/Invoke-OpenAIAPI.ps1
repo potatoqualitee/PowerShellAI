@@ -42,10 +42,13 @@ function Invoke-OpenAIAPI {
         #On PowerShell 6 and higher use Invoke-RestMethod with Authentication parameter and secure Token
         $params['Authentication'] = 'Bearer'
         $params['Token'] = $apiKey
-    } else {
+    }
+    else {
         #On PowerShell 5 and lower, or when using the $env:OpenAIKey environment variable, use Invoke-RestMethod with plain text header
-        $params['Headers'] = @{Authorization = "Bearer $apiKey"}
+        $params['Headers'] = @{Authorization = "Bearer $apiKey" }
     }
 
+    Write-Verbose ($params | ConvertTo-Json)
+    
     Invoke-RestMethod @params
 }
