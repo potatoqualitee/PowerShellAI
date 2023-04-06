@@ -66,11 +66,11 @@ The PowerShell AI module integrates with the OpenAI API and let's you easily acc
         # Azure OpenAI
         'Get-ChatAPIProvider'
         'Get-ChatAzureOpenAIURI'
-        'Get-ChatAzureOpenAIURIOptions'
-        'Reset-ChatAzureOpenAIURIOptions'
+        'Get-AzureOpenAIOptions'
+        'Reset-AzureOpenAIOptions'
         'Set-AzureOpenAI'
         'Set-ChatAPIProvider'
-        'Set-ChatAzureOpenAIURIOptions'
+        'Set-AzureOpenAIOptions'
         #
 
         'Get-OpenAIUsage'

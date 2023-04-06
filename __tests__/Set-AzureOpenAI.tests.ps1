@@ -42,7 +42,7 @@ Describe 'Set-AzureOpenAI' -Tag SetAzureOpenAI {
             -ApiVersion 2023-03-15-preview `
             -ApiKey aayyzzbbcc
 
-        $actual = Get-ChatAzureOpenAIURIOptions
+        $actual = Get-AzureOpenAIOptions
 
         $actual.Endpoint | Should -Be "https://myopenaiinstance.openai.azure.com"
         $actual.DeploymentName | Should -Be "myopenaiinstance"

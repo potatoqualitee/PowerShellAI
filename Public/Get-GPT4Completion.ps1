@@ -8,7 +8,7 @@ $Script:ChatSessionOptions = @{
     'stop'              = $null
 }
 
-$Script:ChatAzureOpenAIURIOptions = @{
+$Script:AzureOpenAIOptions = @{
     Endpoint       = 'not set'
     DeploymentName = 'not set'
     ApiVersion     = 'not set'
@@ -19,14 +19,14 @@ $Script:ChatInProgress = $false
 
 [System.Collections.ArrayList]$Script:ChatMessages = @()
 
-function Get-ChatAzureOpenAIURIOptions {
+function Get-AzureOpenAIOptions {
     [CmdletBinding()]
     param()
 
-    $Script:ChatAzureOpenAIURIOptions
+    $Script:AzureOpenAIOptions
 }
 
-function Set-ChatAzureOpenAIURIOptions {
+function Set-AzureOpenAIOptions {
     [CmdletBinding()]
     param(
         $Endpoint,
@@ -37,16 +37,16 @@ function Set-ChatAzureOpenAIURIOptions {
     $options = @{} + $PSBoundParameters
 
     foreach ($key in $options.Keys) {
-        $Script:ChatAzureOpenAIURIOptions[$key] = $options[$key]
+        $Script:AzureOpenAIOptions[$key] = $options[$key]
     }
 }
 
 
-function Reset-ChatAzureOpenAIURIOptions {
+function Reset-AzureOpenAIOptions {
     [CmdletBinding()]
     param()
 
-    $Script:ChatAzureOpenAIURIOptions = @{
+    $Script:AzureOpenAIOptions = @{
         Endpoint       = 'not set'
         DeploymentName = 'not set'
         ApiVersion     = 'not set'
@@ -63,7 +63,7 @@ function Get-ChatAzureOpenAIURI {
     [CmdletBinding()]
     param()
 
-    $options = Get-ChatAzureOpenAIURIOptions
+    $options = Get-AzureOpenAIOptions
 
     if ($options.Endpoint -eq 'not set') {
         throw 'Azure Open AI Endpoint not set'

@@ -26,7 +26,7 @@ function Set-AzureOpenAI {
     $p = @{} + $PSBoundParameters    
     $p.Remove("ApiKey")    
 
-    Set-ChatAzureOpenAIURIOptions @p
+    Set-AzureOpenAIOptions @p
     $env:AzureOpenAIKey = $ApiKey
     Set-ChatAPIProvider -Provider AzureOpenAI
 }

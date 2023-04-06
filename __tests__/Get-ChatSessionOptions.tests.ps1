@@ -4,7 +4,7 @@ Describe "ChatSessionOptions" -Tag ChatSessionOptions {
 
     AfterEach {
         Reset-ChatSessionOptions
-        Reset-ChatAzureOpenAIURIOptions
+        Reset-AzureOpenAIOptions
         Set-ChatAPIProvider -Provider 'OpenAI'
     }
     
@@ -157,13 +157,13 @@ Describe "ChatSessionOptions" -Tag ChatSessionOptions {
         $actual.stop | Should -BeNullOrEmpty
     }
 
-    It 'Test Get-ChatAzureOpenAIURIOptions function exists' {
-        $actual = Get-Command Get-ChatAzureOpenAIURIOptions -ErrorAction SilentlyContinue
+    It 'Test Get-AzureOpenAIOptions function exists' {
+        $actual = Get-Command Get-AzureOpenAIOptions -ErrorAction SilentlyContinue
         $actual | Should -Not -BeNullOrEmpty
     }
 
-    It 'Test Get-ChatAzureOpenAIURIOptions' {
-        $actual = Get-ChatAzureOpenAIURIOptions
+    It 'Test Get-AzureOpenAIOptions' {
+        $actual = Get-AzureOpenAIOptions
         
         $actual | Should -Not -BeNullOrEmpty
         $actual.Endpoint | Should -BeExactly 'not set'
@@ -176,14 +176,14 @@ Describe "ChatSessionOptions" -Tag ChatSessionOptions {
         $actual | Should -Not -BeNullOrEmpty
     }
 
-    It 'Test Set-ChatAzureOpenAIURIOptions function exists' {
-        $actual = Get-Command Set-ChatAzureOpenAIURIOptions -ErrorAction SilentlyContinue
+    It 'Test Set-AzureOpenAIOptions function exists' {
+        $actual = Get-Command Set-AzureOpenAIOptions -ErrorAction SilentlyContinue
         $actual | Should -Not -BeNullOrEmpty
     }
 
-    It 'Test Set-ChatAzureOpenAIURIOptions' {
-        Set-ChatAzureOpenAIURIOptions -Endpoint 'https://westus.api.cognitive.microsoft.com' -DeploymentName 'openai' -ApiVersion '2021-05-01'
-        $actual = Get-ChatAzureOpenAIURIOptions
+    It 'Test Set-AzureOpenAIOptions' {
+        Set-AzureOpenAIOptions -Endpoint 'https://westus.api.cognitive.microsoft.com' -DeploymentName 'openai' -ApiVersion '2021-05-01'
+        $actual = Get-AzureOpenAIOptions
         
         $actual | Should -Not -BeNullOrEmpty
         $actual.Endpoint | Should -BeExactly 'https://westus.api.cognitive.microsoft.com'
@@ -192,7 +192,7 @@ Describe "ChatSessionOptions" -Tag ChatSessionOptions {
     }
 
     It 'Test Get-ChatAzureOpenAIURI' {
-        Set-ChatAzureOpenAIURIOptions -Endpoint 'https://westus.api.cognitive.microsoft.com' -DeploymentName 'openai' -ApiVersion '2021-05-01'
+        Set-AzureOpenAIOptions -Endpoint 'https://westus.api.cognitive.microsoft.com' -DeploymentName 'openai' -ApiVersion '2021-05-01'
 
         $actual = Get-ChatAzureOpenAIURI
         
@@ -201,24 +201,24 @@ Describe "ChatSessionOptions" -Tag ChatSessionOptions {
         $actual | Should -BeExactly 'https://westus.api.cognitive.microsoft.com/openai/deployments/openai/chat/completions?api-version=2021-05-01'
     }
 
-    It 'Test Reset-ChatAzureOpenAIURIOptions function exists' {
-        $actual = Get-Command Reset-ChatAzureOpenAIURIOptions -ErrorAction SilentlyContinue
+    It 'Test Reset-AzureOpenAIOptions function exists' {
+        $actual = Get-Command Reset-AzureOpenAIOptions -ErrorAction SilentlyContinue
         $actual | Should -Not -BeNullOrEmpty
     }
 
-    It 'Test Reset-ChatAzureOpenAIURIOptions' {
-        Set-ChatAzureOpenAIURIOptions -Endpoint 'https://westus.api.cognitive.microsoft.com' -DeploymentName 'openai' -ApiVersion '2021-05-01'
+    It 'Test Reset-AzureOpenAIOptions' {
+        Set-AzureOpenAIOptions -Endpoint 'https://westus.api.cognitive.microsoft.com' -DeploymentName 'openai' -ApiVersion '2021-05-01'
 
-        $actual = Get-ChatAzureOpenAIURIOptions
+        $actual = Get-AzureOpenAIOptions
 
         $actual | Should -Not -BeNullOrEmpty
         $actual.Endpoint | Should -BeExactly 'https://westus.api.cognitive.microsoft.com'
         $actual.DeploymentName | Should -BeExactly 'openai'
         $actual.ApiVersion | Should -BeExactly '2021-05-01'
 
-        Reset-ChatAzureOpenAIURIOptions
+        Reset-AzureOpenAIOptions
 
-        $actual = Get-ChatAzureOpenAIURIOptions
+        $actual = Get-AzureOpenAIOptions
 
         $actual | Should -Not -BeNullOrEmpty
         $actual.Endpoint | Should -BeExactly 'not set'
@@ -227,19 +227,19 @@ Describe "ChatSessionOptions" -Tag ChatSessionOptions {
     }
 
     It 'Test Get-ChatAzureOpenAIURI throws if Endpoint is not set' {
-        Set-ChatAzureOpenAIURIOptions -DeploymentName 'openai' -ApiVersion '2021-05-01'
+        Set-AzureOpenAIOptions -DeploymentName 'openai' -ApiVersion '2021-05-01'
 
         {Get-ChatAzureOpenAIURI} | Should -Throw -ExpectedMessage 'Azure Open AI Endpoint not set'
     }
 
     It 'Test Get-ChatAzureOpenAIURI throws if DeploymentName is not set' {
-        Set-ChatAzureOpenAIURIOptions -Endpoint 'https://westus.api.cognitive.microsoft.com' -ApiVersion '2021-05-01'
+        Set-AzureOpenAIOptions -Endpoint 'https://westus.api.cognitive.microsoft.com' -ApiVersion '2021-05-01'
 
         {Get-ChatAzureOpenAIURI} | Should -Throw -ExpectedMessage 'Azure Open AI DeploymentName not set'
     }
 
     It 'Test Get-ChatAzureOpenAIURI throws if ApiVersion is not set' {
-        Set-ChatAzureOpenAIURIOptions -Endpoint 'https://westus.api.cognitive.microsoft.com' -DeploymentName 'openai'
+        Set-AzureOpenAIOptions -Endpoint 'https://westus.api.cognitive.microsoft.com' -DeploymentName 'openai'
 
         {Get-ChatAzureOpenAIURI} | Should -Throw -ExpectedMessage 'Azure Open AI ApiVersion not set'
     }
