@@ -5,9 +5,15 @@
   <a href="https://twitter.com/dfinke">
     <img src="https://img.shields.io/badge/Twitter-@dfinke-blue.svg?logo=twitter&style=flat-square">
   </a>
-  <a href="https://github.com/dfinke/PSAdvantage/blob/master/LICENSE">
-    <img src="https://img.shields.io/badge/License-Apache-orange.svg?logo=openbsd&style=flat-square">
+  <a href="https://www.powershellgallery.com/packages/PowerShellAI/">
+    <img src="https://img.shields.io/powershellgallery/v/PowerShellAI.svg">
+  </a>  
+  <a href="https://www.powershellgallery.com/packages/PowerShellAI/">
+    <img src="https://img.shields.io/powershellgallery/dt/PowerShellAI.svg">
   </a>
+  <!-- <a href="https://github.com/dfinke/PSAdvantage/blob/master/LICENSE">
+    <img src="https://img.shields.io/badge/License-Apache-orange.svg?logo=openbsd&style=flat-square">
+  </a> -->
 </p> 
 
 <p align="center">
