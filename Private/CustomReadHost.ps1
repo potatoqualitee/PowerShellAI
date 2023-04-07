@@ -7,13 +7,13 @@ function CustomReadHost {
         CustomReadHost 
     #>
 
-    $Run = New-Object System.Management.Automation.Host.ChoiceDescription '&Run', 'Run the code'    
+    $Yes = New-Object System.Management.Automation.Host.ChoiceDescription '&Yes', 'Yes, run the code'    
     $Explain = New-Object System.Management.Automation.Host.ChoiceDescription '&Explain', 'Explain the code'
     $Copy = New-Object System.Management.Automation.Host.ChoiceDescription '&Copy', 'Copy to clipboard'    
-    $Nothing = New-Object System.Management.Automation.Host.ChoiceDescription '&Nothing', 'Do not run the code'
+    $No = New-Object System.Management.Automation.Host.ChoiceDescription '&No', 'No, do not run the code'
 
     $options = [System.Management.Automation.Host.ChoiceDescription[]]($Run, $Explain, $Copy, $Nothing)
 
-    $message = 'What would you like to do?'
+    $message = 'Run the code? You can also choose additional actions'
     $host.ui.PromptForChoice($null, $message, $options, 3)
 }
