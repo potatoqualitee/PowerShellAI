@@ -50,6 +50,13 @@ function Invoke-OpenAIAPI {
         }
     } 
     elseif ((Get-ChatAPIProvider) -eq 'AzureOpenAI') {
+        $callingFunction = (Get-PSCallStack)[1].FunctionName
+        if($callingFunction -ne 'Get-GPT4Completion'){
+            $msg= "$callingFunction is not supported by Azure OpenAI. Use 'Set-ChatAPIProvider OpenAI' and then try again."
+            #Write-Warning $msg
+            throw $msg
+        }`
+
         if (!(Test-AzureOpenAIKey)) {
             throw 'Please set your Azure OpenAI API key by configuring the $env:AzureOpenAIKey environment variable'
         }
