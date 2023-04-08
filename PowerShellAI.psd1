@@ -1,6 +1,6 @@
 @{
     RootModule        = 'PowerShellAI.psm1'
-    ModuleVersion     = '0.5.5'
+    ModuleVersion     = '0.5.6'
     GUID              = '081ce7b4-6e63-41ca-92a7-2bf72dbad018'
     Author            = 'Douglas Finke'
     CompanyName       = 'Doug Finke'
@@ -11,8 +11,8 @@ The PowerShell AI module integrates with the OpenAI API and let's you easily acc
 '@
 
     FunctionsToExport = @(
-		'Get-OpenAIEdit'
-		'Get-OpenAIEditsUri'
+        'Get-OpenAIEdit'
+        'Get-OpenAIEditsUri'
         'ai'
         'ConvertFrom-GPTMarkdownTable'
         'copilot'
@@ -63,6 +63,16 @@ The PowerShell AI module integrates with the OpenAI API and let's you easily acc
         'Test-ChatInProgress'
         #
 
+        # Azure OpenAI
+        'Get-ChatAPIProvider'
+        'Get-ChatAzureOpenAIURI'
+        'Get-AzureOpenAIOptions'
+        'Reset-AzureOpenAIOptions'
+        'Set-AzureOpenAI'
+        'Set-ChatAPIProvider'
+        'Set-AzureOpenAIOptions'
+        #
+
         'Get-OpenAIUsage'
         'Get-OpenAIUser'
         'Invoke-AIErrorHelper'
@@ -71,6 +81,7 @@ The PowerShell AI module integrates with the OpenAI API and let's you easily acc
         'New-SpreadSheet'
         'Set-DalleImageAsWallpaper'
         'Set-OpenAIKey'
+        'Test-AzureOpenAIKey'
     )
 
     AliasesToExport   = @(

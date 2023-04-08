@@ -1,8 +1,6 @@
 <strong><p align="center">OpenAI at your Fingertips! ✨</p></strong>
 <strong><p align="center">using PowerShell</p></strong>
 
-<!-- [![](https://img.shields.io/powershellgallery/dt/ImportExcel.svg)](https://www.powershellgallery.com/packages/ImportExcel) -->
-
 <p align="center">
   <a href="https://twitter.com/dfinke">
     <img src="https://img.shields.io/badge/Twitter-@dfinke-blue.svg?logo=twitter&style=flat-square">
