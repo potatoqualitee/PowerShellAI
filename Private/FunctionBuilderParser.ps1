@@ -354,7 +354,7 @@ function Test-AifbFunctionCommandletUsage {
             $commandletParameterElementsText = $commandletParameterElements.Extent.Text
             $typeNameIndex = $commandletParameterElementsText.IndexOf('-AssemblyName') + 1
             if($typeNameIndex -gt 0 -and $commandletParameterElementsText.Count -gt $typeNameIndex) {
-                $typeName = $commandletParameterElements.Extent.Text[$typeNameIndex]
+                $typeName = $commandletParameterElements.Extent.Text[$typeNameIndex] -replace "(^['`"]|['`"]`$)", ""
                 Write-Verbose "Checking type '$typeName' exists for Add-Type"
                 $typeSections = $typeName -split "\."
                 for($i = ($typeSections.Length - 1); $i -ge 0; $i--) {
@@ -374,8 +374,15 @@ function Test-AifbFunctionCommandletUsage {
             $commandletParameterElementsText = $commandletParameterElements.Extent.Text
             $typeNameIndex = $commandletParameterElementsText.IndexOf('-TypeName') + 1
             if($typeNameIndex -gt 0 -and $commandletParameterElementsText.Count -gt $typeNameIndex) {
-                $typeName = $commandletParameterElements.Extent.Text[$typeNameIndex]
+                $typeName = $commandletParameterElements.Extent.Text[$typeNameIndex] -replace "(^['`"]|['`"]`$)", ""
                 Write-Verbose "Checking type '$typeName' exists for New-Object"
+
+                $builtinType = [System.Management.Automation.PSTypeName]"$typeName"
+                if($null -ne $builtinType.Type) {
+                    Write-Verbose "Built-in type found"
+                    return
+                }
+
                 $typeSections = $typeName -split "\."
                 for($i = ($typeSections.Length - 1); $i -ge 0; $i--) {
                     $assembly = $typeSections[0..$i] -join "."
@@ -386,7 +393,7 @@ function Test-AifbFunctionCommandletUsage {
                         Add-AifbLogMessage -Level "WRN" -Message "Failed to Add-Type '$assembly'."
                     }
                 }
-                Write-AifbFunctionParsingOutput "Failed to Add-Type '$typeName', the type doesn't exist." -Extent $extent
+                Write-AifbFunctionParsingOutput "Failed to find type for New-Object -TypeName '$typeName', the type doesn't exist." -Extent $extent
                 return
             }
         }
