@@ -366,7 +366,7 @@ function Test-AifbFunctionCommandletUsage {
                         Add-AifbLogMessage -Level "WRN" -Message "Failed to Add-Type '$assembly'."
                     }
                 }
-                Write-AifbFunctionParsingOutput "Failed to Add-Type '$typeName'." -Extent $extent
+                Write-AifbFunctionParsingOutput "Failed to Add-Type '$typeName', the type doesn't exist." -Extent $extent
                 return
             }
         }
@@ -386,7 +386,7 @@ function Test-AifbFunctionCommandletUsage {
                         Add-AifbLogMessage -Level "WRN" -Message "Failed to Add-Type '$assembly'."
                     }
                 }
-                Write-AifbFunctionParsingOutput "Failed to Add-Type '$typeName'." -Extent $extent
+                Write-AifbFunctionParsingOutput "Failed to Add-Type '$typeName', the type doesn't exist." -Extent $extent
                 return
             }
         }
@@ -420,7 +420,7 @@ function Test-AifbFunctionStaticMethodUsage {
         $arguments = $memberCall.Arguments
         $extent = $memberCall.Extent
         
-        $instance = Invoke-Expression "[$className]"
+        $instance = Invoke-Expression "[$className]" -ErrorAction "SilentlyContinue"
         $instanceMembers = $instance | Get-Member -Static -ErrorAction "SilentlyContinue" | Where-Object { $_.Name -eq $memberName }
 
         if(!$instance) {
@@ -442,6 +442,9 @@ function Test-AifbFunctionStaticMethodUsage {
             $constructorArgCounts = ($instance.GetConstructors() | Foreach-Object { $_.GetParameters().Count } | Group-Object).Name
             if($constructorArgCounts -notcontains $arguments.Count) {
                 Write-AifbFunctionParsingOutput "There is no constructor for $className that takes $($arguments.Count) parameters." -Extent $extent
+                return
+            } else {
+                Write-Verbose "Constructor is correct"
                 return
             }
         }

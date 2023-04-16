@@ -4,13 +4,13 @@ $script:OpenAISettings = @{
     Model = "gpt-3.5-turbo"
     # The codewriter is the system used to generate the first instance of the function
     CodeWriter = @{
-        SystemPrompt = "You respond to all questions with PowerShell function code with no explanations or comments, the answer must be a PowerShell Function Definition or multiple function definitions. The answer will be code only and will always be in the form of a PowerShell function. Valid PowerShell functions always start with a verb prefix like Add, Clear, Close, Copy, Enter, Exit, Find, Format, Get, Hide, Join, Lock, Move, New, Open, Optimize, Push, Pop, Redo, Remove, Rename, Reset, Resize, Search, Select, Set, Show, Skip, Split,
+        SystemPrompt = "You are a bot who is an expert in PowerShell and respond to all questions with PowerShell code contained in a ``````powershell code fence. You know that valid PowerShell functions always start with a verb prefix like Add, Clear, Close, Copy, Enter, Exit, Find, Format, Get, Hide, Join, Lock, Move, New, Open, Optimize, Push, Pop, Redo, Remove, Rename, Reset, Resize, Search, Select, Set, Show, Skip, Split,
         Step, Switch, Undo, Unlock or Watch. You do not use splatting for commandlet parameters."
         Temperature = 0.7
     }
     # The codeeditor alters the first instance of the code to meet new requirements
     CodeEditor = @{
-        SystemPrompt = "You are a code editor and respond to all questions with the code provided fixed based on the requests made in the chat. If the code has no issues return the code as it is. You do not use splatting for commandlet parameters."
+        SystemPrompt = "You are a bot who is an expert in PowerShell and respond to all questions with the code fixed based on the requests made in the chat. You respond with the code in a ``````powershell code fence and if the code has no issues you return the original code. You do not use splatting for commandlet parameters."
         Temperature = 0.3
         Prompts = @{
             SyntaxCorrection = @'
@@ -25,7 +25,7 @@ Fix all of these PowerShell issues in the code below:
     }
     # The semantic reinforcement system is used to check the code meets the requirements of the original prompt
     SemanticReinforcement = @{
-        SystemPrompt = "You respond to all questions with only the word YES if the PowerShell functions provided meet the requirements specified or you reply with a corrected version of the PowerShell functions rewritten in their entirety."
+        SystemPrompt = "You are a bot who is an expert in PowerShell and you respond to all questions with only the word YES if the PowerShell functions provided meet the requirements specified or you reply with a corrected version of the PowerShell functions rewritten in their entirety inside a ``````powershell code fence."
         Temperature = 0.0
         Prompts = @{
             Reinforcement = @'
@@ -59,12 +59,13 @@ function Get-AifbUserAction {
     $actions = @(
         New-Object System.Management.Automation.Host.ChoiceDescription '&Save', 'Save this function to your local filesystem'
         New-Object System.Management.Automation.Host.ChoiceDescription '&Run', 'Save this function to a temporary location on your local filesystem and load it into this PowerShell session to be run'
+        New-Object System.Management.Automation.Host.ChoiceDescription '&Copy', 'Copy the function to your clipboard'
         New-Object System.Management.Automation.Host.ChoiceDescription '&Edit', 'Request changes to this function'
         New-Object System.Management.Automation.Host.ChoiceDescription 'E&xplain', 'Explain why this function works'
         New-Object System.Management.Automation.Host.ChoiceDescription '&Quit', 'Exit AIFunctionBuilder'
     )
 
-    $response = $Host.UI.PromptForChoice($null, "What do you want to do?", $actions, 4)
+    $response = $Host.UI.PromptForChoice($null, "What do you want to do?", $actions, 5)
 
     return $actions[$response].Label -replace '&', ''
 }
@@ -294,6 +295,10 @@ function Get-AifbSemanticFailureReason {
     $result = $result -replace '(?s)\s+(Here is |Here''s |The function should be rewritten|The corrected).+', ''
     $result = $result -replace '(?s)```.+', ''
 
+    if([string]::IsNullOrWhiteSpace($result)) {
+        Write-Error "A reason for failure is required"
+    }
+
     return $result
 }
 
@@ -307,6 +312,35 @@ function Write-AifbChat {
         Write-Host -NoNewline "$($_.role): "
         Write-Host -ForegroundColor DarkGray $_.content
     }
+}
+
+function Get-GPT4CompletionWithRetries {
+    <#
+        .SYNOPSIS
+            This is a workaround for rate limiting until https://github.com/dfinke/PowerShellAI/issues/107 is fixed.
+    #>
+    param (
+        [string] $Content
+    )
+
+    $attempts = 0
+    $maxAttempts = 5
+
+    while($attempts -lt $maxAttempts) {
+        $attempts++
+        Write-Verbose "Trying to get AI completion attempt number $attempts"
+        $response = Get-GPT4Completion -Content $Content -ErrorAction "SilentlyContinue"
+        if([string]::IsNullOrWhiteSpace($response)) {
+            $delayInSeconds = 10 * [math]::Pow(2, $attempts)
+            Add-AifbLogMessage -Level "WRN" -Message "Rate limited by the AI API, trying again in $delayInSeconds seconds."
+            Start-Sleep -Seconds $delayInSeconds
+            continue
+        } else {
+            return $response
+        }
+    }
+
+    Write-Error "Ran out of retries after $maxRetries attempts trying to talk to the AI API."
 }
 
 function Test-AifbFunctionSemantics {
@@ -325,31 +359,38 @@ function Test-AifbFunctionSemantics {
         -model $script:OpenAISettings.Model `
         -max_tokens $script:OpenAISettings.MaxTokens `
         -temperature $script:OpenAISettings.SemanticReinforcement.Temperature
-    New-Chat $script:OpenAISettings.SemanticReinforcement.SystemPrompt
+    New-Chat -Content $script:OpenAISettings.SemanticReinforcement.SystemPrompt
     
-    Add-AifbLogMessage "Waiting for AI to validate semantics for prompt '$Prompt'."
-    $response = Get-GPT4Completion -Content ($script:OpenAISettings.SemanticReinforcement.Prompts.Reinforcement -f $Prompt, $FunctionText)
-    $response = $response.Trim()
+    $attempts = 0
+    $maxAttempts = 4
 
-    if($response -match "(?i)\bYES\b") {
-        Add-AifbLogMessage "The function meets the original intent of the prompt."
-        return $FunctionText | ConvertTo-AifbFunction
-    } else {
-        try {
-            Add-AifbLogMessage -Level "ERR" -Message ($response | Get-AifbSemanticFailureReason)
-        } catch {
-            Add-AifbLogMessage -Level "ERR" -Message "The function doesn't meet the original intent of the prompt."
-        }
-        try {
-            return $response | ConvertTo-AifbFunction
-        } catch {
+    while($attempts -lt $maxAttempts) {
+        $attempts++
+
+        Add-AifbLogMessage "Waiting for AI to validate semantics for prompt '$Prompt'."
+        $response = Get-GPT4CompletionWithRetries -Content ($script:OpenAISettings.SemanticReinforcement.Prompts.Reinforcement -f $Prompt, $FunctionText)
+        $response = $response.Trim()
+
+        if($response -match "(?i)\bYES\b") {
+            Add-AifbLogMessage "The function meets the original intent of the prompt."
+            return $FunctionText | ConvertTo-AifbFunction -FallbackText $FunctionText
+        } else {
             try {
-                Add-AifbLogMessage -Level "WRN" -Message "Following up with the AI because it didn't return any code."
-                $response = Get-GPT4Completion -Content $script:OpenAISettings.SemanticReinforcement.Prompts.FollowUp
+                Add-AifbLogMessage -Level "ERR" -Message ($response | Get-AifbSemanticFailureReason)
+            } catch {
+                Add-AifbLogMessage -Level "ERR" -Message "The function doesn't meet the original intent of the prompt."
+            }
+            try {
                 return $response | ConvertTo-AifbFunction
             } catch {
-                Write-AifbChat
-                Write-Error "Failed to get something sensible out of ChatGPT, the chat log has been dumped above for debugging."
+                try {
+                    Add-AifbLogMessage -Level "WRN" -Message "Following up with the AI because it didn't return any code."
+                    $response = Get-GPT4CompletionWithRetries -Content $script:OpenAISettings.SemanticReinforcement.Prompts.FollowUp
+                    return $response | ConvertTo-AifbFunction -FallbackText $FunctionText
+                } catch {
+                    Write-AifbChat
+                    Write-Error "Failed to get something sensible out of ChatGPT, the chat log has been dumped above for debugging."
+                }
             }
         }
     }
@@ -378,12 +419,12 @@ function Initialize-AifbFunction {
         -model $script:OpenAISettings.Model `
         -max_tokens $script:OpenAISettings.MaxTokens `
         -temperature $script:OpenAISettings.CodeWriter.Temperature
-    New-Chat $script:OpenAISettings.CodeWriter.SystemPrompt -Verbose:$false
+    New-Chat -Content $script:OpenAISettings.CodeWriter.SystemPrompt -Verbose:$false
 
     if($InitialFunction) {
         return $InitialFunction | ConvertTo-AifbFunction
     } else {
-        return Get-GPT4Completion $Prompt | ConvertTo-AifbFunction
+        return Get-GPT4CompletionWithRetries -Content $Prompt | ConvertTo-AifbFunction
     }
 }
 
@@ -430,8 +471,8 @@ function Optimize-AifbFunction {
                 Set-ChatSessionOption -model $script:OpenAISettings.Model `
                     -max_tokens $script:OpenAISettings.MaxTokens `
                     -temperature $script:OpenAISettings.CodeEditor.Temperature
-                New-Chat $script:OpenAISettings.CodeEditor.SystemPrompt -Verbose:$false
-                $Function = Get-GPT4Completion -Content ($script:OpenAISettings.CodeEditor.Prompts.SyntaxCorrection -f $corrections.IssuesToCorrect, $Function.Body) | ConvertTo-AifbFunction -FallbackText $Function.Body
+                New-Chat -Content $script:OpenAISettings.CodeEditor.SystemPrompt -Verbose:$false
+                $Function = Get-GPT4CompletionWithRetries -Content ($script:OpenAISettings.CodeEditor.Prompts.SyntaxCorrection -f $corrections.IssuesToCorrect, $Function.Body) | ConvertTo-AifbFunction -FallbackText $Function.Body
                 Write-AifbFunctionOutput -FunctionText $Function.Body -Prompt $Prompt
             }
 

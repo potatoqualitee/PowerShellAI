@@ -67,7 +67,7 @@ function Invoke-AIFunctionBuilder {
         return $function.Body
     }
 
-    Write-AifbFunctionOutput -FunctionText $function.Body -SyntaxHighlight -NoLogMessages -Prompt $fullPrompt
+    Write-AifbFunctionOutput -FunctionText $function.Body -SyntaxHighlight -Prompt $fullPrompt
 
     $finished = $false
     while(-not $finished) {
@@ -84,8 +84,17 @@ function Invoke-AIFunctionBuilder {
                 $function = Optimize-AifbFunction -Function $function -Prompt $fullPrompt -RuntimeError "The function does not meet all conditions in the prompt ($fullPrompt)."
                 Write-AifbFunctionOutput -FunctionText $function.Body -SyntaxHighlight -NoLogMessages -Prompt $fullPrompt
             }
+            "Copy" {
+                Set-Clipboard -Value $function.Body
+                Write-Host "The function code has been copied to your clipboard!"
+                if($IsLinux) {
+                    Write-Warning "This might not work under WSL, you can try the 'Save' option to save the function to your local filesystem instead."
+                }
+                Start-Sleep -Seconds 3
+                Write-AifbFunctionOutput -FunctionText $function.Body -SyntaxHighlight -NoLogMessages -Prompt $fullPrompt
+            }
             "Explain" {
-                $explanation = (Get-GPT3Completion "Explain how the function below meets all of the requirements the following requirements, list the requirements and how each is met in a numbered list. Also provide a summary of what the function can do.`nRequirements: $fullPrompt`n`n``````powershell`n$($function.Body)``````" -max_tokens 2000).Trim()
+                $explanation = (Get-GPT3Completion -prompt "Explain how the function below meets all of the requirements the following requirements, list the requirements and how each is met in a numbered list. Also provide a summary of what the function can do.`nRequirements: $fullPrompt`n`n``````powershell`n$($function.Body)``````" -max_tokens 2000).Trim()
                 Write-AifbFunctionOutput -FunctionText $function.Body -SyntaxHighlight -NoLogMessages -Prompt $fullPrompt
                 Write-Host $explanation
                 Write-Host ""
@@ -118,6 +127,13 @@ function Invoke-AIFunctionBuilder {
                 try {
                     & $function.Name @params -ErrorAction "Stop" | Out-Host
                     Get-Module | Where-Object { $_.Path -eq $tempFilePsm1 } | Remove-Module -Force
+                    $answer = Read-Host -Prompt "Are there any issues that need correcting? (y/n)"
+                    if($answer -eq "y") {
+                        $issueDescription = Read-Host -Prompt "Describe the issues"
+                        Write-AifbFunctionOutput -FunctionText $function.Body -Prompt $fullPrompt
+                        $function = Optimize-AifbFunction -Function $function -Prompt $fullPrompt -RuntimeError $issueDescription
+                        Write-AifbFunctionOutput -FunctionText $function.Body -SyntaxHighlight -NoLogMessages -Prompt $fullPrompt
+                    }
                 } catch {
                     Get-Module | Where-Object { $_.Path -eq $tempFilePsm1 } | Remove-Module -Force
                     Write-Error $_
