@@ -1,7 +1,8 @@
 # Settings that may need tweaking for new models
 $script:OpenAISettings = @{
     MaxTokens = 2048
-    Model = "gpt-3.5-turbo"
+    # The model is setup in Initialize-AifbFunction
+    Model = $null
     # The codewriter is the system used to generate the first instance of the function
     CodeWriter = @{
         SystemPrompt = "You are a bot who is an expert in PowerShell and respond to all questions with PowerShell code contained in a ``````powershell code fence. You know that valid PowerShell functions always start with a verb prefix like Add, Clear, Close, Copy, Enter, Exit, Find, Format, Get, Hide, Join, Lock, Move, New, Open, Optimize, Push, Pop, Redo, Remove, Rename, Reset, Resize, Search, Select, Set, Show, Skip, Split,
@@ -204,7 +205,7 @@ function Format-AifbFunction {
         $FunctionText = ($FunctionText.Split("`n") | Where-Object { ![string]::IsNullOrWhiteSpace($_) }) -join "`n"
         
         if(Test-AifbScriptAnalyzerAvailable) {
-            $FunctionText = $FunctionText | Invoke-Formatter -Verbose:$false
+            $FunctionText = Invoke-Formatter -ScriptDefinition $FunctionText -Verbose:$false
         }
 
         Write-Verbose "Output function:`n$FunctionText"
@@ -317,7 +318,7 @@ function Write-AifbChat {
 function Get-GPT4CompletionWithRetries {
     <#
         .SYNOPSIS
-            This is a workaround for rate limiting until https://github.com/dfinke/PowerShellAI/issues/107 is fixed.
+            TODO This is a workaround for rate limiting until https://github.com/dfinke/PowerShellAI/issues/107 is fixed.
     #>
     param (
         [string] $Content

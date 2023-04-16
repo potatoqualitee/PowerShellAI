@@ -6,10 +6,18 @@ function Invoke-AIFunctionBuilder {
             Invoke-AIFunctionBuilder is a function that uses ChatGPT to generate an initial PowerShell function to achieve the goal defined
             in the prompt by the user but goes a few steps beyond the typical interaction with an LLM by auto-validating the result
             of the AI generated script using parsing techniques that feed common issues back to the model until it resolves them.
-
-            TODO This uses New-Chat and Get-GPT4Completion, some tests need to be written to ensure the format of responses don't break things.
         .EXAMPLE
-            Invoke-AIFunctionBuilder
+            PS>Invoke-AIFunctionBuilder
+            # The function builder renders the UI and asks the user to enter a prompt to generate a function
+        .EXAMPLE
+            PS>Invoke-AIFunctionBuilder -Prompt "Write a powershell function that will show a date and time in timestamp form" -NonInteractive
+            function Get-Timestamp {
+                return (Get-Date).ToString("yyyy-MM-ddTHH:mm:ss.fffffZ")
+            }
+        .EXAMPLE
+            PS>$function = 'function Write-Hello { Write-Output "hello world" }'
+            PS>Invoke-AIFunctionBuilder -InitialFunction $function -Prompt "write a powershell function that says hello"
+            # The function builder renders the UI and validates the function provided meets the goal of the prompt
         .NOTES
             Author: Shaun Lawrie / @shaun_lawrie
     #>
