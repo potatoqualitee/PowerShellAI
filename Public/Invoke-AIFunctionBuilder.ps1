@@ -67,7 +67,7 @@ function Invoke-AIFunctionBuilder {
         return $function.Body
     }
 
-    Write-AifbFunctionOutput -FunctionText $function.Body -SyntaxHighlight -Prompt $fullPrompt
+    Write-AifbFunctionOutput -FunctionText $function.Body -SyntaxHighlight -NoLogMessages -Prompt $fullPrompt
 
     $finished = $false
     while(-not $finished) {
@@ -90,8 +90,7 @@ function Invoke-AIFunctionBuilder {
                 if($IsLinux) {
                     Write-Warning "This might not work under WSL, you can try the 'Save' option to save the function to your local filesystem instead."
                 }
-                Start-Sleep -Seconds 3
-                Write-AifbFunctionOutput -FunctionText $function.Body -SyntaxHighlight -NoLogMessages -Prompt $fullPrompt
+                Write-Host ""
             }
             "Explain" {
                 $explanation = (Get-GPT3Completion -prompt "Explain how the function below meets all of the requirements the following requirements, list the requirements and how each is met in a numbered list. Also provide a summary of what the function can do.`nRequirements: $fullPrompt`n`n``````powershell`n$($function.Body)``````" -max_tokens 2000).Trim()
