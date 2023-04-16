@@ -77,6 +77,7 @@ The PowerShell AI module integrates with the OpenAI API and let's you easily acc
         'Get-OpenAIUser'
         'Invoke-AIErrorHelper'
         'Invoke-AIExplain'
+        'Invoke-AIFunctionBuilder'
         'Invoke-OpenAIAPI'
         'New-SpreadSheet'
         'Set-DalleImageAsWallpaper'
@@ -90,6 +91,7 @@ The PowerShell AI module integrates with the OpenAI API and let's you easily acc
         'chat'
         'ieh'
         'explain'
+        'ifb'
     )
 
     PrivateData       = @{
