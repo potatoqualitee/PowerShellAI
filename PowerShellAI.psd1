@@ -1,6 +1,6 @@
 @{
     RootModule        = 'PowerShellAI.psm1'
-    ModuleVersion     = '0.5.6'
+    ModuleVersion     = '0.5.7'
     GUID              = '081ce7b4-6e63-41ca-92a7-2bf72dbad018'
     Author            = 'Douglas Finke'
     CompanyName       = 'Doug Finke'
@@ -83,6 +83,9 @@ The PowerShell AI module integrates with the OpenAI API and let's you easily acc
         'Set-DalleImageAsWallpaper'
         'Set-OpenAIKey'
         'Test-AzureOpenAIKey'
+
+        # Notebook Copilot
+        'NBCopilot'
     )
 
     AliasesToExport   = @(
