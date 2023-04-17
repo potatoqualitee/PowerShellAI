@@ -6,7 +6,7 @@ This PowerShell function allows you to use ChatGPT directly from your Interactiv
 
 Check it out. If you like it, please give it a thumbs up, subscribe and hit the notification for future videos.
 
-<center><a href="https://youtu.be/NndCsUlaG-E"><img src="https://img.youtube.com/vi/NndCsUlaG-E/0.jpg" width="350"></a></center>
+<center><a href="https://youtu.be/NndCsUlaG-E"><img src="https://img.youtube.com/vi/NndCsUlaG-E/0.jpg" width="550"></a></center>
 
 # The Notebook
 
