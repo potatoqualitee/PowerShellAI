@@ -64,105 +64,109 @@ function Invoke-AIFunctionBuilder {
         $fullPrompt = (@($prePrompt, $Prompt) | Where-Object { $null -ne $_ }) -join ' '
     }
 
-    $function = Initialize-AifbFunction -Prompt $fullPrompt -Model $Model -InitialFunction $InitialFunction
+    try {
+        $function = Initialize-AifbFunction -Prompt $fullPrompt -Model $Model -InitialFunction $InitialFunction
 
-    Initialize-AifbRenderer -InitialPrePrompt $prePrompt -InitialPrompt $Prompt -NonInteractive $NonInteractive
-    Write-AifbFunctionOutput -FunctionText $function.Body -Prompt $fullPrompt
+        Initialize-AifbRenderer -InitialPrePrompt $prePrompt -InitialPrompt $Prompt -NonInteractive $NonInteractive
+        Write-AifbFunctionOutput -FunctionText $function.Body -Prompt $fullPrompt
 
-    $function = Optimize-AifbFunction -Function $function -Prompt $fullPrompt -Force:(![string]::IsNullOrWhiteSpace($InitialFunction))
+        $function = Optimize-AifbFunction -Function $function -Prompt $fullPrompt -Force:(![string]::IsNullOrWhiteSpace($InitialFunction))
 
-    if($NonInteractive) {
-        return $function.Body
-    }
+        if($NonInteractive) {
+            return $function.Body
+        }
 
-    Write-AifbFunctionOutput -FunctionText $function.Body -SyntaxHighlight -NoLogMessages -Prompt $fullPrompt
+        Write-AifbFunctionOutput -FunctionText $function.Body -SyntaxHighlight -NoLogMessages -Prompt $fullPrompt
 
-    $finished = $false
-    while(-not $finished) {
-        $action = Get-AifbUserAction -Function $function
+        $finished = $false
+        while(-not $finished) {
+            $action = Get-AifbUserAction -Function $function
 
-        switch($action) {
-            "Edit" {
-                $editPrePrompt = "`nI also want the function to"
-                Write-Host -ForegroundColor Cyan -NoNewline "${editPrePrompt}: "
-                $editPrompt = Read-Host
-                Write-Verbose "Re-running function optimizer with a request to edit functionality: '$editPrompt'"
-                $fullPrompt = (@($fullPrompt, $editPrompt) | Where-Object { ![string]::IsNullOrWhiteSpace($_) }) -join ' and the function must '
-                Write-AifbFunctionOutput -FunctionText $function.Body -Prompt $fullPrompt
-                $function = Optimize-AifbFunction -Function $function -Prompt $fullPrompt -RuntimeError "The function does not meet all conditions in the prompt ($fullPrompt)."
-                Write-AifbFunctionOutput -FunctionText $function.Body -SyntaxHighlight -NoLogMessages -Prompt $fullPrompt
-            }
-            "Copy" {
-                Set-Clipboard -Value $function.Body
-                Write-Host "The function code has been copied to your clipboard!"
-                if($IsLinux) {
-                    Write-Warning "This might not work under WSL, you can try the 'Save' option to save the function to your local filesystem instead."
+            switch($action) {
+                "Edit" {
+                    $editPrePrompt = "`nI also want the function to"
+                    Write-Host -ForegroundColor Cyan -NoNewline "${editPrePrompt}: "
+                    $editPrompt = Read-Host
+                    Write-Verbose "Re-running function optimizer with a request to edit functionality: '$editPrompt'"
+                    $fullPrompt = (@($fullPrompt, $editPrompt) | Where-Object { ![string]::IsNullOrWhiteSpace($_) }) -join ' and the function must '
+                    Write-AifbFunctionOutput -FunctionText $function.Body -Prompt $fullPrompt
+                    $function = Optimize-AifbFunction -Function $function -Prompt $fullPrompt -RuntimeError "The function does not meet all conditions in the prompt ($fullPrompt)."
+                    Write-AifbFunctionOutput -FunctionText $function.Body -SyntaxHighlight -NoLogMessages -Prompt $fullPrompt
                 }
-                Write-Host ""
-            }
-            "Explain" {
-                $explanation = (Get-GPT3Completion -prompt "Explain how the function below meets all of the requirements the following requirements, list the requirements and how each is met in a numbered list. Also provide a summary of what the function can do.`nRequirements: $fullPrompt`n`n``````powershell`n$($function.Body)``````" -max_tokens 2000).Trim()
-                Write-AifbFunctionOutput -FunctionText $function.Body -SyntaxHighlight -NoLogMessages -Prompt $fullPrompt
-                Write-Host $explanation
-                Write-Host ""
-            }
-            "Run" {
-                $tempFile = New-TemporaryFile
-                $tempFilePsm1 = "$($tempFile.FullName).psm1"
-                Set-Content -Path $tempFile -Value $function.Body
-                Move-Item -Path $tempFile.FullName -Destination $tempFilePsm1
-                Write-Host ""
-                Import-Module $tempFilePsm1 -Global
-                $commands = (Get-Module | Where-Object { $_.Path -eq $tempFilePsm1 }).ExportedCommands.Keys
-                $command = Get-Command $commands[0]
-                if($commands.Count -gt 1) {
-                    while($null -eq $command) {
-                        $commandName = (Read-Host "There are multiple functions in this module ($($commands -join ', ')), enter the name of the one you want to use as the entry point").Trim()
-                        $command = Get-Command $commandName -ErrorAction "SilentlyContinue"
-                        if(!$command) {
-                            Write-Warning "Command name '$commandName' failed to import a command."
+                "Copy" {
+                    Set-Clipboard -Value $function.Body
+                    Write-Host "The function code has been copied to your clipboard!"
+                    if($IsLinux) {
+                        Write-Warning "This might not work under WSL, you can try the 'Save' option to save the function to your local filesystem instead."
+                    }
+                    Write-Host ""
+                }
+                "Explain" {
+                    $explanation = (Get-GPT3Completion -prompt "Explain how the function below meets all of the requirements the following requirements, list the requirements and how each is met in a numbered list. Also provide a summary of what the function can do.`nRequirements: $fullPrompt`n`n``````powershell`n$($function.Body)``````" -max_tokens 2000).Trim()
+                    Write-AifbFunctionOutput -FunctionText $function.Body -SyntaxHighlight -NoLogMessages -Prompt $fullPrompt
+                    Write-Host $explanation
+                    Write-Host ""
+                }
+                "Run" {
+                    $tempFile = New-TemporaryFile
+                    $tempFilePsm1 = "$($tempFile.FullName).psm1"
+                    Set-Content -Path $tempFile -Value $function.Body
+                    Move-Item -Path $tempFile.FullName -Destination $tempFilePsm1
+                    Write-Host ""
+                    Import-Module $tempFilePsm1 -Global
+                    $commands = (Get-Module | Where-Object { $_.Path -eq $tempFilePsm1 }).ExportedCommands.Keys
+                    $command = Get-Command $commands[0]
+                    if($commands.Count -gt 1) {
+                        while($null -eq $command) {
+                            $commandName = (Read-Host "There are multiple functions in this module ($($commands -join ', ')), enter the name of the one you want to use as the entry point").Trim()
+                            $command = Get-Command $commandName -ErrorAction "SilentlyContinue"
+                            if(!$command) {
+                                Write-Warning "Command name '$commandName' failed to import a command."
+                            }
                         }
                     }
-                }
-                $params = @{}
-                if($command.ParameterSets) {
-                    $command.ParameterSets.GetEnumerator()[0].Parameters | Where-Object { $_.Position -ge 0 } | Foreach-Object {
-                        $params[$_.Name] = Read-Host "$($_.Name) ($($_.ParameterType))"
+                    $params = @{}
+                    if($command.ParameterSets) {
+                        $command.ParameterSets.GetEnumerator()[0].Parameters | Where-Object { $_.Position -ge 0 } | Foreach-Object {
+                            $params[$_.Name] = Read-Host "$($_.Name) ($($_.ParameterType))"
+                        }
                     }
-                }
-                $previousErrorActionPreference = $ErrorActionPreference
-                try {
-                    & $function.Name @params -ErrorAction "Stop" | Out-Host
-                    Get-Module | Where-Object { $_.Path -eq $tempFilePsm1 } | Remove-Module -Force
-                    $answer = Read-Host -Prompt "Are there any issues that need correcting? (y/n)"
-                    if($answer -eq "y") {
-                        $issueDescription = Read-Host -Prompt "Describe the issues"
-                        Write-AifbFunctionOutput -FunctionText $function.Body -Prompt $fullPrompt
-                        $function = Optimize-AifbFunction -Function $function -Prompt $fullPrompt -RuntimeError $issueDescription
-                        Write-AifbFunctionOutput -FunctionText $function.Body -SyntaxHighlight -NoLogMessages -Prompt $fullPrompt
+                    $previousErrorActionPreference = $ErrorActionPreference
+                    try {
+                        & $function.Name @params -ErrorAction "Stop" | Out-Host
+                        Get-Module | Where-Object { $_.Path -eq $tempFilePsm1 } | Remove-Module -Force
+                        $answer = Read-Host -Prompt "Are there any issues that need correcting? (y/n)"
+                        if($answer -eq "y") {
+                            $issueDescription = Read-Host -Prompt "Describe the issues"
+                            Write-AifbFunctionOutput -FunctionText $function.Body -Prompt $fullPrompt
+                            $function = Optimize-AifbFunction -Function $function -Prompt $fullPrompt -RuntimeError $issueDescription
+                            Write-AifbFunctionOutput -FunctionText $function.Body -SyntaxHighlight -NoLogMessages -Prompt $fullPrompt
+                        }
+                    } catch {
+                        Get-Module | Where-Object { $_.Path -eq $tempFilePsm1 } | Remove-Module -Force
+                        Write-Error $_
+                        $answer = Read-Host -Prompt "An error occurred, do you want to try auto-fix the function? (y/n)"
+                        if($answer -eq "y") {
+                            Write-AifbFunctionOutput -FunctionText $function.Body -Prompt $fullPrompt
+                            $function = Optimize-AifbFunction -Function $function -Prompt $fullPrompt -RuntimeError $_.Exception.Message
+                            Write-AifbFunctionOutput -FunctionText $function.Body -SyntaxHighlight -NoLogMessages -Prompt $fullPrompt
+                        }
                     }
-                } catch {
-                    Get-Module | Where-Object { $_.Path -eq $tempFilePsm1 } | Remove-Module -Force
-                    Write-Error $_
-                    $answer = Read-Host -Prompt "An error occurred, do you want to try auto-fix the function? (y/n)"
-                    if($answer -eq "y") {
-                        Write-AifbFunctionOutput -FunctionText $function.Body -Prompt $fullPrompt
-                        $function = Optimize-AifbFunction -Function $function -Prompt $fullPrompt -RuntimeError $_.Exception.Message
-                        Write-AifbFunctionOutput -FunctionText $function.Body -SyntaxHighlight -NoLogMessages -Prompt $fullPrompt
-                    }
+                    Write-Host ""
+                    $ErrorActionPreference = $previousErrorActionPreference
                 }
-                Write-Host ""
-                $ErrorActionPreference = $previousErrorActionPreference
-            }
-            "Save" {
-                $moduleLocation = Save-AifbFunctionOutput -FunctionText $function.Body -FunctionName $function.Name -Prompt $fullPrompt
-                Import-Module $moduleLocation -Global
-                Write-Host "The function is available as '$($function.Name)' in your current terminal session. To import this function in the future use 'Import-Module $moduleLocation' or add the directory with all your PowerShellAI modules to your `$env:PSModulePath to have them auto import for every session."
-                $finished = $true
-            }
-            "Quit" {
-                $finished = $true
+                "Save" {
+                    $moduleLocation = Save-AifbFunctionOutput -FunctionText $function.Body -FunctionName $function.Name -Prompt $fullPrompt
+                    Import-Module $moduleLocation -Global
+                    Write-Host "The function is available as '$($function.Name)' in your current terminal session. To import this function in the future use 'Import-Module $moduleLocation' or add the directory with all your PowerShellAI modules to your `$env:PSModulePath to have them auto import for every session."
+                    $finished = $true
+                }
+                "Quit" {
+                    $finished = $true
+                }
             }
         }
+    } finally {
+        Stop-Chat
     }
 }
