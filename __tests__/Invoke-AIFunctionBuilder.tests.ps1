@@ -17,6 +17,11 @@ Describe "Invoke-AIFunctionBuilder" -Tag 'Invoke-AIFunctionBuilder' {
                 Function = "Get-GPT3Completion"
                 Parameters = @("prompt", "max_tokens")
                 Description = "This function is used for quick completions that don't require chat context"
+            },
+            @{
+                Function = "Stop-Chat"
+                Parameters = @()
+                Description = "This function is used at the end to clear the current chat history"
             }
         )
 
