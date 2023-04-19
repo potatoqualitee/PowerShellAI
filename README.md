@@ -1,13 +1,12 @@
 <strong><p align="center">OpenAI at your Fingertips! ✨</p></strong>
 <strong><p align="center">using PowerShell</p></strong>
-<br/>
 
 <p align="center">
-  <a href="https://github.com/codespaces/new?hide_repo_select=true&ref=main&repo=588124439&machine=standardLinux32gb&devcontainer_path=.devcontainer%2Fdevcontainer.json&location=East">
+  <!-- <a href="https://github.com/codespaces/new?hide_repo_select=true&ref=main&repo=588124439&machine=standardLinux32gb&devcontainer_path=.devcontainer%2Fdevcontainer.json&location=East">
      <img src="https://img.shields.io/static/v1?style=for-the-badge&label=GitHub+Codespaces&message=Open&color=brightgreen&logo=github"/>
   </a>
   <br/>
-  <br/>
+  <br/> -->
   <a href="https://twitter.com/dfinke">
     <img src="https://img.shields.io/badge/Twitter-@dfinke-blue.svg?logo=twitter&style=flat-square">
   </a>
