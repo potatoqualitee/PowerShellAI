@@ -1,10 +1,10 @@
 function Test-AzureOpenAIKey {
     <#
         .SYNOPSIS
-        Tests if the OpenAIKey module scope variable or environment variable is set.
+        Tests if the AzureOpenAIKey module scope variable or environment variable is set.
 
         .EXAMPLE
-        Test-OpenAIKey
+        Test-AzureOpenAIKey
     #>
     -not [string]::IsNullOrEmpty($env:AzureOpenAIKey)
 }
