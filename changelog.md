@@ -1,6 +1,11 @@
 # v0.5.8
 
-- Added `kql` to validate set
+Thank you @ShaydeNofziger for the contribution!
+- Update .gitignore 
+- Update help comment
+
+Also, I:
+- Added `kql` to validate set for `NBCopilot`
 
 # v0.5.7
 
