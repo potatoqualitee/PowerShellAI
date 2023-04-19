@@ -31,7 +31,7 @@ function New-NBCell {
   #>
   [CmdletBinding()]
   param(
-    [ValidateSet('pwsh', 'csharp', 'fsharp', 'html', 'markdown', 'javascript', 'sql', 'mermaid')]
+    [ValidateSet('pwsh', 'csharp', 'fsharp', 'html', 'markdown', 'javascript', 'sql', 'mermaid', 'kql')]
     $cellType = 'pwsh',
     [Parameter(ValueFromPipeline)]
     $code
@@ -90,7 +90,7 @@ function NBCopilot {
   [CmdletBinding()]
   param(
     $prompt,
-    [ValidateSet('pwsh', 'csharp', 'fsharp', 'html', 'markdown', 'javascript', 'sql', 'mermaid')]
+    [ValidateSet('pwsh', 'csharp', 'fsharp', 'html', 'markdown', 'javascript', 'sql', 'mermaid', 'kql')]
     $cellType = 'pwsh'      
   )
   

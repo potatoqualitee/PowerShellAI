@@ -1,14 +1,18 @@
+# v0.5.8
+
+- Added `kql` to validate set
+
 # v0.5.7
 
 Thanks Shaun, great work!
 
-* `AI Function Builder` by [Shaun Lawrie](https://github.com/ShaunLawrie)
-    * AIFunctionBuilder takes a prompt and generates a PowerShell function which is validated for syntax and logical issues so you don't have to do the boring work.
-    * https://github.com/dfinke/PowerShellAI/tree/master/CommunityContributions/06-AIFunctionBuilder#readme
-* `Notebook Copilot` by [Doug Finke](https://github.com/dfinke)
-    * This PowerShell function allows you to use ChatGPT directly from your Interactive Notebook.
-    * https://github.com/dfinke/PowerShellAI/tree/master/CommunityContributions/07-NotebookCopilot#readme
-* `Devcontainer` created for easier use in Codespaces [Doug Finke](https://github.com/dfinke)
+- `AI Function Builder` by [Shaun Lawrie](https://github.com/ShaunLawrie)
+    - AIFunctionBuilder takes a prompt and generates a PowerShell function which is validated for syntax and logical issues so you don't have to do the boring work.
+    - https://github.com/dfinke/PowerShellAI/tree/master/CommunityContributions/06-AIFunctionBuilder#readme
+- `Notebook Copilot` by [Doug Finke](https://github.com/dfinke)
+    - This PowerShell function allows you to use ChatGPT directly from your Interactive Notebook.
+    - https://github.com/dfinke/PowerShellAI/tree/master/CommunityContributions/07-NotebookCopilot#readme
+- `Devcontainer` created for easier use in Codespaces [Doug Finke](https://github.com/dfinke)
 
 
 # v0.5.6
