@@ -93,25 +93,29 @@ function copilot {
         return $completion
     }
     else {
+
         $result = @($inputPrompt)
         $result += ''
         $result += $completion
 
-        $result | CreateBoxText
+        $runnable = Get-Runnable -result $result
+        Write-Codeblock -Text $runnable -ShowLineNumbers -SyntaxHighlight
 
-        $userInput = CustomReadHost
+        # $result | CreateBoxText
+
+        # $userInput = CustomReadHost
         
-        switch ($userInput) {
-            0 {
-                (Get-Runnable -result $result) | Invoke-Expression
-            }
-            1 {
-                explain -Value (Get-Runnable -result $result)
-            }
-            2 {
-                Get-Runnable -result $result | Set-Clipboard
-            }
-            default { "Not running" }
-        }
+        # switch ($userInput) {
+        #     0 {
+        #         (Get-Runnable -result $result) | Invoke-Expression
+        #     }
+        #     1 {
+        #         explain -Value (Get-Runnable -result $result)
+        #     }
+        #     2 {
+        #         Get-Runnable -result $result | Set-Clipboard
+        #     }
+        #     default { "Not running" }
+        # }
     }
 }
