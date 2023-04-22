@@ -464,7 +464,9 @@ function Get-GPT4Completion {
 
     New-ChatUserMessage -Content $Content
 
-    $body = Get-ChatPayload -AsJson
+    # $body = Get-ChatPayload -AsJson
+    $payload = Get-ChatPayload -AsJson
+    $body = [System.Text.Encoding]::UTF8.GetBytes($payload)
 
     if ((Get-ChatAPIProvider) -eq 'OpenAI') {
         $uri = Get-OpenAIChatCompletionUri
