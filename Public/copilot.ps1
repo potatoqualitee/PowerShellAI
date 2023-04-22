@@ -99,6 +99,11 @@ function copilot {
         $result += $completion
 
         $runnable = Get-Runnable -result $result
+        
+        if (Test-AifbScriptAnalyzerAvailable) {
+            $runnable = Invoke-Formatter -ScriptDefinition $runnable -Verbose:$false
+        }
+
         Write-Codeblock -Text $runnable -ShowLineNumbers -SyntaxHighlight
 
         # $result | CreateBoxText
