@@ -106,21 +106,19 @@ function copilot {
 
         Write-Codeblock -Text $runnable -ShowLineNumbers -SyntaxHighlight
 
-        # $result | CreateBoxText
-
-        # $userInput = CustomReadHost
+        $userInput = CustomReadHost
         
-        # switch ($userInput) {
-        #     0 {
-        #         (Get-Runnable -result $result) | Invoke-Expression
-        #     }
-        #     1 {
-        #         explain -Value (Get-Runnable -result $result)
-        #     }
-        #     2 {
-        #         Get-Runnable -result $result | Set-Clipboard
-        #     }
-        #     default { "Not running" }
-        # }
+        switch ($userInput) {
+            0 {
+                (Get-Runnable -result $result) | Invoke-Expression
+            }
+            1 {
+                explain -Value (Get-Runnable -result $result)
+            }
+            2 {
+                Get-Runnable -result $result | Set-Clipboard
+            }
+            default { "Not running" }
+        }
     }
 }
