@@ -42,6 +42,7 @@ function Invoke-AIExplain {
     
     $result = $cli | ai $prompt -max_tokens $max_tokens
 
-    Write-Host $cli -ForegroundColor Green
+    #Write-Host $cli -ForegroundColor Green
+    Write-Codeblock -Text $cli -SyntaxHighlight
     $result
 }
