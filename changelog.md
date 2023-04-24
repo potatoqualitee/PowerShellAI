@@ -1,3 +1,8 @@
+# v0.6.1
+
+- Upgraded `copilot` and `explain` to use `Write-CodeBlock` fir syntax highlighting
+- Added call to `Invoke-Formatter` to prettify the code
+
 # v0.6.0
 
 - Fixed `Invalid JSON` - https://github.com/dfinke/PowerShellAI/issues/119
