@@ -64,7 +64,7 @@ In the PowerShell console:
 Install-Module -Name PowerShellAI
 ```
 
-Get/Create your OpenAI API key from [https://beta.openai.com/account/api-keys](https://beta.openai.com/account/api-keys) and then set as *secure string* with `Set-OpenAIKey` or as *plain text* with `$env:OpenAIKey`.
+Get/Create your OpenAI API key from [ https://platform.openai.com/account/api-keys]( https://platform.openai.com/account/api-keys) and then set as *secure string* with `Set-OpenAIKey` or as *plain text* with `$env:OpenAIKey`.
 
 ## Examples
 Check out these PowerShell scripts to see how easy it is to get started with AI in PowerShell:
@@ -330,7 +330,7 @@ Try it out: `New-Spreadsheet "list of first 5 US presidents name, term"`
 
 # DALL-E
 
-The [DALL-E](https://openai.com/blog/dall-e/) API is a new API from OpenAI that allows you to generate images from text. The API is currently in beta and is free to use.
+The [DALL-E](https://openai.com/blog/dall-e/) API is a new API from OpenAI that allows you to generate images from text
 
 Use this function to generate an image from text and set it as your desktop background.
 

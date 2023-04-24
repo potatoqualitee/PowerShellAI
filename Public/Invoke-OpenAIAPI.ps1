@@ -36,7 +36,7 @@ function Invoke-OpenAIAPI {
 
     if ((Get-ChatAPIProvider) -eq 'OpenAI') {
         if (!(Test-OpenAIKey)) {
-            throw 'Please set your OpenAI API key using Set-OpenAIKey or by configuring the $env:OpenAIKey environment variable (https://beta.openai.com/account/api-keys)'
+            throw 'Please set your OpenAI API key using Set-OpenAIKey or by configuring the $env:OpenAIKey environment variable (https://platform.openai.com/account/api-keys)'
         }
 
         if (($apiKey = Get-LocalOpenAIKey) -is [SecureString]) {

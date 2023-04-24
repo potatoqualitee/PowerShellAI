@@ -1,3 +1,7 @@
+# v0.6.0
+
+- Fixed `Invalid JSON` - https://github.com/dfinke/PowerShellAI/issues/119
+
 # v0.5.8
 
 Thank you @ShaydeNofziger for the contribution!
