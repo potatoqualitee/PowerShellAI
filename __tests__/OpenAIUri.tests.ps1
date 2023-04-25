@@ -42,4 +42,10 @@ Describe "OpenAIUri" -Tag 'OpenAIUri' {
         
         $actual | Should -Be 'https://api.openai.com/v1/chat/completions'
     }
+
+    It "Should return the OpenAI Embedding URI" {
+        $actual = Get-OpenAIEmbeddingsUri
+        
+        $actual | Should -Be 'https://api.openai.com/v1/embeddings'
+    }    
 }
