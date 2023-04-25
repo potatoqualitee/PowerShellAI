@@ -1,3 +1,6 @@
+# v0.6.2
+
+- Added `Get-OpenAIEmbedding` to get a vector representation of a given input 
 # v0.6.1
 
 - Upgraded `copilot` and `explain` to use `Write-CodeBlock` fir syntax highlighting
