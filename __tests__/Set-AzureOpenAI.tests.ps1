@@ -7,7 +7,13 @@ Describe 'Set-AzureOpenAI' -Tag SetAzureOpenAI {
     }
 
     AfterEach {
-        $env:AzureOpenAIKey = $savedAzureOpenAIKey
+        $env:AzureOpenAIKey = $savedAzureOpenAIKey        
+    }
+
+    AfterEach {
+        Reset-ChatSessionOptions
+        Reset-AzureOpenAIOptions
+        Set-ChatAPIProvider -Provider 'OpenAI'
     }
 
     It 'Test if Set-AzureOpenAI function exists' {

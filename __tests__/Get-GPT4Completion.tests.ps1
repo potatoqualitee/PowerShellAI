@@ -1,6 +1,6 @@
 Import-Module "$PSScriptRoot\..\PowerShellAI.psd1" -Force
 
-Describe "Get-GPT4Completion" -Tag 'GPT4Completion' {
+Describe "Get-GPT4Completion" -Tag GPT4Completion {
 
     BeforeAll {
         $script:savedKey = $env:OpenAIKey
@@ -261,5 +261,16 @@ Describe "Get-GPT4Completion" -Tag 'GPT4Completion' {
 
         $content[1].role | Should -BeExactly 'assistant'
         $content[1].content | Should -BeExactly 'Mocked Get-GPT4Completion call'
+    }
+
+    It 'Test temperature is set calling chat' {        
+        $actual = Get-GPT4Completion 'test user message' -temperature 1
+
+        (Get-ChatSessionOptions)['temperature'] | Should -Be 1
+        $actual | Should -BeExactly 'Mocked Get-GPT4Completion call'
+
+        Reset-ChatSessionOptions
+        
+        (Get-ChatSessionOptions)['temperature'] | Should -Be 0.0
     }
 }
