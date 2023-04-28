@@ -459,12 +459,12 @@ function Get-GPT4Completion {
     [alias("chat")]
     param(
         [Parameter(Mandatory)]
-        $Content
+        $Content,
+        [decimal]$temperature
     )
 
     New-ChatUserMessage -Content $Content
-
-    # $body = Get-ChatPayload -AsJson
+    
     $payload = Get-ChatPayload -AsJson
     $body = [System.Text.Encoding]::UTF8.GetBytes($payload)
 
@@ -475,6 +475,10 @@ function Get-GPT4Completion {
         $uri = Get-ChatAzureOpenAIURI
     }
     
+    if ($temperature) {
+        (Get-ChatSessionOptions)['temperature'] = $temperature
+    }
+
     $result = Invoke-OpenAIAPI -Uri $uri -Method 'Post' -Body $body 
 
     if ($result.choices) {
