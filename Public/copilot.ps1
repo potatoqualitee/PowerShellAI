@@ -64,7 +64,7 @@ function copilot {
     param(
         [Parameter(Mandatory)]
         $inputPrompt,
-        $prefixPrompt = 'powershell, just code:',
+        $SystemPrompt = 'using powershell, just code:',
         [ValidateRange(0, 2)]
         [decimal]$temperature = 0.0,
         # The maximum number of tokens to generate. default 256
@@ -82,7 +82,7 @@ function copilot {
         $promptComments = ''
     }
 
-    $prompt = "using {0} {1}: {2}`n" -f $prefixPrompt, $promptComments, $inputPrompt
+    $prompt = "{0} {1}: {2}`n" -f $SystemPrompt, $promptComments, $inputPrompt
     $prompt += '```'
 
     $completion = Get-GPT3Completion -prompt $prompt -max_tokens $max_tokens -temperature $temperature -stop '```'
@@ -134,4 +134,105 @@ function copilot {
             }
         }
     }
+}
+
+
+function git? {
+    <#
+    .SYNOPSIS
+        A brief description of what the cmdlet does.
+
+    .DESCRIPTION
+        A detailed description of what the cmdlet does.
+
+    .PARAMETER inputPrompt
+        Prompt to be sent to GPT
+    
+    .PARAMETER temperature
+        The sampling temperature to use when generating text. Default is 0.0.
+
+    .PARAMETER max_tokens
+        The maximum number of tokens to generate. Default is 256.
+
+    .PARAMETER Raw
+        Don't show prompt for choice. Default is false.        
+
+    .EXAMPLE
+        git? 'compare this branch to master, just the files'
+
+    #>
+    [CmdletBinding()]    
+    param(
+        $inputPrompt,
+        [ValidateRange(0, 2)]
+        [decimal]$temperature = 0.0,
+        # The maximum number of tokens to generate. default 256
+        $max_tokens = 256,
+        # Don't show prompt for choice
+        [Switch]$Raw
+    )
+
+    $params = @{
+        inputPrompt  = $inputPrompt
+        SystemPrompt = 'you are an expert at using git command line, just code: '
+        temperature  = $temperature
+        max_tokens   = $max_tokens
+        Raw          = $Raw
+    }
+    
+    copilot @params
+}
+
+function gh? {
+    <#
+    .SYNOPSIS
+        A brief description of what the cmdlet does.
+
+    .DESCRIPTION
+        A detailed description of what the cmdlet does.
+
+    .PARAMETER inputPrompt
+        Prompt to be sent to GPT
+
+    .PARAMETER temperature
+        The sampling temperature to use when generating text. Default is 0.0.
+
+    .PARAMETER max_tokens
+        The maximum number of tokens to generate. Default is 256.
+
+    .PARAMETER Raw
+        Don't show prompt for choice. Default is false.
+
+    .EXAMPLE
+        gh? 'list issues on dfinke/importexcel'
+    #>
+    [CmdletBinding()]
+    param(
+        $inputPrompt,
+        [ValidateRange(0, 2)]
+        [decimal]$temperature = 0.0,
+        # The maximum number of tokens to generate. default 256
+        $max_tokens = 256,
+        # Don't show prompt for choice
+        [Switch]$Raw
+    )
+
+    $params = @{
+        inputPrompt  = $inputPrompt
+        SystemPrompt = '
+        1. You are an expert at using GitHub gh cli.
+        2. You are working with GitHub Repositories.
+        3. If no owner/repo, default to current dir.
+        4. Handle owner/repo correctly with --repo.
+        5. Map the prompt to the correct syntax of the gh cli.
+        6. Handle pluralization to singular correctly for the gh cli syntax.
+        7. Handle removing spaces in the command and map to the correct syntax of the gh cli.
+        8. Output just the command: 
+        '
+        temperature  = $temperature
+        max_tokens   = $max_tokens
+        Raw          = $Raw
+    }
+    
+    copilot @params
 }
