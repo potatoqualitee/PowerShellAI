@@ -88,6 +88,10 @@ The PowerShell AI module integrates with the OpenAI API and let's you easily acc
 
         # Notebook Copilot
         'NBCopilot'
+
+        # Copilot wrappers
+        'git?' # Translate natural language to Git commands
+        'gh?' # Translate natural language to to GitHub CLI commands
     )
 
     AliasesToExport   = @(
@@ -97,6 +101,7 @@ The PowerShell AI module integrates with the OpenAI API and let's you easily acc
         'ieh'
         'explain'
         'ifb'
+        '??'
     )
 
     PrivateData       = @{
