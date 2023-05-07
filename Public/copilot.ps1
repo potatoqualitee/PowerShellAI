@@ -204,6 +204,9 @@ function gh? {
         Don't show prompt for choice. Default is false.
 
     .EXAMPLE
+        gh? 'list all closed PRs opened by dfinke and find the word fix' 
+
+    .EXAMPLE
         gh? 'list issues on dfinke/importexcel'
     #>
     [CmdletBinding()]
