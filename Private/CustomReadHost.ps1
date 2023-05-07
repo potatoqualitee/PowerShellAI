@@ -7,7 +7,7 @@ function Test-VSCodeInstalled {
         Test-VSCodeInstalled
     #>
 
-    $null -ne (Get-Command codex -ErrorAction SilentlyContinue)
+    $null -ne (Get-Command code -ErrorAction SilentlyContinue)
 }
 
 function CustomReadHost {
