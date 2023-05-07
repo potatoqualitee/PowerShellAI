@@ -118,7 +118,17 @@ function copilot {
             2 {
                 Get-Runnable -result $result | Set-Clipboard
             }
-            default { "Not running" }
+            3 {
+                if (Test-VSCodeInstalled) {
+                    (Get-Runnable $result) | code -                
+                }
+                else {
+                    "Not running"
+                }
+            }
+            default {
+                "Not running"
+            }
         }
     }
 }
