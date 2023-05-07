@@ -59,9 +59,12 @@ function copilot {
         .EXAMPLE
         copilot 'Find all enabled users that have a samaccountname similar to Mazi; List SAMAccountName and DisplayName'
     #>
+    [CmdletBinding()]
+    [alias("??")]
     param(
         [Parameter(Mandatory)]
         $inputPrompt,
+        $prefixPrompt = 'powershell, just code:',
         [ValidateRange(0, 2)]
         [decimal]$temperature = 0.0,
         # The maximum number of tokens to generate. default 256
@@ -72,14 +75,14 @@ function copilot {
     
     # $inputPrompt = $args -join ' '
     
-    $shell = 'powershell, just code:'
+    #$shell = 'powershell, just code:'
     
     $promptComments = ', include comments'
     if (-not $IncludeComments) {
         $promptComments = ''
     }
 
-    $prompt = "using {0} {1}: {2}`n" -f $shell, $promptComments, $inputPrompt
+    $prompt = "using {0} {1}: {2}`n" -f $prefixPrompt, $promptComments, $inputPrompt
     $prompt += '```'
 
     $completion = Get-GPT3Completion -prompt $prompt -max_tokens $max_tokens -temperature $temperature -stop '```'
