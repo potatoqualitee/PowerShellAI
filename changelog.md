@@ -1,6 +1,14 @@
 # v0.6.2
 
 - Added `Get-OpenAIEmbedding` to get a vector representation of a given input 
+- Added `-temperature` param to `chat`
+- Added "send to vs code" option to menu
+- Added two new functions:
+    - `git?`: Translate natural language to Git commands
+    - `gh?`: Translate natural language to GitHub CLI commands
+
+
+**Full Changelog**: https://github.com/dfinke/PowerShellAI/compare/v0.6.1...v0.6.2
 # v0.6.1
 
 - Upgraded `copilot` and `explain` to use `Write-CodeBlock` fir syntax highlighting
