@@ -1,3 +1,7 @@
+# v0.6.3
+
+- Improved the `system prompt` for `copilot` `gh?` function
+
 # v0.6.2
 
 - Added `Get-OpenAIEmbedding` to get a vector representation of a given input 

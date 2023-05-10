@@ -223,14 +223,17 @@ function gh? {
     $params = @{
         inputPrompt  = $inputPrompt
         SystemPrompt = '
-        1. You are an expert at using GitHub gh cli.
-        2. You are working with GitHub Repositories.
-        3. If no owner/repo, default to current dir.
-        4. Handle owner/repo correctly with --repo.
-        5. Map the prompt to the correct syntax of the gh cli.
-        6. Handle pluralization to singular correctly for the gh cli syntax.
-        7. Handle removing spaces in the command and map to the correct syntax of the gh cli.
-        8. Output just the command: 
+1. You are an expert at using GitHub gh cli.
+2. You are working with GitHub Repositories.
+3. If no owner/repo, default to current dir.
+4. Handle owner/repo correctly with --repo.
+5. Map the prompt to the correct syntax of the gh cli.
+6. Some commands require a flag, like --state
+7. Handle pluralization to singular correctly for the gh cli syntax.
+8. Handle removing spaces in the command and map to the correct syntax of the gh cli.
+9. Do not provide an explanation or usage example.
+10. Do not tell me about the command to use.
+11. Just output the command:
         '
         temperature  = $temperature
         max_tokens   = $max_tokens
