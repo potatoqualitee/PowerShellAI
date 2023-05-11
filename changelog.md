@@ -1,6 +1,7 @@
 # v0.6.3
 
 - Improved the `system prompt` for `copilot` `gh?` function
+- Make `New-NBCell` public
 
 # v0.6.2
 
