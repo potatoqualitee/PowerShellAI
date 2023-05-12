@@ -6,7 +6,6 @@ $script:LogMessageColors = @{
 }
 $script:LogMessagesMaxCount = 8
 $script:FunctionTopLeft = @{X = 0; Y = 0}
-$script:LogMessagesTopLeft = @{X = 0; Y = 0}
 $script:RendererBackground = @{ R = 35; G = 35; B = 35 }
 $script:FunctionVersion = 1
 $script:InitialPrePrompt = $null
@@ -96,7 +95,6 @@ function Write-AifbFunctionOutput {
     Write-Host ""
 
     # Write the log messages under the function
-    $script:LogMessagesTopLeft = $Host.UI.RawUI.CursorPosition
     if(!$NoLogMessages) {
         Write-AifbLogMessages
     }
@@ -130,10 +128,6 @@ function Add-AifbLogMessage {
     if($script:LogMessages.Count -gt $script:LogMessagesMaxCount) {
         $script:LogMessages.Dequeue() | Out-Null
     }
-
-    if(!$NoRender -and $script:NonInteractive -eq $false) {
-        Write-AifbLogMessages
-    }
 }
 
 function Write-AifbLogMessages {
@@ -146,7 +140,6 @@ function Write-AifbLogMessages {
     }
 
     $consoleWidth = $Host.UI.RawUI.WindowSize.Width
-    [Console]::SetCursorPosition($script:LogMessagesTopLeft.X, $script:LogMessagesTopLeft.Y)
     $script:LogMessages | Foreach-Object {
         $logPrefix = "$($_.Date) $($_.Level.PadRight(4))"
         $line = $_.Message -replace "`n", ". " -replace "`r", ""
