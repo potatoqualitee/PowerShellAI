@@ -93,6 +93,9 @@ The PowerShell AI module integrates with the OpenAI API and let's you easily acc
         # Copilot wrappers
         'git?' # Translate natural language to Git commands
         'gh?' # Translate natural language to to GitHub CLI commands
+
+        # tiktoken
+        'Get-NumberOfTokens'
     )
 
     AliasesToExport   = @(
