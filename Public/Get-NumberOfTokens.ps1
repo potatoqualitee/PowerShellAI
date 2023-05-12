@@ -5,6 +5,12 @@ function Get-NumberOfTokens {
         $Model = "gpt-3.5-turbo"
     )
 
+    $PBEFileDirectory = "$PSScriptRoot\PBEFileDirectory"
+    
+    if (!(Test-Path $PBEFileDirectory)) {
+        New-Item -ItemType Directory -Path $PBEFileDirectory | Out-Null
+    }
+    
     [TiktokenSharp.TikToken]::set_PBEFileDirectory("$PSScriptRoot\PBEFileDirectory")
     
     try {
