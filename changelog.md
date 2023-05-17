@@ -1,5 +1,6 @@
 # v0.7.0
 
+
 - `New-Chat` refactored
     - Now immediately posts to GPT if you specify a prompt and displays the response
     - No prompt, still closes existing session and creates a new one
