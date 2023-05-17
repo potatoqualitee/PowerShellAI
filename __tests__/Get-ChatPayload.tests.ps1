@@ -2,6 +2,15 @@ Import-Module "$PSScriptRoot\..\PowerShellAI.psd1" -Force
 
 Describe "Get-ChatPayload" -Tag ChatPayload {
 
+    BeforeAll {
+        $script:savedKey = $env:OpenAIKey
+        $env:OpenAIKey = 'sk-1234567890'
+    }
+    
+    AfterAll {
+        $env:OpenAIKey = $savedKey
+    }
+    
     BeforeEach {
         Clear-ChatMessages
     }
