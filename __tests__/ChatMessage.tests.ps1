@@ -8,6 +8,7 @@ Describe "Chat Messages" -Tag ChatMessages {
     
     AfterAll {
         $env:OpenAIKey = $savedKey
+        Stop-Chat
     }
 
     BeforeEach {
@@ -113,7 +114,7 @@ Describe "Chat Messages" -Tag ChatMessages {
         $actual[0].Content | Should -Be "Hello"
     }
 
-    It 'Tests adding a user message witn New-ChatUserMessage' {
+    It 'Tests adding a user message with New-ChatUserMessage' {
         Clear-ChatMessages
         New-ChatUserMessage -content "Hello"       
 
@@ -125,14 +126,44 @@ Describe "Chat Messages" -Tag ChatMessages {
     }
 
     It 'Tests state gets reset after New-Chat' {
+        Mock Invoke-RestMethod -ModuleName PowerShellAI -ParameterFilter { 
+            $Method -eq 'Post' -and $Uri -eq (Get-OpenAIChatCompletionUri) 
+        } -MockWith {
+            [PSCustomObject]@{
+                choices = @(
+                    [PSCustomObject]@{
+                        message = [PSCustomObject]@{
+                            content = 'Mocked Get-GPT4Completion call'
+                        }
+                    }
+                )
+            }
+        } 
+        
         New-ChatUserMessage -content "Hello"
         (Get-ChatMessages).Count | Should -Be 1
 
         New-Chat
-        Get-ChatMessages | Should -BeNullOrEmpty
+        
+        $chatMessages = @(Get-ChatMessages)
+        $chatMessages.Count | Should -Be 1
+        $chatMessages[0].Content | Should -Be "Mocked Get-GPT4Completion call"
     }
 
     It 'Tests adding new chat system messages' {
+        Mock Invoke-RestMethod -ModuleName PowerShellAI -ParameterFilter { 
+            $Method -eq 'Post' -and $Uri -eq (Get-OpenAIChatCompletionUri) 
+        } -MockWith {
+            [PSCustomObject]@{
+                choices = @(
+                    [PSCustomObject]@{
+                        message = [PSCustomObject]@{
+                            content = 'Mocked Get-GPT4Completion call'
+                        }
+                    }
+                )
+            }
+        } 
         New-ChatSystemMessage -Content "Hello"
         New-ChatMessage -Role 'system' -Content "World"
 
@@ -163,13 +194,32 @@ Describe "Chat Messages" -Tag ChatMessages {
     }
 
     It 'Tests New-Chat with a starting message' {
+
+        Mock Invoke-RestMethod -ModuleName PowerShellAI -ParameterFilter { 
+            $Method -eq 'Post' -and $Uri -eq (Get-OpenAIChatCompletionUri) 
+        } -MockWith {
+            [PSCustomObject]@{
+                choices = @(
+                    [PSCustomObject]@{
+                        message = [PSCustomObject]@{
+                            content = 'Mocked Get-GPT4Completion call'
+                        }
+                    }
+                )
+            }
+        } 
+
         New-Chat -Content "You are a powershell bot"
 
         $actual = Get-ChatMessages
 
-        $actual.Count | Should -Be 1
+        $actual.Count | Should -Be 2
+
         $actual[0].Role | Should -BeExactly 'system'
         $actual[0].Content | Should -BeExactly 'You are a powershell bot'
+
+        $actual[1].Role | Should -BeExactly 'assistant'
+        $actual[1].Content | Should -BeExactly 'Mocked Get-GPT4Completion call'
     }
 
     It 'Tests creating a chat and sending a message' {
@@ -194,14 +244,27 @@ Describe "Chat Messages" -Tag ChatMessages {
 
         $actual = Get-ChatMessages
 
-        $actual.Count | Should -Be 3
+        $actual.Count | Should -Be 4
+
+        <#
+            role      content
+            ----      -------
+            system    You are a powershell bot
+            assistant Mocked Get-GPT4Completion call
+            user      Hello
+            assistant Mocked Get-GPT4Completion call
+        #>
+
         $actual[0].Role | Should -BeExactly 'system'
         $actual[0].Content | Should -BeExactly 'You are a powershell bot'
 
-        $actual[1].Role | Should -BeExactly 'user'
-        $actual[1].Content | Should -BeExactly 'Hello'
+        $actual[1].Role | Should -BeExactly 'assistant'
+        $actual[1].Content | Should -BeExactly 'Mocked Get-GPT4Completion call'
+        
+        $actual[2].Role | Should -BeExactly 'user'
+        $actual[2].Content | Should -BeExactly 'Hello'
 
-        $actual[2].Role | Should -BeExactly 'assistant'
-        $actual[2].Content | Should -BeExactly 'Mocked Get-GPT4Completion call'
+        $actual[3].Role | Should -BeExactly 'assistant'
+        $actual[3].Content | Should -BeExactly 'Mocked Get-GPT4Completion call'
     }
 }

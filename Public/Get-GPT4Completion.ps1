@@ -413,7 +413,8 @@ function New-Chat {
         New-ChatSystemMessage -Content $Content
     }
     
-    Export-ChatSession
+    # Export-ChatSession
+    Get-GPT4Response
 }
 
 function Test-ChatInProgress {
@@ -464,7 +465,16 @@ function Get-GPT4Completion {
     )
 
     New-ChatUserMessage -Content $Content
-    
+
+    Get-GPT4Response -Temperature $temperature
+}
+
+function Get-GPT4Response {
+    [CmdletBinding()]
+    param(
+        [decimal]$Temperature
+    )
+
     $payload = Get-ChatPayload -AsJson
     $body = [System.Text.Encoding]::UTF8.GetBytes($payload)
 
@@ -475,8 +485,8 @@ function Get-GPT4Completion {
         $uri = Get-ChatAzureOpenAIURI
     }
     
-    if ($temperature) {
-        (Get-ChatSessionOptions)['temperature'] = $temperature
+    if ($Temperature) {
+        (Get-ChatSessionOptions)['temperature'] = $Temperature
     }
 
     $result = Invoke-OpenAIAPI -Uri $uri -Method 'Post' -Body $body 
@@ -486,6 +496,6 @@ function Get-GPT4Completion {
         New-ChatAssistantMessage -Content $response
         
         Export-ChatSession
-        $response
+        return $response
     }
 }
