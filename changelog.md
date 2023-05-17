@@ -1,3 +1,7 @@
+# v0.7.2
+
+- Added `Write-Information` as an indicator after callint GPT
+
 # v0.7.1
 
 - `New-Chat` refactored
