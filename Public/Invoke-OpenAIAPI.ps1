@@ -65,8 +65,13 @@ function Invoke-OpenAIAPI {
             $params['Headers'] = @{'api-key' = $env:AzureOpenAIKey }
         }
     }
-
+    
     Write-Verbose ($params | ConvertTo-Json)
+    
+    $savedInformationPreference = $InformationPreference
+    $InformationPreference = 'Continue'
+    Write-Information "Thinking ..."
+    $InformationPreference = $savedInformationPreference
     
     Invoke-RestMethod @params
 }
