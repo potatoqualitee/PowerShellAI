@@ -30,9 +30,10 @@ Describe "Get-GPT4Completion" -Tag GPT4Completion {
 
     AfterAll {
         $env:OpenAIKey = $savedKey
+        Stop-Chat
     }
 
-    It 'Test if chat is in progress initially' -Skip {
+    It 'Test if chat is in progress initially' {
         $actual = Test-ChatInProgress
         $actual | Should -BeFalse
     }
@@ -180,13 +181,16 @@ Describe "Get-GPT4Completion" -Tag GPT4Completion {
     It 'Test message is added via New-Chat' {
         $actual = New-Chat 'test system message'
 
-        $actual | Should -BeNullOrEmpty
+        $actual | Should -BeExactly 'Mocked Get-GPT4Completion call'
 
         $messages = Get-ChatMessages
-        $messages.Count | Should -Be 1
+        $messages.Count | Should -Be 2
 
         $messages[0].role | Should -BeExactly 'system'
         $messages[0].content | Should -BeExactly 'test system message'
+
+        $messages[1].role | Should -BeExactly 'assistant'
+        $messages[1].content | Should -BeExactly 'Mocked Get-GPT4Completion call'
     }
 
     It 'Test message is added via chat' {
@@ -209,7 +213,7 @@ Describe "Get-GPT4Completion" -Tag GPT4Completion {
 
         $actual = New-Chat 'test system message'
 
-        $actual | Should -BeNullOrEmpty
+        $actual | Should -BeExactly 'Mocked Get-GPT4Completion call'
 
         Test-ChatInProgress | Should -BeTrue
 
@@ -233,16 +237,19 @@ Describe "Get-GPT4Completion" -Tag GPT4Completion {
     It 'Test system message is added via New-Chat and Export works' {
         $actual = New-Chat 'test system message'
 
-        $actual | Should -BeNullOrEmpty
+        $actual | Should -BeExactly 'Mocked Get-GPT4Completion call'
 
         $sessions = Get-ChatSession
         $sessions.Count | Should -Be 1
 
         $content = $sessions | Get-ChatSessionContent
-        $content.Count | Should -Be 1
+        $content.Count | Should -Be 2
 
         $content[0].role | Should -BeExactly 'system'
         $content[0].content | Should -BeExactly 'test system message'
+
+        $content[1].role | Should -BeExactly 'assistant'
+        $content[1].content | Should -BeExactly 'Mocked Get-GPT4Completion call'
     }
 
     It 'Test user message is added via chat and Export works' {
