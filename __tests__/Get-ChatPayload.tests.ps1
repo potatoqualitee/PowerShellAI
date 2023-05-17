@@ -2,6 +2,15 @@ Import-Module "$PSScriptRoot\..\PowerShellAI.psd1" -Force
 
 Describe "Get-ChatPayload" -Tag ChatPayload {
 
+    BeforeAll {
+        $script:savedKey = $env:OpenAIKey
+        $env:OpenAIKey = 'sk-1234567890'
+    }
+    
+    AfterAll {
+        $env:OpenAIKey = $savedKey
+    }
+    
     BeforeEach {
         Clear-ChatMessages
     }
@@ -83,17 +92,48 @@ Describe "Get-ChatPayload" -Tag ChatPayload {
         $actual.messages[0].content | Should -Be 'Hello'
     }
 
-    It 'Tests Get-ChatPayload after Get-GPT4Completion' -Skip {
+    It 'Tests Get-ChatPayload after Get-GPT4Completion' {
+        Mock Invoke-RestMethod -ModuleName PowerShellAI -ParameterFilter { 
+            $Method -eq 'Post' -and $Uri -eq (Get-OpenAIChatCompletionUri) 
+        } -MockWith {
+            [PSCustomObject]@{
+                choices = @(
+                    [PSCustomObject]@{
+                        message = [PSCustomObject]@{
+                            content = 'Mocked Get-GPT4Completion call'
+                        }
+                    }
+                )
+            }
+        } 
         Get-GPT4Completion -Content "Hello World"
 
         $actual = Get-ChatPayload
 
-        $actual.messages.count | Should -Be 1
+        $actual.messages.count | Should -Be 2
+
         $actual.messages[0].role | Should -Be 'user'
         $actual.messages[0].content | Should -Be 'Hello World'
+
+        $actual.messages[1].role | Should -Be 'assistant'
+        $actual.messages[1].content | Should -Be 'Mocked Get-GPT4Completion call'
     }
 
-    It 'Tests Get-ChatPayload as Json' -Skip {
+    It 'Tests Get-ChatPayload as Json' {
+        Mock Invoke-RestMethod -ModuleName PowerShellAI -ParameterFilter { 
+            $Method -eq 'Post' -and $Uri -eq (Get-OpenAIChatCompletionUri) 
+        } -MockWith {
+            [PSCustomObject]@{
+                choices = @(
+                    [PSCustomObject]@{
+                        message = [PSCustomObject]@{
+                            content = 'Mocked Get-GPT4Completion call'
+                        }
+                    }
+                )
+            }
+        } 
+        
         Get-GPT4Completion -Content "Hello World"
 
         $actual = Get-ChatPayload -AsJson
@@ -101,9 +141,12 @@ Describe "Get-ChatPayload" -Tag ChatPayload {
 
         $obj = ConvertFrom-Json $actual
 
-        $obj.messages.count | Should -Be 1
+        $obj.messages.count | Should -Be 2
 
         $obj.messages[0].role | Should -Be 'user'
         $obj.messages[0].content | Should -Be 'Hello World'
+
+        $obj.messages[1].role | Should -Be 'assistant'
+        $obj.messages[1].content | Should -Be 'Mocked Get-GPT4Completion call'
     }    
 }
