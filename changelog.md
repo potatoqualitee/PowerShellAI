@@ -1,3 +1,8 @@
+# v0.7.0
+
+- `New-Chat` refactored
+    - Now immediately posts to GPT if you specify a prompt and displays the response
+    - No prompt, still closes existing session and creates a new one
 # v0.6.3
 
 - Improved the `system prompt` for `copilot` `gh?` function
