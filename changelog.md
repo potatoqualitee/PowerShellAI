@@ -1,5 +1,4 @@
-# v0.7.0
-
+# v0.7.1
 
 - `New-Chat` refactored
     - Now immediately posts to GPT if you specify a prompt and displays the response
