@@ -1,6 +1,6 @@
 @{
     RootModule        = 'PowerShellAI.psm1'
-    ModuleVersion     = '0.5.4'
+    ModuleVersion     = '0.7.2'
     GUID              = '081ce7b4-6e63-41ca-92a7-2bf72dbad018'
     Author            = 'Douglas Finke'
     CompanyName       = 'Doug Finke'
@@ -11,8 +11,10 @@ The PowerShell AI module integrates with the OpenAI API and let's you easily acc
 '@
 
     FunctionsToExport = @(
-		'Get-OpenAIEdit'
-		'Get-OpenAIEditsUri'
+        'Get-OpenAIEdit'
+        'Get-OpenAIEditsUri'
+        'Get-OpenAIEmbeddings'
+        'Get-OpenAIEmbeddingsUri'
         'ai'
         'ConvertFrom-GPTMarkdownTable'
         'copilot'
@@ -21,6 +23,8 @@ The PowerShell AI module integrates with the OpenAI API and let's you easily acc
         'Get-DalleImage'
         'Get-ChatCompletion'
         'Get-GPT3Completion'
+        'Get-GPT4Completion'
+        'Get-GPT4Response'
         'Get-OpenAIBaseRestUri'
         'Get-OpenAIChatCompletionUri'
         'Get-OpenAICompletionsUri'
@@ -35,37 +39,71 @@ The PowerShell AI module integrates with the OpenAI API and let's you easily acc
         'Get-OpenAIEdit'
         'New-SpreadSheet'
 
-        'Get-ChatHistory'
-        'Get-ChatInProgress'
+        # new chat functions
+        'Add-ChatMessage'
+        'Clear-ChatMessages'
+        'Export-ChatSession'
+        'Get-ChatMessages'
+        'Get-ChatPayload'
         'Get-ChatSession'
         'Get-ChatSessionContent'
+        'Get-ChatSessionFile'
+        'Get-ChatSessionOptions'
         'Get-ChatSessionPath'
-        'Get-ChatTheme'
-        'Import-ChatMessages'
-        'Import-ChatAssistantMessages'
-        'Import-ChatUserMessages'
-        'Import-ChatSession'
-        'Invoke-ChatCompletion'
+        'Get-ChatSessionTimeStamp'
         'New-Chat'
+        'New-ChatAssistantMessage'
+        'New-ChatMessage'
+        'New-ChatMessageTemplate'
+        'New-ChatSystemMessage'
+        'New-ChatUserMessage'        
+        'Reset-ChatSessionOptions'
+        'Reset-ChatSessionPath'
+        'Reset-ChatSessionTimeStamp'
+        'Set-ChatSessionOption'
+        'Set-ChatSessionPath'
         'Stop-Chat'
         'Test-ChatInProgress'
+        #
+
+        # Azure OpenAI
+        'Get-ChatAPIProvider'
+        'Get-ChatAzureOpenAIURI'
+        'Get-AzureOpenAIOptions'
+        'Reset-AzureOpenAIOptions'
+        'Set-AzureOpenAI'
+        'Set-ChatAPIProvider'
+        'Set-AzureOpenAIOptions'
+        #
 
         'Get-OpenAIUsage'
         'Get-OpenAIUser'
         'Invoke-AIErrorHelper'
         'Invoke-AIExplain'
+        'Invoke-AIFunctionBuilder'
         'Invoke-OpenAIAPI'
         'New-SpreadSheet'
         'Set-DalleImageAsWallpaper'
         'Set-OpenAIKey'
+        'Test-AzureOpenAIKey'
+
+        # Notebook Copilot
+        'NBCopilot'
+        'New-NBCell'
+
+        # Copilot wrappers
+        'git?' # Translate natural language to Git commands
+        'gh?' # Translate natural language to to GitHub CLI commands
     )
 
     AliasesToExport   = @(
         'gpt'
-        #'chatgpt'
+        'gpt4'
         'chat'
         'ieh'
         'explain'
+        'ifb'
+        '??'
     )
 
     PrivateData       = @{

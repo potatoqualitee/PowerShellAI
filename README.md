@@ -1,4 +1,32 @@
+<strong><p align="center">OpenAI at your Fingertips! ✨</p></strong>
+<strong><p align="center">using PowerShell</p></strong>
+
+<p align="center">
+  <a href="https://github.com/codespaces/new?hide_repo_select=true&ref=main&repo=588124439&machine=standardLinux32gb&devcontainer_path=.devcontainer%2Fdevcontainer.json&location=East">
+     <img src="https://img.shields.io/static/v1?style=for-the-badge&label=GitHub+Codespaces&message=Open&color=brightgreen&logo=github"/>
+  </a>
+  <br/>
+  <br/>
+  <a href="https://twitter.com/dfinke">
+    <img src="https://img.shields.io/badge/Twitter-@dfinke-blue.svg?logo=twitter&style=flat-square">
+  </a>
+  <a href="https://www.powershellgallery.com/packages/PowerShellAI/">
+    <img src="https://img.shields.io/powershellgallery/v/PowerShellAI.svg">
+  </a>  
+  <a href="https://www.powershellgallery.com/packages/PowerShellAI/">
+    <img src="https://img.shields.io/powershellgallery/dt/PowerShellAI.svg">
+  </a>
+  <!-- <a href="https://github.com/dfinke/PSAdvantage/blob/master/LICENSE">
+    <img src="https://img.shields.io/badge/License-Apache-orange.svg?logo=openbsd&style=flat-square">
+  </a> -->
+</p> 
+
+<p align="center">
+   • <a href="https://github.com/dfinke/PowerShellAI/wiki">Documentation</a> •
+</p>
+
 # PowerShellAI
+
 ## A User-Friendly Module for OpenAI's GPT-3 and DALL-E API
 
 `PowerShellAI` is a ***community-maintained*** PowerShell module designed to simplify the use of OpenAI's GPT-3 language model and DALL-E API. It empowers users to effortlessly build complex language-powered applications, regardless of their level of experience.
@@ -36,7 +64,7 @@ In the PowerShell console:
 Install-Module -Name PowerShellAI
 ```
 
-Get/Create your OpenAI API key from [https://beta.openai.com/account/api-keys](https://beta.openai.com/account/api-keys) and then set as *secure string* with `Set-OpenAIKey` or as *plain text* with `$env:OpenAIKey`.
+Get/Create your OpenAI API key from [ https://platform.openai.com/account/api-keys]( https://platform.openai.com/account/api-keys) and then set as *secure string* with `Set-OpenAIKey` or as *plain text* with `$env:OpenAIKey`.
 
 ## Examples
 Check out these PowerShell scripts to see how easy it is to get started with AI in PowerShell:
@@ -302,7 +330,7 @@ Try it out: `New-Spreadsheet "list of first 5 US presidents name, term"`
 
 # DALL-E
 
-The [DALL-E](https://openai.com/blog/dall-e/) API is a new API from OpenAI that allows you to generate images from text. The API is currently in beta and is free to use.
+The [DALL-E](https://openai.com/blog/dall-e/) API is a new API from OpenAI that allows you to generate images from text
 
 Use this function to generate an image from text and set it as your desktop background.
 

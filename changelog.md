@@ -1,3 +1,115 @@
+# v0.7.2
+
+- Added `Write-Information` as an indicator after callint GPT
+
+# v0.7.1
+
+- `New-Chat` refactored
+    - Now immediately posts to GPT if you specify a prompt and displays the response
+    - No prompt, still closes existing session and creates a new one
+# v0.6.3
+
+- Improved the `system prompt` for `copilot` `gh?` function
+- Make `New-NBCell` public
+
+# v0.6.2
+
+- Added `Get-OpenAIEmbedding` to get a vector representation of a given input 
+- Added `-temperature` param to `chat`
+- Added "send to vs code" option to menu
+- Added two new functions:
+    - `git?`: Translate natural language to Git commands
+    - `gh?`: Translate natural language to GitHub CLI commands
+
+
+**Full Changelog**: https://github.com/dfinke/PowerShellAI/compare/v0.6.1...v0.6.2
+# v0.6.1
+
+- Upgraded `copilot` and `explain` to use `Write-CodeBlock` fir syntax highlighting
+- Added call to `Invoke-Formatter` to prettify the code
+
+# v0.6.0
+
+- Fixed `Invalid JSON` - https://github.com/dfinke/PowerShellAI/issues/119
+
+# v0.5.8
+
+Thank you @ShaydeNofziger for the contribution!
+- Update .gitignore 
+- Update help comment
+
+Also, I:
+- Added `kql` to validate set for `NBCopilot`
+
+# v0.5.7
+
+Thanks Shaun, great work!
+
+- `AI Function Builder` by [Shaun Lawrie](https://github.com/ShaunLawrie)
+    - AIFunctionBuilder takes a prompt and generates a PowerShell function which is validated for syntax and logical issues so you don't have to do the boring work.
+    - https://github.com/dfinke/PowerShellAI/tree/master/CommunityContributions/06-AIFunctionBuilder#readme
+- `Notebook Copilot` by [Doug Finke](https://github.com/dfinke)
+    - This PowerShell function allows you to use ChatGPT directly from your Interactive Notebook.
+    - https://github.com/dfinke/PowerShellAI/tree/master/CommunityContributions/07-NotebookCopilot#readme
+- `Devcontainer` created for easier use in Codespaces [Doug Finke](https://github.com/dfinke)
+
+
+# v0.5.6
+## What's Changed
+- Enables chat conversations with either the public OpenAI or a private Azure OpenAI Service.
+    - [Documentation](https://github.com/dfinke/PowerShellAI/wiki/AzureOpenAI)
+    - [Video](https://youtu.be/1Z1QYQZ1Z1Q)
+
+_Community Contributions:_
+- Thank you [Svyatoslav Pidgorny](https://github.com/SP3269)
+    - Copilot prompt change, adding clipboard 
+
+        ```
+        PS D:\> copilot 'cmds to find k8 pods'
+        ╔═════════════════════════╗
+        ║Q: cmds to find k8 pods  ║
+        ║═════════════════════════║
+        ║1: kubectl get pods      ║
+        ╚═════════════════════════╝
+        Run the code? You can also choose additional actions
+        [Y] Yes  [E] Explain  [C] Copy  [N] No  [?] Help (default is "N"):
+        ```
+
+## New Contributors
+* @SP3269 made their first contribution in https://github.com/dfinke/PowerShellAI/pull/105
+
+
+# v0.5.5
+
+- Added support for GPT-4, conversation-in and message-out
+    - Saves the conversation to a file in each invocation
+    - Supports changing chat options like the model like `gpt-4` or `gpt-3.5-turbo` and more
+    - List sessions that have been saved, plus you can get their content
+
+**Note**: This defaults to using `gpt-4`. You can set the model to chat with:
+
+```powershell
+Get-ChatSessionOptions
+Set-ChatSessionOption -model  gpt-3.5-turbo
+Get-ChatSessionOptions
+```
+
+Getting started example:
+
+```powershell
+New-Chat 'respond only in json'
+chat 'what are the capitals of Spain, France, and the USA?'
+```
+
+```json
+{
+  "Spain": "Madrid",
+  "France": "Paris",
+  "USA": "Washington, D.C."
+}
+```
+    
+
 # v0.5.4
 
 - Copilot can now `explain` the code it generates.
