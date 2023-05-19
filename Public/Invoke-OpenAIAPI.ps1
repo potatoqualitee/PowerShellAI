@@ -74,9 +74,5 @@ function Invoke-OpenAIAPI {
     
     Write-Information "Thinking ..."
     
-    if($NoProgress) {
-        Invoke-RestMethod @params
-    } else {
-        Invoke-RestMethodWithProgress -Params $params
-    }
+    Invoke-RestMethodWithProgress -Params $params -NoProgress:$NoProgress
 }

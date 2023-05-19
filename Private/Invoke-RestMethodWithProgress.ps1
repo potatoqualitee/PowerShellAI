@@ -2,6 +2,11 @@
 $script:DefaultResponseTimeSeconds = 10
 $script:EndpointResponseTimeSeconds = @{}
 
+function Reset-APIEstimatedResponseTimes {
+    $script:DefaultResponseTimeSeconds = 10
+    $script:EndpointResponseTimeSeconds = @{}    
+}
+
 function Get-APIEstimatedResponseTime {
     param (
         [string] $Method,
@@ -11,7 +16,7 @@ function Get-APIEstimatedResponseTime {
     $endpointResponseTimeKey = $Method + $Uri
     $estimatedResponseTime = $script:EndpointResponseTimeSeconds[$endpointResponseTimeKey]
 
-    if($null -eq $estimatedResponseTime) {
+    if($null -eq $estimatedResponseTime -or $estimatedResponseTime -lt $script:DefaultResponseTimeSeconds) {
         $estimatedResponseTime = $script:DefaultResponseTimeSeconds
     }
 
@@ -48,12 +53,12 @@ function Invoke-RestMethodWithProgress {
 
         $start = Get-Date
         
-        while($job.State -ne "Completed") {
+        while($job.State -eq "Running") {
             $percent = ((Get-Date) - $start).TotalSeconds / $estimatedResponseTime * 100
             
             # Slow the progress towards the end of the progress bar because the api is a bit all over the show for response times, this makes sure the bar doesn't fill up linearly
             $logPercent = [int][math]::Min([math]::Max(1, $percent * [math]::Log(1.5)), 100)
-            $status = "$logPercent% Completed"
+            $status = "$logPercent% Completed {$($job.State)}"
             if($logPercent -eq 100) {
                 $status = "API is taking longer than expected"
             }
@@ -61,6 +66,10 @@ function Invoke-RestMethodWithProgress {
             Start-Sleep -Milliseconds 50
         }
         Write-Progress -Id 1 -Activity "Invoking AI" -Completed
+
+        if($job.State -eq "Failed") {
+            throw $job.ChildJobs[0].JobStateInfo.Reason
+        }
 
         Set-APIResponseTime -Method $Params["Method"] -Uri $Params["Uri"] -ResponseTimeSeconds ((Get-Date) - $start).TotalSeconds
 

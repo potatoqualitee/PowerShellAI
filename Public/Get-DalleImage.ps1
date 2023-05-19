@@ -24,7 +24,8 @@ function Get-DalleImage {
         $Description,
         [ValidateSet('256', '512', '1024')]
         $Size = 256,
-        [Switch]$Raw
+        [Switch]$Raw,
+        [Switch]$NoProgress
     )
 
     $targetSize = switch ($Size) {
@@ -45,7 +46,11 @@ function Get-DalleImage {
     }
     else {
         $DestinationPath = [IO.Path]::GetTempFileName() -replace ".tmp", ".png"
-        Invoke-RestMethod $result.data.url -OutFile $DestinationPath
+        $params = @{
+            Path = $result.data.url
+            OutFile = $DestinationPath
+        }
+        Invoke-RestMethodWithProgress -Params $params -NoProgress:$NoProgress
         $DestinationPath
     }
 }
