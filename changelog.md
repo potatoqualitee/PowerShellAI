@@ -1,3 +1,8 @@
+# v0.7.3
+
+- Thank you [Shaun Lawrie](https://github.com/ShaunLawrie)!
+    - Added `Write-Progress`, tests and mocks
+
 # v0.7.2
 
 - Added `Write-Information` as an indicator after callint GPT
