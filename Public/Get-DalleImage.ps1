@@ -50,7 +50,7 @@ function Get-DalleImage {
     else {
         $DestinationPath = [IO.Path]::GetTempFileName() -replace ".tmp", ".png"
         $params = @{
-            Path = $result.data.url
+            Uri = $result.data.url
             OutFile = $DestinationPath
         }
         Invoke-RestMethodWithProgress -Params $params -NoProgress:$NoProgress
