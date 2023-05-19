@@ -58,7 +58,7 @@ function Invoke-RestMethodWithProgress {
             
             # Slow the progress towards the end of the progress bar because the api is a bit all over the show for response times, this makes sure the bar doesn't fill up linearly
             $logPercent = [int][math]::Min([math]::Max(1, $percent * [math]::Log(1.5)), 100)
-            $status = "$logPercent% Completed {$($job.State)}"
+            $status = "$logPercent% Completed"
             if($logPercent -eq 100) {
                 $status = "API is taking longer than expected"
             }
@@ -67,15 +67,14 @@ function Invoke-RestMethodWithProgress {
         }
         Write-Progress -Id 1 -Activity "Invoking AI" -Completed
 
+        # If Invoke-RestMethod failed in the job rethrow this up to the caller so it's like a normal web error
         if($job.State -eq "Failed") {
             throw $job.ChildJobs[0].JobStateInfo.Reason
         }
 
         Set-APIResponseTime -Method $Params["Method"] -Uri $Params["Uri"] -ResponseTimeSeconds ((Get-Date) - $start).TotalSeconds
 
-        $response = (Receive-Job $job).Response
-
-        return $response
+        return (Receive-Job $job).Response
     } catch {
         throw $_
     } finally {
