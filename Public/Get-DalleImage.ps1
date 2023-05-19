@@ -15,6 +15,9 @@ function Get-DalleImage {
         .PARAMETER Raw
         If set, the raw response will be returned. Otherwise, the image will be saved to a temporary file and the path to that file will be returned
 
+        .PARAMETER NoProgress
+        The option to hide write-progress if you want, you could also set $ProgressPreference to SilentlyContinue
+
         .EXAMPLE
         Get-DalleImage -Description "A cat sitting on a table"
     #>
@@ -24,7 +27,8 @@ function Get-DalleImage {
         $Description,
         [ValidateSet('256', '512', '1024')]
         $Size = 256,
-        [Switch]$Raw
+        [Switch]$Raw,
+        [Switch]$NoProgress
     )
 
     $targetSize = switch ($Size) {
@@ -45,7 +49,11 @@ function Get-DalleImage {
     }
     else {
         $DestinationPath = [IO.Path]::GetTempFileName() -replace ".tmp", ".png"
-        Invoke-RestMethod $result.data.url -OutFile $DestinationPath
+        $params = @{
+            Uri = $result.data.url
+            OutFile = $DestinationPath
+        }
+        Invoke-RestMethodWithProgress -Params $params -NoProgress:$NoProgress
         $DestinationPath
     }
 }

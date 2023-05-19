@@ -5,8 +5,8 @@ Describe "AzureOpenAIKey" -Tag AzureOpenAIKey {
         $script:savedKey = $env:AzureOpenAIKey
         $env:AzureOpenAIKey = 'a7duejdnekhdl'
 
-        Mock Invoke-RestMethod -ModuleName PowerShellAI -ParameterFilter { 
-            $Method -eq 'Post' -and $Uri -eq (Get-OpenAIChatCompletionUri) 
+        Mock Invoke-RestMethodWithProgress -ModuleName PowerShellAI -ParameterFilter { 
+            $Params.Method -eq 'Post' -and $Params.Uri -eq (Get-OpenAIChatCompletionUri) 
         } -MockWith {
             [PSCustomObject]@{
                 choices = @(

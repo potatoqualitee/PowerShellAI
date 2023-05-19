@@ -126,8 +126,8 @@ Describe "Chat Messages" -Tag ChatMessages {
     }
 
     It 'Tests state gets reset after New-Chat' {
-        Mock Invoke-RestMethod -ModuleName PowerShellAI -ParameterFilter { 
-            $Method -eq 'Post' -and $Uri -eq (Get-OpenAIChatCompletionUri) 
+        Mock Invoke-RestMethodWithProgress -ModuleName PowerShellAI -ParameterFilter { 
+            $Params.Method -eq 'Post' -and $Params.Uri -eq (Get-OpenAIChatCompletionUri) 
         } -MockWith {
             [PSCustomObject]@{
                 choices = @(
@@ -151,8 +151,8 @@ Describe "Chat Messages" -Tag ChatMessages {
     }
 
     It 'Tests adding new chat system messages' {
-        Mock Invoke-RestMethod -ModuleName PowerShellAI -ParameterFilter { 
-            $Method -eq 'Post' -and $Uri -eq (Get-OpenAIChatCompletionUri) 
+        Mock Invoke-RestMethodWithProgress -ModuleName PowerShellAI -ParameterFilter { 
+            $Params.Method -eq 'Post' -and $Params.Uri -eq (Get-OpenAIChatCompletionUri) 
         } -MockWith {
             [PSCustomObject]@{
                 choices = @(
@@ -195,8 +195,8 @@ Describe "Chat Messages" -Tag ChatMessages {
 
     It 'Tests New-Chat with a starting message' {
 
-        Mock Invoke-RestMethod -ModuleName PowerShellAI -ParameterFilter { 
-            $Method -eq 'Post' -and $Uri -eq (Get-OpenAIChatCompletionUri) 
+        Mock Invoke-RestMethodWithProgress -ModuleName PowerShellAI -ParameterFilter { 
+            $Params.Method -eq 'Post' -and $Params.Uri -eq (Get-OpenAIChatCompletionUri) 
         } -MockWith {
             [PSCustomObject]@{
                 choices = @(
@@ -223,8 +223,8 @@ Describe "Chat Messages" -Tag ChatMessages {
     }
 
     It 'Tests creating a chat and sending a message' {
-        Mock Invoke-RestMethod -ModuleName PowerShellAI -ParameterFilter { 
-            $Method -eq 'Post' -and $Uri -eq (Get-OpenAIChatCompletionUri) 
+        Mock Invoke-RestMethodWithProgress -ModuleName PowerShellAI -ParameterFilter { 
+            $Params.Method -eq 'Post' -and $Params.Uri -eq (Get-OpenAIChatCompletionUri) 
         } -MockWith {
             [PSCustomObject]@{
                 choices = @(

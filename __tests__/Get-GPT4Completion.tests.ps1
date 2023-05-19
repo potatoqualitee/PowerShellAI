@@ -7,8 +7,8 @@ Describe "Get-GPT4Completion" -Tag GPT4Completion {
         $env:OpenAIKey = 'sk-1234567890'
         Set-chatSessionPath -Path 'TestDrive:\PowerShell\ChatGPT'
 
-        Mock Invoke-RestMethod -ModuleName PowerShellAI -ParameterFilter { 
-            $Method -eq 'Post' -and $Uri -eq (Get-OpenAIChatCompletionUri) 
+        Mock Invoke-RestMethodWithProgress -ModuleName PowerShellAI -ParameterFilter { 
+            $Params.Method -eq 'Post' -and $Params.Uri -eq (Get-OpenAIChatCompletionUri) 
         } -MockWith {
             [PSCustomObject]@{
                 choices = @(
