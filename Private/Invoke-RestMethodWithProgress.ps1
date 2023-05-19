@@ -42,7 +42,9 @@ function Invoke-RestMethodWithProgress {
     $estimatedResponseTime = Get-APIEstimatedResponseTime -Method $Params["Method"] -Uri $Params["Uri"]
 
     try {
-        [Console]::CursorVisible = $false
+        try { [Console]::CursorVisible = $false }
+        catch [System.IO.IOException] { <# unit tests don't have a console #> }
+        
         $job = Start-Job {
             $restParameters = $using:Params
             $response = Invoke-RestMethod @restParameters
@@ -78,8 +80,9 @@ function Invoke-RestMethodWithProgress {
     } catch {
         throw $_
     } finally {
-        [Console]::CursorVisible = $false
         Stop-Job $job -ErrorAction "SilentlyContinue"
         Remove-Job $job -Force -ErrorAction "SilentlyContinue"
+        try { [Console]::CursorVisible = $true }
+        catch [System.IO.IOException] { <# unit tests don't have a console #> }
     }
 }
