@@ -1,6 +1,7 @@
 # Start with a guess at how long this API call will take
 $script:DefaultResponseTimeSeconds = 10
 $script:EndpointResponseTimeSeconds = @{}
+$script:SupportedHosts = @("ConsoleHost")
 
 function Reset-APIEstimatedResponseTimes {
     $script:DefaultResponseTimeSeconds = 10
@@ -38,6 +39,11 @@ function Invoke-RestMethodWithProgress {
     param (
         [hashtable] $Params
     )
+
+    # Some hosts can't support background jobs. It's best to opt-in to this feature by using a list of supported hosts
+    if($script:SupportedHosts -notcontains (Get-Host).Name) {
+        return Invoke-RestMethod @Params
+    }
 
     $estimatedResponseTime = Get-APIEstimatedResponseTime -Method $Params["Method"] -Uri $Params["Uri"]
 
