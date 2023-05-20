@@ -67,7 +67,7 @@ Describe "Chat Messages" -Tag ChatMessages {
         $actual.Count | Should -Be 0
     }
 
-    It 'Tests Get-ChatMessages retuns messages with proper cased keys' {
+    It 'Tests Get-ChatMessages retuns messages with proper cased keys' -Tag AIFunctionBuilder {
         New-ChatMessage -Role 'user' -Content "Hello"       
 
         $actual = Get-ChatMessages
