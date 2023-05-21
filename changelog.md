@@ -1,3 +1,9 @@
+# v0.7.4
+
+- Thank you [Shaun Lawrie](https://github.com/ShaunLawrie)!
+    - Fix function builder not running with latest PowerShellAI 
+    - Fix write-progress breaking notebooks 
+
 # v0.7.3
 
 - Thank you [Shaun Lawrie](https://github.com/ShaunLawrie)!
