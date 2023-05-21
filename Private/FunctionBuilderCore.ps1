@@ -177,10 +177,17 @@ function ConvertTo-AifbFunction {
         
         if($FallbackText) {
             Add-AifbLogMessage -Level "WRN" -Message "There is no function in this PowerShell code block: $Text"
-            return $FallbackText
-        } else {
-            Write-Error "There is no function in this PowerShell code block: $Text" -ErrorAction "Stop"
+            foreach($pattern in $script:FunctionExtractionPatterns) {
+                if($FallbackText -match $pattern.Regex) {
+                    return @{
+                        Name = $Matches[$pattern.FunctionNameGroup]
+                        Body = ($Matches[$pattern.FunctionBodyGroup] -replace '(?s)```.+', '' | Format-AifbFunction)
+                    }
+                }
+            }
         }
+
+        Write-Error "There is no function in the PowerShell code block returned by the LLM or in the fallback text provided as a backup. LLM: [$Text]`nFallback: [$FallbackText]" -ErrorAction "Stop"
     }
 }
 
@@ -359,8 +366,8 @@ function Test-AifbFunctionSemantics {
     Set-ChatSessionOption `
         -model $script:OpenAISettings.Model `
         -max_tokens $script:OpenAISettings.MaxTokens `
-        -temperature $script:OpenAISettings.SemanticReinforcement.Temperature
-    New-Chat -Content $script:OpenAISettings.SemanticReinforcement.SystemPrompt
+        -temperature $script:OpenAISettings.SemanticReinforcement.Temperature | Out-Null
+    New-Chat -Content $script:OpenAISettings.SemanticReinforcement.SystemPrompt | Out-Null
     
     $attempts = 0
     $maxAttempts = 4
@@ -419,8 +426,8 @@ function Initialize-AifbFunction {
     Set-ChatSessionOption `
         -model $script:OpenAISettings.Model `
         -max_tokens $script:OpenAISettings.MaxTokens `
-        -temperature $script:OpenAISettings.CodeWriter.Temperature
-    New-Chat -Content $script:OpenAISettings.CodeWriter.SystemPrompt -Verbose:$false
+        -temperature $script:OpenAISettings.CodeWriter.Temperature | Out-Null
+    New-Chat -Content $script:OpenAISettings.CodeWriter.SystemPrompt -Verbose:$false | Out-Null
 
     if($InitialFunction) {
         return $InitialFunction | ConvertTo-AifbFunction
@@ -471,8 +478,8 @@ function Optimize-AifbFunction {
                 Add-AifbLogMessage "Waiting for AI to correct any issues present in the script."
                 Set-ChatSessionOption -model $script:OpenAISettings.Model `
                     -max_tokens $script:OpenAISettings.MaxTokens `
-                    -temperature $script:OpenAISettings.CodeEditor.Temperature
-                New-Chat -Content $script:OpenAISettings.CodeEditor.SystemPrompt -Verbose:$false
+                    -temperature $script:OpenAISettings.CodeEditor.Temperature | Out-Null
+                New-Chat -Content $script:OpenAISettings.CodeEditor.SystemPrompt -Verbose:$false | Out-Null
                 $Function = Get-GPT4CompletionWithRetries -Content ($script:OpenAISettings.CodeEditor.Prompts.SyntaxCorrection -f $corrections.IssuesToCorrect, $Function.Body) | ConvertTo-AifbFunction -FallbackText $Function.Body
                 Write-AifbFunctionOutput -FunctionText $Function.Body -Prompt $Prompt
             }
@@ -481,6 +488,7 @@ function Optimize-AifbFunction {
             Write-AifbFunctionOutput -FunctionText $Function.Body -Prompt $Prompt
         } else {
             Add-AifbLogMessage "Function building is complete!"
+            Write-AifbFunctionOutput -FunctionText $Function.Body -Prompt $Prompt
             Start-Sleep -Seconds 3
             break
         }
