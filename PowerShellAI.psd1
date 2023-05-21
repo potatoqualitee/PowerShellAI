@@ -103,6 +103,7 @@ The PowerShell AI module integrates with the OpenAI API and let's you easily acc
         'gpt'
         'gpt4'
         'chat'
+        'pstok'
         'ieh'
         'explain'
         'ifb'
