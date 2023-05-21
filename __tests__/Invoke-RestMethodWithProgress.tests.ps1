@@ -48,6 +48,31 @@ Describe "Invoke-RestMethodWithProgress" -Tag InvokeRestMethodWithProgress {
             $errorRecord.Exception.Message | Should -BeLike "*'yeet' scheme is not supported*"
         }
 
+        It "should not use a background job in unsupported hosts" {
+            Mock Get-Host {
+                return @{
+                    Name = "UnitTestHost"
+                }
+            }
+
+            Mock Invoke-RestMethod {
+                return "a happy web response from a web server"
+            }
+
+            Mock Start-Job { }
+
+            $params = @{
+                "Method" = "GET";
+                "Uri" = "http://localhost";
+            }
+            
+            $response = Invoke-RestMethodWithProgress -Params $params
+            $response | Should -BeExactly "a happy web response from a web server"
+
+            Should -Invoke -CommandName Invoke-RestMethod -Times 1
+            Should -Invoke -CommandName Start-Job -Times 0
+        }
+
         Describe "Get-APIEstimatedResponseTime Tests" {
             It "should return default response time when there's no record for a specific endpoint" {
                 $responseTime = Get-APIEstimatedResponseTime -Method "POST" -Uri "http://localhost/new-endpoint"
