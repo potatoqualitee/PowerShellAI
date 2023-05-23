@@ -1,6 +1,6 @@
 Import-Module "$PSScriptRoot\..\PowerShellAI.psd1" -Force
 
-Describe "ConvertFrom-GPTMarkdownTable" {
+Describe "ConvertFrom-GPTMarkdownTable" -Tag GPTMarkdownTable {
     It "ConvertFrom-GPTMarkdownTable" {
         $markdown = @"
 | p1 | p2 | p3 |
@@ -8,7 +8,7 @@ Describe "ConvertFrom-GPTMarkdownTable" {
 | 1 | 2 | 3 |
 | 4 | 5 | 6 |
 "@
-        $actual = ConvertFrom-GPTMarkdownTable $markdown
+        $actual = ConvertFrom-GPTMarkdownTable $markdown.Trim()
         
         $actual | Should -Not -BeNullOrEmpty
 
@@ -16,17 +16,18 @@ Describe "ConvertFrom-GPTMarkdownTable" {
         $names = $actual[0].psobject.Properties.Name
 
         $names.Count | Should -Be 3
-        $names[0] | Should -Be 'p1 '
-        $names[1] | Should -Be 'p2 '
-        $names[2] | Should -Be 'p3 '
+        $names[0] | Should -Be 'p1'
+        $names[1] | Should -Be 'p2'
+        $names[2] | Should -Be 'p3'
 
-        $actual[0].'p1 ' | Should -Be 1
-        $actual[0].'p2 ' | Should -Be 2
-        $actual[0].'p3 ' | Should -Be 3
 
-        $actual[1].'p1 ' | Should -Be 4
-        $actual[1].'p2 ' | Should -Be 5
-        $actual[1].'p3 ' | Should -Be 6
+        $actual[0].'p1' | Should -Be 1
+        $actual[0].'p2' | Should -Be 2
+        $actual[0].'p3' | Should -Be 3
+
+        $actual[1].'p1' | Should -Be 4
+        $actual[1].'p2' | Should -Be 5
+        $actual[1].'p3' | Should -Be 6
 
     }
 
@@ -50,22 +51,22 @@ Celery | 16 | 0 | 3 | 0
         $names = $actual[0].psobject.Properties.Name
 
         $names.Count | Should -Be 5
-        $names[0] | Should -Be 'Vegetable '
-        $names[1] | Should -Be 'Calories '
-        $names[2] | Should -Be 'Protein (g) '
-        $names[3] | Should -Be 'Carbs (g) '
+        $names[0] | Should -Be 'Vegetable'
+        $names[1] | Should -Be 'Calories'
+        $names[2] | Should -Be 'Protein (g)'
+        $names[3] | Should -Be 'Carbs (g)'
         $names[4] | Should -Be 'Fat (g)'
 
-        $actual[0].'Vegetable ' | Should -Be 'Carrot '
-        $actual[0].'Calories ' | Should -Be 41
-        $actual[0].'Protein (g) ' | Should -Be 1
-        $actual[0].'Carbs (g) ' | Should -Be 9
+        $actual[0].'Vegetable' | Should -Be 'Carrot'
+        $actual[0].'Calories' | Should -Be 41
+        $actual[0].'Protein (g)' | Should -Be 1
+        $actual[0].'Carbs (g)' | Should -Be 9
         $actual[0].'Fat (g)' | Should -Be 0
 
-        $actual[-1].'Vegetable ' | Should -Be 'Celery '
-        $actual[-1].'Calories ' | Should -Be 16
-        $actual[-1].'Protein (g) ' | Should -Be 0
-        $actual[-1].'Carbs (g) ' | Should -Be 3
+        $actual[-1].'Vegetable' | Should -Be 'Celery'
+        $actual[-1].'Calories' | Should -Be 16
+        $actual[-1].'Protein (g)' | Should -Be 0
+        $actual[-1].'Carbs (g)' | Should -Be 3
         $actual[-1].'Fat (g)' | Should -Be 0
     }
 
@@ -88,17 +89,17 @@ Celery | 16 | 0 | 3 | 0
         $names = $actual[0].psobject.Properties.Name
 
         $names.Count | Should -Be 3
-        $names[0] | Should -Be 'President '
-        $names[1] | Should -Be 'Term '
-        $names[2] | Should -Be 'Vice President '
+        $names[0] | Should -Be 'President'
+        $names[1] | Should -Be 'Term'
+        $names[2] | Should -Be 'Vice President'
 
-        $actual[0].'President ' | Should -Be 'George Washington '
-        $actual[0].'Term ' | Should -Be '1789-1797 '
-        $actual[0].'Vice President ' | Should -Be 'John Adams '
+        $actual[0].'President' | Should -Be 'George Washington'
+        $actual[0].'Term' | Should -Be '1789-1797'
+        $actual[0].'Vice President' | Should -Be 'John Adams'
 
-        $actual[-1].'President ' | Should -Be 'James Monroe '
-        $actual[-1].'Term ' | Should -Be '1817-1825 '
-        $actual[-1].'Vice President ' | Should -Be 'Daniel D. Tompkins '
+        $actual[-1].'President' | Should -Be 'James Monroe'
+        $actual[-1].'Term' | Should -Be '1817-1825'
+        $actual[-1].'Vice President' | Should -Be 'Daniel D. Tompkins'
     }
 
     It "ConvertFrom-GPTMarkdownTable - with whitespace" {
@@ -118,16 +119,16 @@ Celery | 16 | 0 | 3 | 0
 
         $names = $actual[0].psobject.Properties.Name
         $names.Count | Should -Be 3
-        $names[0] | Should -Be 'Column 1 '
-        $names[1] | Should -Be 'Column 2 '
-        $names[2] | Should -Be 'Column 3 '
+        $names[0] | Should -Be 'Column 1'
+        $names[1] | Should -Be 'Column 2'
+        $names[2] | Should -Be 'Column 3'
 
-        $actual[0].'Column 1 ' | Should -Be 'Cell 1   '
-        $actual[0].'Column 2 ' | Should -Be 'Cell 2   '
-        $actual[0].'Column 3 ' | Should -Be 'Cell 3   '
+        $actual[0].'Column 1' | Should -Be 'Cell 1  '
+        $actual[0].'Column 2' | Should -Be 'Cell 2  '
+        $actual[0].'Column 3' | Should -Be 'Cell 3  '
 
-        $actual[-1].'Column 1 ' | Should -Be 'Cell 7   '
-        $actual[-1].'Column 2 ' | Should -Be 'Cell 8   '
-        $actual[-1].'Column 3 ' | Should -Be 'Cell 9   '
+        $actual[-1].'Column 1' | Should -Be 'Cell 7  '
+        $actual[-1].'Column 2' | Should -Be 'Cell 8  '
+        $actual[-1].'Column 3' | Should -Be 'Cell 9  '
     }
 }
