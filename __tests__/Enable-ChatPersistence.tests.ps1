@@ -1,3 +1,5 @@
+Import-Module "$PSScriptRoot\..\PowerShellAI.psd1" -Force
+
 Describe 'Enable-ChatPersistence' -Tag ChatPersistence {
 
     AfterEach {

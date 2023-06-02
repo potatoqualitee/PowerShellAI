@@ -1,3 +1,4 @@
+Import-Module "$PSScriptRoot\..\PowerShellAI.psd1" -Force
 
 Describe 'Get-ChatPersistence' -Tag ChatPersistence {
     It 'tests the function Get-ChatPersistence exists' {

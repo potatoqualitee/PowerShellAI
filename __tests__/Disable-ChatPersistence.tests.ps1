@@ -1,9 +1,10 @@
+Import-Module "$PSScriptRoot\..\PowerShellAI.psd1" -Force
+
 Describe 'Disable-ChatPersistence' -Tag ChatPersistence {
 
     BeforeEach {
         Reset-ChatSessionOptions
     }
-    
 
     It 'tests the function Disable-ChatPersistence exists' {
         $actual = Get-Command Disable-ChatPersistence -ErrorAction SilentlyContinue
