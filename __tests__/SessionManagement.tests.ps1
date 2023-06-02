@@ -12,14 +12,10 @@ Describe "Session Management" -Tag SessionManagement {
         }
     }
 
-    BeforeEach {
-        # Set-ChatSessionPath "TestDrive:\PowerShell\ChatGPT"
-    }
-
     AfterEach {
         Reset-ChatSessionPath
+        Reset-ChatSessionOptions
         Clear-ChatMessages
-        # Get-ChatSessionPath | Remove-Item -Recurse -force
     }
 
     AfterAll {
@@ -383,5 +379,44 @@ Describe "Session Management" -Tag SessionManagement {
 
         $result[8].role | Should -BeExactly 'assistant'
         $result[8].content | Should -BeExactly 'assistant test 3'
+    }
+
+    It "tests Export-ChatSession respects ChatPersistence flag" {
+        Set-ChatSessionPath "TestDrive:\PowerShell\ChatGPT"
+        Get-ChatSessionPath | Get-ChildItem | Remove-Item -Recurse -Force -ErrorAction SilentlyContinue        
+
+        Add-ChatMessage -Message ([PSCustomObject]@{
+            role    = 'assistant'
+            content = 'assistant test 2'
+        })
+        
+        Export-ChatSession
+        
+        (Get-ChatSessionPath | Get-ChildItem ).Count | Should -Be 1
+        
+        Get-ChatSessionPath | Get-ChildItem | Remove-Item -Recurse -Force -ErrorAction SilentlyContinue
+
+        Disable-ChatPersistence
+
+        Add-ChatMessage -Message ([PSCustomObject]@{
+            role    = 'assistant'
+            content = 'assistant test 2'
+        })
+        
+        Export-ChatSession
+        
+        (Get-ChatSessionPath | Get-ChildItem ).Count | Should -Be 0        
+
+        Enable-ChatPersistence
+        Get-ChatSessionPath | Get-ChildItem | Remove-Item -Recurse -Force -ErrorAction SilentlyContinue        
+
+        Add-ChatMessage -Message ([PSCustomObject]@{
+            role    = 'assistant'
+            content = 'assistant test 2'
+        })
+        
+        Export-ChatSession
+        
+        (Get-ChatSessionPath | Get-ChildItem ).Count | Should -Be 1
     }
 }
