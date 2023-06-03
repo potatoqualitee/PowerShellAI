@@ -1,3 +1,5 @@
+# v0.7.6
+
 # v0.7.5
 
 - Fixed spaces in property names [#141](https://github.com/dfinke/PowerShellAI/issues/141)
