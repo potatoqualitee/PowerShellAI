@@ -37,7 +37,8 @@ function Set-APIResponseTime {
 
 function Invoke-RestMethodWithProgress {
     param (
-        [hashtable] $Params
+        [hashtable] $Params,
+        $ProgressActivity = "Thinking..."
     )
 
     # Some hosts can't support background jobs. It's best to opt-in to this feature by using a list of supported hosts
@@ -70,10 +71,10 @@ function Invoke-RestMethodWithProgress {
             if($logPercent -eq 100) {
                 $status = "API is taking longer than expected"
             }
-            Write-Progress -Id 1 -Activity "Invoking AI" -Status $status -PercentComplete $logPercent
+            Write-Progress -Id 1 -Activity $ProgressActivity -Status $status -PercentComplete $logPercent
             Start-Sleep -Milliseconds 50
         }
-        Write-Progress -Id 1 -Activity "Invoking AI" -Completed
+        Write-Progress -Id 1 -Activity $ProgressActivity -Completed
 
         # If Invoke-RestMethod failed in the job rethrow this up to the caller so it's like a normal web error
         if($job.State -eq "Failed") {
