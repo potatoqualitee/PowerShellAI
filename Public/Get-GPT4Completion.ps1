@@ -1,24 +1,3 @@
-$Script:ChatSessionOptions = @{
-    'model'             = 'gpt-4'
-    'temperature'       = 0.0
-    'max_tokens'        = 256
-    'top_p'             = 1.0
-    'frequency_penalty' = 0
-    'presence_penalty'  = 0
-    'stop'              = $null
-}
-
-$Script:AzureOpenAIOptions = @{
-    Endpoint       = 'not set'
-    DeploymentName = 'not set'
-    ApiVersion     = 'not set'
-}
-
-$Script:ChatAPIProvider = 'OpenAI'
-$Script:ChatInProgress = $false
-
-[System.Collections.ArrayList]$Script:ChatMessages = @()
-
 function Get-AzureOpenAIOptions {
     [CmdletBinding()]
     param()
@@ -197,6 +176,8 @@ function Reset-ChatSessionOptions {
         'presence_penalty'  = 0
         'stop'              = $null
     }
+
+    Enable-ChatPersistence
 }
 
 function Clear-ChatMessages {

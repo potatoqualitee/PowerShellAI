@@ -181,6 +181,8 @@ function Export-ChatSession {
     [CmdletBinding()]
     param ()
 
+    if ((Get-ChatPersistence) -eq $false) { return }
+
     $sessionPath = Get-ChatSessionPath
     if (-not (Test-Path $sessionPath)) {
         New-Item -ItemType Directory -Path $sessionPath -Force | Out-Null

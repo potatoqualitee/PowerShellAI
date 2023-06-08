@@ -1,3 +1,8 @@
+# v0.7.6
+
+- Implement mechanism to turn on/off persistence of chat message
+- Add `Get-CompletionFromMessages` so you can get messages can be passes standalone to get the completions
+
 # v0.7.5
 
 - Fixed spaces in property names [#141](https://github.com/dfinke/PowerShellAI/issues/141)
