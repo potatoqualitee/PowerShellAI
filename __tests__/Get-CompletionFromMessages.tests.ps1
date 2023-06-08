@@ -1,6 +1,14 @@
 Import-Module $PSScriptRoot\..\PowerShellAI.psd1 -Force
 
 Describe "Get-CompletionFromMessages" -Tag "Get-CompletionFromMessages" {
+    BeforeAll {
+        $script:savedKey = $env:OpenAIKey
+        $env:OpenAIKey = 'sk-1234567890'
+    }
+    
+    AfterAll {
+        $env:OpenAIKey = $savedKey
+    }
 
     It "tests the function Get-CompletionFromMessages exists" {
         $actual = Get-Command Get-CompletionFromMessages -ErrorAction SilentlyContinue
