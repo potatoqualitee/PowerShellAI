@@ -9,10 +9,12 @@ Describe "Invoke-RestMethodWithProgress" -Tag InvokeRestMethodWithProgress {
         BeforeEach {
             Reset-APIEstimatedResponseTimes
             Push-Location -StackName "MOCK-IRMWP" -Path $PSScriptRoot
+            New-PSDrive -Name "MOCK-IRMWP" -PSProvider "FileSystem" -Root $env:TEMP
         }
 
         AfterEach {
             Pop-Location -StackName "MOCK-IRMWP" -ErrorAction "SilentlyContinue"
+            Remove-PSDrive -Name "MOCK-IRMWP" -ErrorAction "SilentlyContinue"
         }
 
         It "should return the known response if the API call is successful" {
@@ -53,7 +55,7 @@ Describe "Invoke-RestMethodWithProgress" -Tag InvokeRestMethodWithProgress {
                 "Uri" = "http://localhost";
             }
 
-            Set-Location "Temp:\"
+            Set-Location "MOCK-IRMWP:\"
             
             $response = Invoke-RestMethodWithProgress -Params $params
             $response | Should -BeExactly "a happy web response from a web server"
