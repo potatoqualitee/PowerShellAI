@@ -9,7 +9,7 @@ Describe "Invoke-RestMethodWithProgress" -Tag InvokeRestMethodWithProgress {
         BeforeEach {
             Reset-APIEstimatedResponseTimes
             Push-Location -StackName "MOCK-IRMWP" -Path $PSScriptRoot
-            New-PSDrive -Name "MOCK-IRMWP" -PSProvider "FileSystem" -Root $env:TEMP
+            New-PSDrive -Name "MOCK-IRMWP" -PSProvider "FileSystem" -Root $PSScriptRoot
         }
 
         AfterEach {
