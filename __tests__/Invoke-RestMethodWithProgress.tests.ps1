@@ -8,6 +8,11 @@ Describe "Invoke-RestMethodWithProgress" -Tag InvokeRestMethodWithProgress {
 
         BeforeEach {
             Reset-APIEstimatedResponseTimes
+            New-PSDrive -Name "MOCK-IRMWP" -PSProvider "FileSystem" -Root $PSScriptRoot
+        }
+
+        AfterEach {
+            Remove-PSDrive -Name "MOCK-IRMWP" -ErrorAction "SilentlyContinue"
         }
 
         It "should return the known response if the API call is successful" {
@@ -29,6 +34,56 @@ Describe "Invoke-RestMethodWithProgress" -Tag InvokeRestMethodWithProgress {
             
             $response = Invoke-RestMethodWithProgress -Params $params
             $response | Should -BeExactly "a happy web response from a web server"
+        }
+
+        It "should work when run from a psdrive" {
+
+            Mock Start-Job {
+                return & $script:StartJobCommand { }
+            }
+            
+            Mock Receive-Job {
+                return @{
+                    Response = "a happy web response from a web server"
+                }
+            }
+
+            $params = @{
+                "Method" = "GET";
+                "Uri" = "http://localhost";
+            }
+
+            Push-Location -StackName "MOCK-IRMWP"
+            Set-Location "MOCK-IRMWP:\"
+            
+            $response = Invoke-RestMethodWithProgress -Params $params
+            $response | Should -BeExactly "a happy web response from a web server"
+            
+            Pop-Location -StackName "MOCK-IRMWP"
+        }
+
+        It "should work when run from a non-filesystem provider" {
+            
+            Mock Invoke-RestMethod {
+                return "a happy web response from a web server"
+            }
+
+            Mock Start-Job { }
+
+            $params = @{
+                "Method" = "GET";
+                "Uri" = "http://localhost";
+            }
+
+            Push-Location -StackName "MOCK-IRMWP"
+            Set-Location "HKCU:\"
+            
+            $response = Invoke-RestMethodWithProgress -Params $params
+            $response | Should -BeExactly "a happy web response from a web server"
+            Should -Invoke -CommandName Invoke-RestMethod -Times 1
+            Should -Invoke -CommandName Start-Job -Times 0
+            
+            Pop-Location -StackName "MOCK-IRMWP"
         }
 
         It "should throw if the API call fails" {
