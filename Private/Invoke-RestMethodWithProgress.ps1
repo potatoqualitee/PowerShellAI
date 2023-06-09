@@ -56,7 +56,7 @@ function Invoke-RestMethodWithProgress {
 
         Push-Location -StackName "RestMethodWithProgress"
         if($currentLocation.Path -ne $currentLocation.ProviderPath) {
-            Set-Location $here.ProviderPath
+            Set-Location $currentLocation.ProviderPath
         }
         
         $job = Start-Job {
@@ -95,8 +95,10 @@ function Invoke-RestMethodWithProgress {
         throw $_
     } finally {
         Pop-Location -StackName "RestMethodWithProgress" -ErrorAction "SilentlyContinue"
-        Stop-Job $job -ErrorAction "SilentlyContinue"
-        Remove-Job $job -Force -ErrorAction "SilentlyContinue"
+        if($null -ne $job) {
+            Stop-Job $job -ErrorAction "SilentlyContinue"
+            Remove-Job $job -Force -ErrorAction "SilentlyContinue"
+        }
         try { [Console]::CursorVisible = $true }
         catch [System.IO.IOException] { <# unit tests don't have a console #> }
     }
