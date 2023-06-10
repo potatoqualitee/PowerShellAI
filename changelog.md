@@ -1,3 +1,9 @@
+# v0.7.7
+
+Thank you [Shaun Lawrie](https://github.com/ShaunLawrie)
+- Fix GPT fails when run from a PSDrive
+    - Reported by Jeff Hicks - https://github.com/dfinke/PowerShellAI/issues/148
+
 # v0.7.6
 
 - Implement mechanism to turn on/off persistence of chat message
