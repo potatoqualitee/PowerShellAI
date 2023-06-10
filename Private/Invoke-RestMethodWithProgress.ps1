@@ -41,8 +41,10 @@ function Invoke-RestMethodWithProgress {
         $ProgressActivity = "Thinking..."
     )
 
+    $currentLocation = Get-Location
+
     # Some hosts can't support background jobs. It's best to opt-in to this feature by using a list of supported hosts
-    if($script:SupportedHosts -notcontains (Get-Host).Name) {
+    if($script:SupportedHosts -notcontains (Get-Host).Name -or $currentLocation.Provider.Name -ne "FileSystem") {
         return Invoke-RestMethod @Params
     }
 
@@ -51,6 +53,11 @@ function Invoke-RestMethodWithProgress {
     try {
         try { [Console]::CursorVisible = $false }
         catch [System.IO.IOException] { <# unit tests don't have a console #> }
+
+        Push-Location -StackName "RestMethodWithProgress"
+        if($currentLocation.Path -ne $currentLocation.ProviderPath) {
+            Set-Location $currentLocation.ProviderPath
+        }
         
         $job = Start-Job {
             $restParameters = $using:Params
@@ -87,8 +94,11 @@ function Invoke-RestMethodWithProgress {
     } catch {
         throw $_
     } finally {
-        Stop-Job $job -ErrorAction "SilentlyContinue"
-        Remove-Job $job -Force -ErrorAction "SilentlyContinue"
+        Pop-Location -StackName "RestMethodWithProgress" -ErrorAction "SilentlyContinue"
+        if($null -ne $job) {
+            Stop-Job $job -ErrorAction "SilentlyContinue"
+            Remove-Job $job -Force -ErrorAction "SilentlyContinue"
+        }
         try { [Console]::CursorVisible = $true }
         catch [System.IO.IOException] { <# unit tests don't have a console #> }
     }
