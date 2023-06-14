@@ -1,3 +1,9 @@
+# v0.7.8
+- Added example: `Read-ExcelAndMultiplyUnits.ps1 `
+
+Uses the `ImportExcel` `Get-ExcelFileSchema` to read the schema of the Excel file, then creates GPT chat messages for the user and system, the prompt `read the excel file
+multiply the units by 20%`. Finally, it outputs the PowerShell code that reads the Excel file, multiplies the units by 20%, and formats the output as a table.
+
 # v0.7.7
 
 Thank you [Shaun Lawrie](https://github.com/ShaunLawrie)
