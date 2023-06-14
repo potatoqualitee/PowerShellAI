@@ -27,9 +27,22 @@ Describe "ChatSessionOptions" -Tag ChatSessionOptions {
         $actual.stop | Should -BeNullOrEmpty
     }
 
-    It 'Test Set-ChatSessionOption' {
+    It 'Test Set-ChatSessionOption exists' {
         $actual = Get-Command Set-ChatSessionOption -ErrorAction SilentlyContinue
         $actual | Should -Not -BeNullOrEmpty
+    }
+
+    It 'Test Set-ChatSessionOption model param has this set of values' {
+        $actual = Get-Command Set-ChatSessionOption -ErrorAction SilentlyContinue
+
+        $values = $actual.Parameters['model'].Attributes.ValidValues
+        $values.Count | Should -Be 5
+
+        $values[0] | Should -BeExactly 'gpt-4'
+        $values[1] | Should -BeExactly 'gpt-4-0613'
+        $values[2] | Should -BeExactly 'gpt-3.5-turbo'
+        $values[3] | Should -BeExactly 'gpt-3.5-turbo-16k'
+        $values[4] | Should -BeExactly 'gpt-3.5-turbo-0613'        
     }
 
     It 'Test Set-ChatSessionOption model' {
@@ -229,19 +242,19 @@ Describe "ChatSessionOptions" -Tag ChatSessionOptions {
     It 'Test Get-ChatAzureOpenAIURI throws if Endpoint is not set' {
         Set-AzureOpenAIOptions -DeploymentName 'openai' -ApiVersion '2021-05-01'
 
-        {Get-ChatAzureOpenAIURI} | Should -Throw -ExpectedMessage 'Azure Open AI Endpoint not set'
+        { Get-ChatAzureOpenAIURI } | Should -Throw -ExpectedMessage 'Azure Open AI Endpoint not set'
     }
 
     It 'Test Get-ChatAzureOpenAIURI throws if DeploymentName is not set' {
         Set-AzureOpenAIOptions -Endpoint 'https://westus.api.cognitive.microsoft.com' -ApiVersion '2021-05-01'
 
-        {Get-ChatAzureOpenAIURI} | Should -Throw -ExpectedMessage 'Azure Open AI DeploymentName not set'
+        { Get-ChatAzureOpenAIURI } | Should -Throw -ExpectedMessage 'Azure Open AI DeploymentName not set'
     }
 
     It 'Test Get-ChatAzureOpenAIURI throws if ApiVersion is not set' {
         Set-AzureOpenAIOptions -Endpoint 'https://westus.api.cognitive.microsoft.com' -DeploymentName 'openai'
 
-        {Get-ChatAzureOpenAIURI} | Should -Throw -ExpectedMessage 'Azure Open AI ApiVersion not set'
+        { Get-ChatAzureOpenAIURI } | Should -Throw -ExpectedMessage 'Azure Open AI ApiVersion not set'
     }
 
     It 'Test Set-ChatAPIProvider function exists' {
