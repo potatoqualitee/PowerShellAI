@@ -109,30 +109,33 @@ function copilot {
 
         Write-Codeblock -Text $runnable -ShowLineNumbers -SyntaxHighlight
 
-        $userInput = CustomReadHost
+        do {
+            $userInput = CustomReadHost
         
-        switch ($userInput) {
-            0 {
+            switch ($userInput) {
+                0 {
                 (Get-Runnable -result $result) | Invoke-Expression
-            }
-            1 {
-                explain -Value (Get-Runnable -result $result)
-            }
-            2 {
-                Get-Runnable -result $result | Set-Clipboard
-            }
-            3 {
-                if (Test-VSCodeInstalled) {
-                    (Get-Runnable $result) | code -                
                 }
-                else {
+                1 {
+                    explain -Value (Get-Runnable -result $result)
+                    write-output "`n"
+                }
+                2 {
+                    Get-Runnable -result $result | Set-Clipboard
+                }
+                3 {
+                    if (Test-VSCodeInstalled) {
+                    (Get-Runnable $result) | code -                
+                    }
+                    else {
+                        "Not running"
+                    }
+                }
+                default {
                     "Not running"
                 }
             }
-            default {
-                "Not running"
-            }
-        }
+        } while ($userInput -eq 1)
     }
 }
 

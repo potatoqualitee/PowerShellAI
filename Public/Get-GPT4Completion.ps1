@@ -140,7 +140,7 @@ function Set-ChatSessionOption {
     #>
     [CmdletBinding()]
     param(
-        [ValidateSet('gpt-4', 'gpt-3.5-turbo')]
+        [ValidateSet('gpt-4', 'gpt-4-0613', 'gpt-3.5-turbo', 'gpt-3.5-turbo-16k', 'gpt-3.5-turbo-0613')]
         $model,
         $max_tokens = 256,
         $temperature = 0,
