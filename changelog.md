@@ -1,3 +1,8 @@
+# v0.7.9
+- Thank you [merlinfrombelgium](https://github.com/merlinfrombelgium)
+    - Introduce re-prompting after explain is chosen in copilot function 
+- Updated to latest models for interacting with GPT
+
 # v0.7.8
 - Added example: `Read-ExcelAndMultiplyUnits.ps1 `
 
