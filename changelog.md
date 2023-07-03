@@ -1,3 +1,7 @@
+# v0.8.0
+
+- Fix "[] is too short - 'messages'" https://github.com/dfinke/PowerShellAI/issues/163
+
 # v0.7.9
 - Thank you [merlinfrombelgium](https://github.com/merlinfrombelgium)
     - Introduce re-prompting after explain is chosen in copilot function 
