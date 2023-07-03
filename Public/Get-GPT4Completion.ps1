@@ -392,10 +392,9 @@ function New-Chat {
 
     if (![string]::IsNullOrEmpty($Content)) {
         New-ChatSystemMessage -Content $Content
+        Get-GPT4Response
     }
     
-    # Export-ChatSession
-    Get-GPT4Response
 }
 
 function Test-ChatInProgress {
