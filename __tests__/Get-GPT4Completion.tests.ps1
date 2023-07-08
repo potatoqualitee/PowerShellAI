@@ -104,6 +104,19 @@ Describe "Get-GPT4Completion" -Tag GPT4Completion {
         $keys.Contains("Content") | Should -BeTrue
     }
 
+    It 'Test New-ChatMessageTemplate Role paramater has this set' {
+        $actual = Get-Command New-ChatMessageTemplate
+
+        $validateSet = $actual.Parameters.Role.Attributes | Where-Object { $_ -is [System.Management.Automation.ValidateSetAttribute] }
+        $validateSet | Should -Not -BeNullOrEmpty
+        $validateSet.ValidValues.Count | Should -Be 4
+
+        $validateSet.ValidValues[0] | Should -BeExactly 'user'
+        $validateSet.ValidValues[1] | Should -BeExactly 'system'
+        $validateSet.ValidValues[2] | Should -BeExactly 'assistant'
+        $validateSet.ValidValues[3] | Should -BeExactly 'function'
+    }
+
     It 'Test if Add-ChatMessage has these parameters' {
         $actual = Get-Command Add-ChatMessage
         
@@ -137,8 +150,13 @@ Describe "Get-GPT4Completion" -Tag GPT4Completion {
                 content = 'assistant test'
             })
 
+        Add-ChatMessage -Message ([PSCustomObject]@{
+                role    = 'function'
+                content = 'function test'
+            })
+
         $actual = Get-ChatMessages
-        $actual.Count | Should -Be 3
+        $actual.Count | Should -Be 4
 
         $actual[0].role | Should -Be 'system'
         $actual[0].content | Should -Be 'system test'
@@ -148,6 +166,9 @@ Describe "Get-GPT4Completion" -Tag GPT4Completion {
 
         $actual[2].role | Should -Be 'assistant'
         $actual[2].content | Should -Be 'assistant test'
+
+        $actual[3].role | Should -Be 'function'
+        $actual[3].content | Should -Be 'function test'
     }
 
     It 'Test New-ChatMessageTemplate creates and populates template' {

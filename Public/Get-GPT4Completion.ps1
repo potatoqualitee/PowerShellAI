@@ -225,7 +225,7 @@ function New-ChatMessageTemplate {
     #>
     [CmdletBinding()]
     param( 
-        [ValidateSet('user', 'system', 'assistant')]
+        [ValidateSet('user', 'system', 'assistant', 'function')]
         $Role,
         $Content
     )

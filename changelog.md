@@ -1,3 +1,7 @@
+# v0.8.1
+
+- Added a new role `function` for messages
+
 # v0.8.0
 
 - Fix "[] is too short - 'messages'" https://github.com/dfinke/PowerShellAI/issues/163
