@@ -1,5 +1,7 @@
 # v0.8.1
 
+- Thank you [Shaun Lawrie](https://github.com/ShaunLawrie)
+    - Fixed progress bars for users with proxies configured https://github.com/dfinke/PowerShellAI/pull/171
 - Added a new role `function` for messages
 
 # v0.8.0
