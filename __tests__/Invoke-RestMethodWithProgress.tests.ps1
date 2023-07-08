@@ -154,7 +154,7 @@ Describe "Invoke-RestMethodWithProgress" -Tag InvokeRestMethodWithProgress {
             Should -Invoke -CommandName Start-Job -Times 0
         }
 
-        It "should not use a background job if a defaultproxy is configured for the current sessions " {
+        It "should not use a background job if a defaultproxy is configured for the current session" {
             Mock Get-Host {
                 return @{
                     Name = "ConsoleHost"
