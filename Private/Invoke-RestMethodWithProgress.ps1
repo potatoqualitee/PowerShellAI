@@ -72,6 +72,7 @@ function Invoke-RestMethodWithProgress {
         catch [System.IO.IOException] { <# unit tests don't have a console #> }
 
         Push-Location -StackName "RestMethodWithProgress"
+        $currentLocation = Get-Location
         if($currentLocation.Path -ne $currentLocation.ProviderPath) {
             Set-Location $currentLocation.ProviderPath
         }
