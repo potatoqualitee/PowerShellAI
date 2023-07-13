@@ -1,5 +1,8 @@
 # v0.8.2
-- Added $name to `New-ChatMessageTemplate`. Required when a message has the role of function
+- Thank you [Darren Robinson](https://github.com/darrenjrobinson)
+    - max_tokens increased to what Azure OpenAI supports https://github.com/dfinke/PowerShellAI/issues/173
+
+- Added `$name` to `New-ChatMessageTemplate`. Required when a message has the role of function
 
 # v0.8.1
 
