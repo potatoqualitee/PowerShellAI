@@ -1,3 +1,6 @@
+# v0.8.2
+- Added $name to `New-ChatMessageTemplate`. Required when a message has the role of function
+
 # v0.8.1
 
 - Thank you [Shaun Lawrie](https://github.com/ShaunLawrie)
