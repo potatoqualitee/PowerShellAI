@@ -1,3 +1,8 @@
+# v0.9.0
+
+- Added requirement to the `PowerShellAI.Functions` module
+    👉 https://github.com/dfinke/PowerShellAI.Functions
+
 # v0.8.2
 - Thank you [Darren Robinson](https://github.com/darrenjrobinson)
     - max_tokens increased to what Azure OpenAI supports https://github.com/dfinke/PowerShellAI/issues/173
