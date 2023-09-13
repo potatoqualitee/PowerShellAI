@@ -111,6 +111,33 @@ Here are some videos of `PowerShellAI` in action:
 
 ## What it looks like
 
+### Setting AzureOpenAI as the default chat API provider
+```powershell
+set-chatAPIProvider AzureOpenAI
+```
+
+```powershell
+# Setting AzureOpenAI parameters
+Set-AzureOpenAI -ApiKey 'API Key' -Endpoint https://endpoint.azure-api.net -DeploymentName gpt-35-turbo-16k -ApiVersion 2023-03-15-preview
+```
+
+### Setting OpenAI as the default chat API provider
+```powershell
+Set-ChatAPIProvider OpenAI
+```
+
+```powershell
+# Fetch 'OpenAIKey' which is stored in the System environment variables
+$pass = [Environment]::GetEnvironmentVariable('OpenAIKey', 'Machine')
+```
+
+```powershell
+# Set 'OpenAIKey'
+Set-OpenAIKey -Key ($pass | ConvertTo-SecureString -AsPlainText -Force)
+```
+
+***Note:*** One of the above chat API provider has to be set before executing any of the below commands.
+
 > ***Note:*** You can use the `gpt` alias for `Get-GPT3Completion`
 
 ```powershell
