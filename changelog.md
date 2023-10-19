@@ -1,5 +1,10 @@
 # v0.9.1
 
+- Add `Get-ChatCompletion` to the list to support Azure Open AI
+- Add function `ConvertTo-JsonL`
+
+# v0.9.1
+
 - Remove `Get-ChatCompletion` from `psd1`. It lives in `PowerShellAI.Functions`
 
 # v0.9.0
