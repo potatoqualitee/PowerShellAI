@@ -33,45 +33,45 @@ Describe "ConvertTo-JsonL" -Tag 'ConvertTo-JsonL' {
         $actual | Should -Not -BeNullOrEmpty
         $actual | Should -BeOfType [string]
 
-        $result=$actual.Split([System.Environment]::NewLine)
+        $result = $actual.Split([System.Environment]::NewLine)
 
         $result.Count | Should -Be 2
         $result[0] | Should -Be '{"Name":"Test","Value":"Test"}'
     }
 
-    #     It 'Tests ConvertTo-JsonL handles more than one object' {
-    #         $actual = ConvertTo-JsonL -InputObject @(
-    #             @{Name = 'Test'; Value = 'Test' }
-    #             @{Name = 'Test2'; Value = 'Test2' }
-    #         )
+    It 'Tests ConvertTo-JsonL handles more than one object' {
+        $actual = ConvertTo-JsonL -InputObject @(
+            [Ordered]@{Name = 'Test'; Value = 'Test' }
+            [Ordered]@{Name = 'Test2'; Value = 'Test2' }
+        )
 
-    #         $expected = @"
-    # {"Name":"Test","Value":"Test"}
-    # {"Name":"Test2","Value":"Test2"}
+            $actual | Should -Not -BeNullOrEmpty
+            $actual | Should -BeOfType [string]
 
-    # "@
-    #         $actual | Should -Not -BeNullOrEmpty
-    #         $actual | Should -BeOfType [string]
-    #         $actual | Should -Be $expected
-    #     }
+            $result = $actual.Split([System.Environment]::NewLine)
 
-    #     It 'Tests ConvertTo-JsonL handles converted csv' {
+            $result.Count | Should -Be 3
+            $result[0] | Should -Be '{"Name":"Test","Value":"Test"}'
+            $result[1] | Should -Be '{"Name":"Test2","Value":"Test2"}'
 
-    #         $data = ConvertFrom-Csv @"
-    # Name,Value
-    # Test,Test
-    # Test2,Test2
-    # "@
-    #         $actual = ConvertTo-JsonL -InputObject $data
+        }
 
-    #         $expected = @"
-    # {"Name":"Test","Value":"Test"}
-    # {"Name":"Test2","Value":"Test2"}
+        It 'Tests ConvertTo-JsonL handles converted csv' {
 
-    # "@
+            $data = ConvertFrom-Csv @"
+Name,Value
+Test,Test
+Test2,Test2
+"@
+            $actual = ConvertTo-JsonL -InputObject $data
         
-    #         $actual | Should -Not -BeNullOrEmpty
-    #         $actual | Should -BeOfType [string]
-    #         $actual | Should -Be $expected
-    #     }        
+            $actual | Should -Not -BeNullOrEmpty
+            $actual | Should -BeOfType [string]
+
+            $result = $actual.Split([System.Environment]::NewLine)
+            
+            $result.Count | Should -Be 3
+            $result[0] | Should -Be '{"Name":"Test","Value":"Test"}'
+            $result[1] | Should -Be '{"Name":"Test2","Value":"Test2"}'
+        }
 }
