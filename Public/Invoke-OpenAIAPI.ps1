@@ -56,7 +56,7 @@ function Invoke-OpenAIAPI {
     elseif ((Get-ChatAPIProvider) -eq 'AzureOpenAI') {
         $callingFunction = (Get-PSCallStack)[1].FunctionName
         # if($callingFunction -ne 'Get-GPT4Completion'){
-        if ($callingFunction -ne 'Get-GPT4Response') {
+        if ($callingFunction -notin 'Get-GPT4Response', "Get-ChatCompletion") {
             $msg = "$callingFunction is not supported by Azure OpenAI. Use 'Set-ChatAPIProvider OpenAI' and then try again."
             #Write-Warning $msg
             throw $msg
