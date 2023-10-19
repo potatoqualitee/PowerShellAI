@@ -74,7 +74,6 @@ Test2,Test2
         $actual | Should -Not -BeNullOrEmpty
         $actual | Should -BeOfType [string]
         $actual | Should -Be $expected
-    }
-        
+    }        
 
 }
