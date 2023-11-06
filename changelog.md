@@ -1,3 +1,11 @@
+# v0.9.4
+
+- add call to create assistants that can call models and use tools to perform tasks
+
+# v0.9.3
+
+- fix tests
+
 # v0.9.2
 
 - Support latest OpenAI API models gpt-4-1106-preview and gpt-3.5-turbo-1106
