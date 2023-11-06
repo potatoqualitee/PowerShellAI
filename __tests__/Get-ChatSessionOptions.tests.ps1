@@ -32,17 +32,19 @@ Describe "ChatSessionOptions" -Tag ChatSessionOptions {
         $actual | Should -Not -BeNullOrEmpty
     }
 
-    It 'Test Set-ChatSessionOption model param has this set of values' {
+    It 'Test Set-ChatSessionOption model param has these set of values' {
         $actual = Get-Command Set-ChatSessionOption -ErrorAction SilentlyContinue
 
         $values = $actual.Parameters['model'].Attributes.ValidValues
-        $values.Count | Should -Be 5
+        $values.Count | Should -Be 7
 
         $values[0] | Should -BeExactly 'gpt-4'
-        $values[1] | Should -BeExactly 'gpt-4-0613'
-        $values[2] | Should -BeExactly 'gpt-3.5-turbo'
-        $values[3] | Should -BeExactly 'gpt-3.5-turbo-16k'
-        $values[4] | Should -BeExactly 'gpt-3.5-turbo-0613'        
+        $values[1] | Should -BeExactly 'gpt-3.5-turbo-1106'
+        $values[2] | Should -BeExactly 'gpt-4-1106-preview'
+        $values[3] | Should -BeExactly 'gpt-4-0613'
+        $values[4] | Should -BeExactly 'gpt-3.5-turbo'
+        $values[5] | Should -BeExactly 'gpt-3.5-turbo-16k'
+        $values[6] | Should -BeExactly 'gpt-3.5-turbo-0613'
     }
 
     It 'Test Set-ChatSessionOption model' {
