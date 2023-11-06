@@ -1,5 +1,6 @@
-# v0.9.1
+# v0.9.2
 
+- Support latest OpenAI API models gpt-4-1106-preview and gpt-3.5-turbo-1106
 - Add `Get-ChatCompletion` to the list to support Azure Open AI
 - Add function `ConvertTo-JsonL`
 
