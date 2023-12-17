@@ -1,3 +1,7 @@
+# v0.9.4
+
+- [Shaun Lawrie](https://twitter.com/shaun_lawrie) - Fallback to gray text for the codeblock if the console host doesn't expose window dimensions. This fixes [#200](https://github.com/dfinke/PowerShellAI/issues/200) and potentially [#199](https://github.com/dfinke/PowerShellAI/issues/199) as well.
+
 # v0.9.1
 
 - Remove `Get-ChatCompletion` from `psd1`. It lives in `PowerShellAI.Functions`
