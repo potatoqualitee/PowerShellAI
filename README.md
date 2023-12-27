@@ -7,9 +7,16 @@
   </a>
   <br/>
   <br/>
-  <a href="https://twitter.com/dfinke">
+  <!-- <a href="https://twitter.com/dfinke">
     <img src="https://img.shields.io/badge/Twitter-@dfinke-blue.svg?logo=twitter&style=flat-square">
+  </a> -->
+  <!-- https://img.shields.io/twitter/follow/dfinke.svg?style=social&label=Follow%20%40dfinke -->
+  <a href="https://x.com/dfinke">
+    <img src="https://img.shields.io/twitter/follow/dfinke.svg?style=social&label=Follow%20%40dfinke">
   </a>
+  <a href="https://youtube.com/@dougfinke">
+    <img src="https://img.shields.io/youtube/channel/subscribers/UCP47ZkO5EDkoI2sr-3P4ShQ">
+  </a>  
   <a href="https://www.powershellgallery.com/packages/PowerShellAI/">
     <img src="https://img.shields.io/powershellgallery/v/PowerShellAI.svg">
   </a>  
