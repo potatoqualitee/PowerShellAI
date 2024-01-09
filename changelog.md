@@ -1,3 +1,5 @@
+# v0.9.6
+
 # v0.9.5
 - Thank you [Darren Robinson](https://github.com/darrenjrobinson)
     - Update Copilot to support Azure Open AI
