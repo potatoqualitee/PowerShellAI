@@ -1,5 +1,7 @@
 # v0.9.6
 
+- Updated default model to use gpt-3.5-turbo-instruct
+
 # v0.9.5
 - Thank you [Darren Robinson](https://github.com/darrenjrobinson)
     - Update Copilot to support Azure Open AI
