@@ -32,6 +32,26 @@
    • <a href="https://github.com/dfinke/PowerShellAI/wiki">Documentation</a> •
 </p>
 
+# **Big Announcement**
+- I created a new module called [PowerShellAIAssistant](https://github.com/dfinke/PowerShellAIAssistant).
+- You can get it: `Install-Module -Name PowerShellAIAssistant`
+- Highly recommend you check it out.
+
+> You can just type 'ai "your question here"' and it will return an answer.
+
+> The module exposes a lot of handy functions that interact directly with the new Assistants API, so you can also build scripts or spin up and manage different assistants/threads yourself.
+
+```
+The Assistants API is a tool that lets you create your own AI assistants in your applications. 
+Think of it as building a digital helper that can follow instructions and use different tools and knowledge to answer questions or solve problems. 
+
+It has three types of tools for different tasks like coding, information retrieval, and executing specific functions. 
+
+OpenAI is adding more, and you'll also be able to add your own tools to customize your assistant's abilities.
+```
+
+> All can programmatically automate via PowerShell.
+
 # PowerShellAI
 
 ## A User-Friendly Module for OpenAI's GPT-3 and DALL-E API
