@@ -1,3 +1,7 @@
+# v0.9.7
+- Thank you [Darren Robinson](https://github.com/darrenjrobinson)
+    - New Get-AOAIDalleImage cmdlet supports Azure Open AI
+
 # v0.9.6
 
 - Updated default model to use gpt-3.5-turbo-instruct
