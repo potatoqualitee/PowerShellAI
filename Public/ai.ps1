@@ -16,12 +16,13 @@ function ai {
     #>
     [CmdletBinding()]
     param(
-        $inputPrompt,
-        [Parameter(ValueFromPipeline = $true)]
-        $pipelineInput,
+        [Parameter(Position = 0, ValueFromRemainingArguments)]
+        [string[]]$inputPrompt,
+        [Parameter(ValueFromPipeline)]
+        [psobject[]]$pipelineInput,
         [ValidateRange(0,2)]
         [decimal]$temperature = 0.0,
-        $max_tokens = 256
+        [int]$max_tokens = 25
     )
 
     Begin {
@@ -29,7 +30,7 @@ function ai {
     }
 
     Process {
-        $lines += $pipelineInput
+        $lines += "$pipelineInput"
     }
 
     End {
