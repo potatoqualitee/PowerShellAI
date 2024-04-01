@@ -15,6 +15,9 @@ The PowerShell AI module integrates with the OpenAI API and let's you easily acc
         @{ModuleName = 'PowerShellAI.Functions'; ModuleVersion = "0.1.0" ; GUID = "bd4306a8-d043-430b-b02c-813ab8330924" }
     )
 
+    # This module uses Invoke-RestMethod, which was introduced in PSv3
+    PowerShellVersion = '3.0'
+
     FunctionsToExport = @(
         'Get-OpenAIEdit'
         'Get-OpenAIEditsUri'

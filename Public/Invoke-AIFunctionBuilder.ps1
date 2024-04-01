@@ -38,7 +38,6 @@ function Invoke-AIFunctionBuilder {
         # The model to use
         [Parameter(ParameterSetName="Interactive")]
         [Parameter(ParameterSetName="NonInteractive")]
-        [ValidateSet("gpt-3.5-turbo", "gpt-4")]
         [string] $Model = "gpt-3.5-turbo",
         # A seed function to use as the function builder starting point, this can allow you to iterate on an existing idea
         [Parameter(ParameterSetName="Interactive")]
