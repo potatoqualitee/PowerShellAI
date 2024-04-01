@@ -38,7 +38,6 @@ foreach ($directory in @('Public', 'Private')) {
 
 $scriptBlock = {
     param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters)
-
     $models = Get-OpenAIModel -ErrorAction SilentlyContinue
     if (-not $models) {
         $models = 'gpt-4','gpt-3.5-turbo-1106', 'gpt-4-1106-preview', 'gpt-4-0613', 'gpt-3.5-turbo', 'gpt-3.5-turbo-16k', 'gpt-3.5-turbo-0613'
@@ -51,4 +50,4 @@ $scriptBlock = {
     }
 }
 
-Register-ArgumentCompleter -CommandName * -ParameterName model -ScriptBlock $scriptBlock
+Register-ArgumentCompleter -CommandName Set-ChatSessionOption, Invoke-AIFunctionBuilder -ParameterName model -ScriptBlock $scriptBlock
