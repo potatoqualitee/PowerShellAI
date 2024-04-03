@@ -22,7 +22,7 @@ function ai {
         [psobject[]]$pipelineInput,
         [ValidateRange(0,2)]
         [decimal]$temperature = 0.0,
-        [int]$max_tokens = 25
+        [int]$max_tokens = 256
     )
 
     Begin {
