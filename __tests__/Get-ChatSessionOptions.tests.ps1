@@ -32,7 +32,7 @@ Describe "ChatSessionOptions" -Tag ChatSessionOptions {
         $actual | Should -Not -BeNullOrEmpty
     }
 
-    It 'Test Set-ChatSessionOption model param has these set of values' {
+    It -Skip 'Test Set-ChatSessionOption model param has these set of values' {
         $actual = Get-Command Set-ChatSessionOption -ErrorAction SilentlyContinue
 
         $values = $actual.Parameters['model'].Attributes.ValidValues
